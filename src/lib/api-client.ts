@@ -1,8 +1,7 @@
 
 import { ICategory } from "@/models/Category";
-import { IVideo } from "@/models/Video";
 
-export type VideoFormData = Omit<IVideo, "_id">;
+
 
 export interface ICategorys {
   _id: string;
@@ -31,7 +30,7 @@ class ApiClient {
       ...headers,
     };
 
-    const response = await fetch(`http://localhost:3000/api${endpoint}`, {
+    const response = await fetch(`/api${endpoint}`, {
     // const response = await fetch(`/api${endpoint}`, {
       method,
       headers: defaultHeaders,
@@ -45,23 +44,16 @@ class ApiClient {
     return response.json();
   }
 
-  async getVideos() {
-    return this.fetch<IVideo[]>("/videos");
-  }
+
 
 async getCategories() {
     return this.fetch<ICategory[]>("/category");
 }
-  async getVideo(id: string) {
-    return this.fetch<IVideo>(`/videos/${id}`);
-  }
+  // async getVideo(id: string) {
+  //   return this.fetch<IVideo>(`/videos/${id}`);
+  // }
 
-  async createVideo(videoData: VideoFormData) {
-    return this.fetch<IVideo>("/videos", {
-      method: "POST",
-      body: videoData,
-    });
-  }
+  
 async createCategory(categoryData: CategoryoFormData) {
     return this.fetch<ICategorys>("/category", {
       method: "POST",

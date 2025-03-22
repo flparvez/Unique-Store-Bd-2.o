@@ -34,7 +34,7 @@ export default function AdminCategoryForm() {
 
   const handleUploadSuccess = (response: IKUploadResponse) => {
     setValue("image", response.url);
-    console.log(response)
+
     toast.success("Image uploaded successfully!",);
   };
 

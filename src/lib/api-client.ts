@@ -1,16 +1,17 @@
 
+import { ICategory } from "@/models/Category";
 import { IVideo } from "@/models/Video";
 
 export type VideoFormData = Omit<IVideo, "_id">;
 
-export interface ICategory {
+export interface ICategorys {
   _id: string;
   name: string;
   description: string;
   image: string;
 
 }
-export type CategoryoFormData = Omit<ICategory, "_id">;
+export type CategoryoFormData = Omit<ICategorys, "_id">;
 
 type FetchOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
@@ -30,7 +31,8 @@ class ApiClient {
       ...headers,
     };
 
-    const response = await fetch(`/api${endpoint}`, {
+    const response = await fetch(`http://localhost:3000/api${endpoint}`, {
+    // const response = await fetch(`/api${endpoint}`, {
       method,
       headers: defaultHeaders,
       body: body ? JSON.stringify(body) : undefined,
@@ -47,7 +49,9 @@ class ApiClient {
     return this.fetch<IVideo[]>("/videos");
   }
 
-
+async getCategories() {
+    return this.fetch<ICategory[]>("/category");
+}
   async getVideo(id: string) {
     return this.fetch<IVideo>(`/videos/${id}`);
   }
@@ -59,7 +63,7 @@ class ApiClient {
     });
   }
 async createCategory(categoryData: CategoryoFormData) {
-    return this.fetch<ICategory>("/category", {
+    return this.fetch<ICategorys>("/category", {
       method: "POST",
       body: categoryData,
     });

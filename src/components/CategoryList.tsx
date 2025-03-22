@@ -5,12 +5,12 @@ import Image from 'next/image';
 import React from 'react'
 
 const CategoryList =async () => {
-    const categories =await apiClient.getCategories();
+    const categories =await apiClient?.getCategories();
  
   return (
     <div>
       {
-        categories.map((category) => (
+        categories?.map((category) => (
           <div key={category._id}>
             <h2>{category.name}</h2>
             <p>{category.description}</p>

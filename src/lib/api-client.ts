@@ -30,7 +30,7 @@ class ApiClient {
       ...headers,
     };
 
-    const response = await fetch(`/api${endpoint}`, {
+    const response = await fetch(`https://landig-store.vercel.app/api${endpoint}`, {
     // const response = await fetch(`/api${endpoint}`, {
       method,
       headers: defaultHeaders,

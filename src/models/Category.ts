@@ -1,43 +1,56 @@
-import { model, models, Schema } from "mongoose";
-
-export interface ICategory {
-    _id: string;
-    name: string;
-    description: string;
-    image: string;
-    slug: string;
+import  { Document, model, models, Schema } from 'mongoose';
+import slugify from 'slugify';
+export interface IImage extends Document {
+  url: string;
+  publicId: string;
+  width?: number;
+  height?: number;
+  format?: string;
 }
 
-const categorySchema = new Schema<ICategory>({
+export interface ICategory extends Document {
+  name: string;
+  slug: string;
+  tags ?: string;
+  description?: string;
+  images: IImage[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
-    name: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-       
-    },
-    image: {
-        type: String,
-        required: true
-    },
-    slug: {
-        type: String,
-       
-    },
-},
-{
-    timestamps: true
-})
+const ImageSchema: Schema = new Schema({
+  url: { type: String, required: true },
+  publicId: { type: String, required: true },
+  width: { type: Number },
+  height: { type: Number },
+  format: { type: String },
+});
 
-// if change name than update slug
-categorySchema.pre('save', function (next) {
-    this.slug = this.name.toLowerCase().replace(/ /g, '-');
-    next();
+const CategorySchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String },
+    slug: { type: String, required: true },
+    tags: { type: String },
+    images: [ImageSchema],
+  },
+  { timestamps: true }
+);
+
+// Generate slug from name before saving
+CategorySchema.pre<ICategory>("save", function (next) {
+  if (this.isModified('name')) {
+    this.slug = slugify(this.name, {
+      lower: true,
+      strict: true,
+      remove: /[*+~.()'"!:@]/g
+    });
+  }
+  next();
 });
 
 
-const Category = models?.Category || model<ICategory>("Category", categorySchema);
+// Create or retrieve the model
+const Category = models?.Category || model<ICategory>("Category", CategorySchema);
 
 export default Category;

@@ -3,14 +3,8 @@ import { ICategory } from "@/models/Category";
 
 
 
-export interface ICategorys {
-  _id: string;
-  name: string;
-  description: string;
-  image: string;
 
-}
-export type CategoryoFormData = Omit<ICategorys, "_id">;
+export type CategoryoFormData = Omit<ICategory, "_id">;
 
 type FetchOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
@@ -30,8 +24,9 @@ class ApiClient {
       ...headers,
     };
 
-    const response = await fetch(`https://landig-store.vercel.app/api${endpoint}`, {
-    // const response = await fetch(`/api${endpoint}`, {
+    const response = await fetch(`http://localhost:3000/api${endpoint}`, {
+    // const response = await fetch(`https://landig-store.vercel.app/api${endpoint}`, {
+
       method,
       headers: defaultHeaders,
       body: body ? JSON.stringify(body) : undefined,
@@ -47,7 +42,7 @@ class ApiClient {
 
 
 async getCategories() {
-    return this.fetch<ICategory[]>("/category");
+    return this.fetch<ICategory[]>("/categories");
 }
   // async getVideo(id: string) {
   //   return this.fetch<IVideo>(`/videos/${id}`);
@@ -55,15 +50,12 @@ async getCategories() {
 
   
 async createCategory(categoryData: CategoryoFormData) {
-    return this.fetch<ICategorys>("/category", {
+    return this.fetch<ICategory>("/category", {
       method: "POST",
       body: categoryData,
     });
 }
-  // ✅ Add deleteVideo method
-  async deleteVideo(id: string) {
-    return this.fetch(`/videos?id=${id}`, { method: "DELETE" });
-  }
+
 }
 
 export const apiClient = new ApiClient();

@@ -1,116 +1,117 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import FileUpload from "@/components/FileUpload";
-import { IKUploadResponse } from "imagekitio-next/dist/types/components/IKUpload/props";
-import { Loader2 } from "lucide-react";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ImageUploader } from '@/components/ImageUploader';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { CloudinaryUploadResult } from '@/lib/cloudinary';
+import { ICategory } from '@/models/Category';
 
-import { apiClient } from "@/lib/api-client";
-import toast from "react-hot-toast";
-
-interface CategoryFormData {
-  name: string;
-  description: string;
-  image: string;
+interface CategoryFormProps {
+  initialData?: ICategory;
 }
 
-export default function AdminCategoryForm() {
-  const [loading, setLoading] = useState(false);
+export function CategoryForm({ initialData }: CategoryFormProps) {
+  const router = useRouter();
+  const [name, setName] = useState<string>(initialData?.name || '');
+  const [tags, setTags] = useState<string>(initialData?.tags || '');
+  const [description, setDescription] = useState<string>(initialData?.description || '');
+  const [images, setImages] = useState<CloudinaryUploadResult[]>(initialData?.images || []);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<CategoryFormData>({
-    defaultValues: {
-      name: "",
-      description: "",
-      image: "",
-    },
-  });
-
-  const handleUploadSuccess = (response: IKUploadResponse) => {
-    setValue("image", response.url);
-
-    toast.success("Image uploaded successfully!",);
+  const handleImageUpload = (uploadedImages: CloudinaryUploadResult[]) => {
+    setImages((prev) => [...prev, ...uploadedImages]);
   };
 
-  const onSubmit = async (data: CategoryFormData) => {
-    setLoading(true);
-    try {
-      await apiClient.createCategory(data);
-      toast.success("Category created successfully!", );
+  const handleRemoveImage = (index: number) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+  };
 
-      // Reset form after successful submission
-      setValue("name", "");
-      setValue("description", "");
-      setValue("image", "");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const categoryData = {
+        name,
+        description,
+        images: images.map(img => ({ url: img.url, publicId: img.publicId }))
+      };
+
+      const url = initialData
+        ? `/api/categories/${initialData._id}`
+        : '/api/categories';
+      const method = initialData ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(categoryData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save category');
+      }
+
+      router.push('/categories');
+      router.refresh();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to create category",
-       
-      );
+      console.error('Error saving category:', error);
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form
-    onSubmit={handleSubmit(onSubmit)}
-    className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg space-y-6"
-  >
-    <h2 className="text-2xl font-semibold text-gray-700 text-center">
-      Create a New Category
-    </h2>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="name">Category Name</Label>
+        <Input
+          id="name"
+          value={name}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+          required
+        />
+      </div>
+     <div className="space-y-2">
+        <Label htmlFor="name">Category Tags</Label>
+        <Input
+          id="name"
+          value={tags}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTags(e.target.value)}
+          required
+        />
+      </div>
 
-    {/* Category Name */}
-    <div className="form-control">
-      <label className="label font-medium text-gray-600">Category Name</label>
-      <input
-        type="text"
-        className={`input input-bordered w-full px-4 py-2 rounded-md border focus:ring-2 focus:ring-blue-500 focus:outline-none ${errors.name ? "border-red-500" : "border-gray-300"}`}
-        placeholder="Enter category name"
-        {...register("name", { required: "Category name is required" })}
-      />
-      {errors.name && (
-        <span className="text-red-500 text-sm mt-1">{errors.name.message}</span>
-      )}
-    </div>
+      <div className="space-y-2">
+        <Label htmlFor="description">Description</Label>
+        <Textarea
+          id="description"
+          value={description}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
+          rows={3}
+        />
+      </div>
 
-    {/* Description */}
-    <div className="form-control">
-      <label className="label font-medium text-gray-600">Description</label>
-      <textarea
-        className={`textarea textarea-bordered w-full px-4 py-2 rounded-md border focus:ring-2 focus:ring-blue-500 focus:outline-none h-28 ${errors.description ? "border-red-500" : "border-gray-300"}`}
-        placeholder="Enter category description"
-        {...register("description")}
-      />
-    </div>
+      <div className="space-y-2">
+        <Label>Images</Label>
+        <ImageUploader
+          onUploadComplete={handleImageUpload}
+          initialImages={images}
+          onRemoveImage={handleRemoveImage}
+        />
+      </div>
 
-    {/* Category Image Upload */}
-    <div className="form-control">
-      <label className="label font-medium text-gray-600">Category Image</label>
-      <FileUpload onSuccess={handleUploadSuccess} />
-    </div>
-
-    {/* Submit Button */}
-    <button
-      type="submit"
-      className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md transition duration-300 flex justify-center items-center"
-      disabled={loading}
-    >
-      {loading ? (
-        <>
-          <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Creating Category...
-        </>
-      ) : (
-        "Create Category"
-      )}
-    </button>
-  </form>
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Saving...' : 'Save Category'}
+      </Button>
+    </form>
   );
 }

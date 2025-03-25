@@ -17,6 +17,7 @@ import { IProductImage } from '@/models/Product';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { ICategory } from '@/models/Category';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -41,7 +42,7 @@ const formSchema = z.object({
   ).optional(),
 });
 
-export function ProductUploadForm({ categories }: { categories: { _id: string; name: string }[] }) {
+export function ProductUploadForm({ categories }: { categories: ICategory[] })  {
 
   const router = useRouter();
   const [images, setImages] = useState<IProductImage[]>([]);

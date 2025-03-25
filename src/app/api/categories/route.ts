@@ -8,11 +8,12 @@ interface CategoryResponse {
   error?: string;
 }
 
-export async function GET(): Promise<NextResponse<CategoryResponse>> {
+export async function GET(){
   await connectToDb();
   try {
     const categories = await Category.find().sort({ createdAt: -1 });
-    return NextResponse.json({ data: categories }, { status: 200 });
+
+    return NextResponse.json(categories, { status: 200 });
   } catch (error) {
     console.log(error)
     return NextResponse.json(

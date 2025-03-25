@@ -9,6 +9,7 @@ export interface IImage extends Document {
 }
 
 export interface ICategory extends Document {
+  _id: string;
   name: string;
   slug: string;
   tags ?: string;

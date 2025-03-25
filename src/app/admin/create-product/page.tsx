@@ -1,26 +1,20 @@
 'use client';
-
-import { ProductEditForm } from '@/components/EditProduct';
+import {ProductUploadForm} from "@/components/admin/CreateProduct";
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { IProduct } from '@/models/Product';
+
 import { Loader2 } from 'lucide-react';
 
-export default function EditProductPage() {
+export default function CreateProduct() {
   const params = useParams();
-  const [product, setProduct] = useState<IProduct | null>(null);
+//   const [product, setProduct] = useState<IProduct | null>(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 console.log(params.id)
   useEffect(() => {
     async function fetchData() {
       try {
-        // Fetch product data
-        const productRes = await fetch(`/api/products/${params.id}`);
-        if (!productRes.ok) throw new Error('Failed to fetch product');
-        const productData = await productRes.json();
-        setProduct(productData.data);
-
+  
         // Fetch categories
         const categoriesRes = await fetch('/api/categories');
         if (!categoriesRes.ok) throw new Error('Failed to fetch categories');
@@ -45,19 +39,13 @@ console.log(params.id)
     );
   }
 
-  if (!product) {
-    return (
-      <div className="container py-8 text-center">
-        <p>Product not found</p>
-      </div>
-    );
-  }
+
 
   return (
     <div className="container py-8">
-      <ProductEditForm 
+      <ProductUploadForm 
         categories={categories} 
-        initialProduct={product} 
+       
       />
     </div>
   );

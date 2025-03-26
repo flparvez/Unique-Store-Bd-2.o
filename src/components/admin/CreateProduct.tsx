@@ -331,7 +331,7 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
             <div>
               <FormLabel>Specifications</FormLabel>
               <div className="space-y-2">
-                {specs.map((spec, index) => (
+                {specs?.map((spec, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <span className="font-medium">{spec.key}:</span>
                     <span>{spec.value}</span>
@@ -393,9 +393,9 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
             <div className="space-y-6">
               <h2 className="text-xl font-semibold">{form.watch('name')}</h2>
               
-              {images.length > 0 && (
+              {images?.length > 0 && (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {images.map((img, index) => (
+                  {images?.map((img, index) => (
                     <div key={index} className="aspect-square overflow-hidden rounded-md border">
                       <Image
                       width={100}
@@ -440,11 +440,11 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
                 </div>
               </div>
 
-              {specs.length > 0 && (
+              {specs?.length > 0 && (
                 <div>
                   <h3 className="font-medium mb-2">Specifications</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {specs.map((spec, index) => (
+                    {specs?.map((spec, index) => (
                       <div key={index} className="border p-3 rounded-md">
                         <h4 className="font-medium">{spec.key}</h4>
                         <p className="text-muted-foreground">{spec.value}</p>

@@ -1,6 +1,7 @@
 import { ICategory } from "@/models/Category";
 import { IProduct } from "@/models/Product";
 import { IReview } from "@/models/Review";
+import { ApiResponse } from "@/types/product";
 
 export type CategoryFormData = Omit<ICategory, "_id">;
 export type ProductFormData = Omit<IProduct, "_id" | "createdAt" | "updatedAt" | "reviews">;
@@ -120,11 +121,9 @@ class ApiClient {
   }
 
   // Product Methods
-  async getProducts(query?: Record<string, string>): Promise<IProduct[]> {
+  async getProducts(query?: Record<string, string>): Promise<ApiResponse> {
     const queryString = query ? `?${new URLSearchParams(query).toString()}` : "";
-    return this.fetch<IProduct[]>(`/products${queryString}`, {
-      next: { revalidate: 60 } // Revalidate every minute
-    });
+    return this.fetch<ApiResponse>(`/products${queryString}`);
   }
 
   async getProduct(id: string): Promise<IProduct> {

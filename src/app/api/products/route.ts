@@ -27,7 +27,7 @@ interface ErrorWithMessage extends Error {
 }
 
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
     
 
   try {

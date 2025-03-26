@@ -12,6 +12,7 @@ export interface IProductImage extends Document {
 }
 
 export interface IProduct extends Document {
+  _id: string;
   name: string;
   slug: string;
   shortName: string;

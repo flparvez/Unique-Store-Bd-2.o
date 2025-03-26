@@ -19,7 +19,7 @@ console.log(params.id)
         const categoriesRes = await fetch('/api/categories');
         if (!categoriesRes.ok) throw new Error('Failed to fetch categories');
         const categoriesData = await categoriesRes.json();
-        setCategories(categoriesData.data);
+        setCategories(categoriesData);
 
       } catch (error) {
         console.error('Error fetching data:', error);

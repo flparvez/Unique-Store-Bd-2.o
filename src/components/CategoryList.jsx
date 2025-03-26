@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React from 'react'
 
-const CategoryList =async () => {
+const CategoryList = () => {
    
   return (
     <div className='border-2'>

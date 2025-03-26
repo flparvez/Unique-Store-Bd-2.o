@@ -179,9 +179,9 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {categories.map(category => (
+                          {categories?.map(category => (
                             <SelectItem key={category._id} value={category._id}>
-                              {category.name}
+                              {category?.name}
                             </SelectItem>
                           ))}
                         </SelectContent>

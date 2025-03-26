@@ -5,13 +5,16 @@ import Category from '@/models/Category';
 
 
 export async function GET(
-  request: NextRequest
+  request: NextRequest,
+  {params}: {params : Promise<{id: string}>} 
 ) {
+
+
+  const {id} = (await params)
   await connectToDb();
   try {
 
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+  
     const category = await Category.findById(id);
     if (!category) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });
@@ -27,12 +30,12 @@ export async function GET(
 }
 export async function PUT(
   request: Request,
-
+  {params}: {params : Promise<{id: string}>} 
 ) {
+  const {id} = (await params)
   await connectToDb();
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+
     const body = await request.json();
     const category = await Category.findByIdAndUpdate(id, body, {
       new: true,
@@ -52,12 +55,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
- 
+  {params}: {params : Promise<{id: string}>} 
 ){
+  const {id} = (await params)
   await connectToDb();
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+  
     const category = await Category.findByIdAndDelete(id);
     if (!category) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });

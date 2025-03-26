@@ -12,7 +12,7 @@ export async function POST(request: Request): Promise<NextResponse<UploadRespons
     const files = formData.getAll('files') as File[];
 
     if (!files || files.length === 0) {
-      return NextResponse.json(
+      return NextResponse.json( 
         { error: 'No files uploaded' },
         { status: 400 }
       );
@@ -36,7 +36,7 @@ export async function POST(request: Request): Promise<NextResponse<UploadRespons
 
     return NextResponse.json({ data: results }, { status: 200 });
   } catch (error) {
-    console.error('Upload error:', error);
+    console.log('Upload error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Upload failed';
     return NextResponse.json(
       { error: errorMessage },

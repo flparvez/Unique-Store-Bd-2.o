@@ -1,7 +1,7 @@
 import { ICategory } from "@/models/Category";
 import { IProduct } from "@/models/Product";
 import { IReview } from "@/models/Review";
-import { ApiResponse } from "@/types/product";
+import { ApiResponse, ApiResponseP } from "@/types/product";
 
 export type CategoryFormData = Omit<ICategory, "_id">;
 export type ProductFormData = Omit<IProduct, "_id" | "createdAt" | "updatedAt" | "reviews">;
@@ -128,6 +128,12 @@ class ApiClient {
 
   async getProduct(id: string): Promise<IProduct> {
     return this.fetch<IProduct>(`/products/${id}`);
+  }
+
+  // getProductBySlug
+
+  async getProductBySlug(slug: string): Promise<ApiResponseP> {
+    return this.fetch<ApiResponseP>(`/products/${slug}`);
   }
 
   async createProduct(productData: ProductFormData): Promise<IProduct> {

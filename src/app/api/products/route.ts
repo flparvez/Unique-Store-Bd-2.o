@@ -6,7 +6,7 @@ import { connectToDb } from '@/lib/db';
 import mongoose, { Types } from 'mongoose';
 import slugify from 'slugify';
 // Connect to database
-connectToDb();
+
 
 
 interface ProductQuery {
@@ -29,7 +29,7 @@ interface ErrorWithMessage extends Error {
 
 export async function GET(request: NextRequest) {
     
-
+  connectToDb();
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
 // export async function POST(request: Request): Promise<NextResponse<ApiResponse<IProduct>>> {
 export async function POST(request: NextRequest) {
     
-
+  connectToDb();
 
 //   const session = await getServerSession(authOptions);
   

@@ -6,13 +6,14 @@ import { authOptions } from '@/lib/auth';
 import { Product } from '@/models/Product';
 import { Review } from '@/models/Review';
 
-connectToDb();
+
 
 export async function GET(
 req: NextRequest
 ) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+  connectToDb();
   try {
     if (!mongoose.Types.ObjectId.isValid(id!)) {
       return NextResponse.json(
@@ -58,6 +59,8 @@ export async function PATCH(
 
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+
+  connectToDb();
   try {
     if (!mongoose.Types.ObjectId.isValid(id!)) {
       return NextResponse.json(
@@ -133,6 +136,8 @@ export async function DELETE(
   request: NextRequest,
 
 ) {
+
+  connectToDb();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
   const session = await getServerSession(authOptions);

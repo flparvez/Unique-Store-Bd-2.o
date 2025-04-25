@@ -1,39 +1,23 @@
 import mongoose from "mongoose";
-const   MONGODB_URI =  process.env.MONGODB_URI!;
 
-if (!MONGODB_URI) {
-    throw new Error("Please Define Mongodb Uri in .env file");
-}
+type ConnectionObject = {
+  isConnected?: number;
+};
 
-let cached = global.mongoose;
+const connection: ConnectionObject = {};
 
-
-if (!cached) {
-    cached = global.mongoose = { conn: null, promise: null };
-}
-
-export async function connectToDb() {
-    if (cached.conn) {
-        return cached.conn;
-    }
-
-    if (!cached.promise) {
-        const opts = {
-            bufferCommands: true,
-            maxPoolSize: 10,
-        }
- 
-
-    cached.promise = mongoose
-    .connect(MONGODB_URI , opts)
-    .then(()=> mongoose.connection)
-}
-
-try {
-    cached.conn = await cached.promise;
-} catch (error) {
-    cached.promise = null;
-    throw new Error("Check Database File"+error);
-}
-
+export async function connectToDb(): Promise<void> {
+  if (connection.isConnected) {
+    console.log("Already connected");
+    return;
+  }
+  try {
+    const db = await mongoose.connect(process.env.MONGODB_URI || "", {});
+    connection.isConnected = db.connections[0].readyState;
+    console.log("Connected to MongoDB Successfully");
+  } catch (error) {
+    console.error("Error connecting to MongoDB", error);
+    // Rethrow the error to handle it appropriately in the application logic
+    throw new Error("Error connecting to MongoDB");
+  }
 }

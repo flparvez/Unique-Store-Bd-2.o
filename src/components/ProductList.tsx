@@ -1,14 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ApiResponse, IProduct, Pagination } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, ShoppingCart, Heart } from "lucide-react";
+import { apiClient } from "@/lib/api-client";
 
-const ProductList = ({product}:{product:ApiResponse}) => {
- 
+const ProductList = () => {
+  const [product, setProduct] = useState<ApiResponse>();
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const data = await apiClient.getProducts();
+        setProduct(data);
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
  
 
   return (
@@ -21,7 +35,9 @@ const ProductList = ({product}:{product:ApiResponse}) => {
         ))}
       </div>
 
-      <PaginationControls pagination={product.pagination} />
+   {    product?.pagination && (
+        <PaginationControls pagination={product.pagination} />
+      )}
     </div>
   );
 };

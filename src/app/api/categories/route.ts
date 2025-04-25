@@ -2,6 +2,7 @@ import { connectToDb } from '@/lib/db';
 import slugify from 'slugify';
 import { NextResponse } from 'next/server';
 import Category, { ICategory } from '@/models/Category';
+export const dynamic = 'force-dynamic';
 
 interface CategoryResponse {
   data?: ICategory | ICategory[];

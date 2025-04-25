@@ -1,15 +1,17 @@
+
 "use client"
 
 import { apiClient } from '@/lib/api-client';
 import { ICategory } from '@/models/Category';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 
 const CategoryList = () => {
-  const [Categories, setCategories] = useState<ICategory[]>([]);
+  const [category, setCategories] = useState<ICategory[]>();
+
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchVideos = async () => {
       try {
         const data = await apiClient.getCategories();
         setCategories(data);
@@ -17,14 +19,14 @@ const CategoryList = () => {
         console.error("Error fetching videos:", error);
       }
     };
-
-    fetchCategories();
+  
+    fetchVideos();
   }, []);
   return (
     <div className='border-2'>
-   
+
       {
-        Categories && Categories?.map((category) => (
+        category && category?.map((category) => (
             <div key={category._id} className='container'>
                 <h2>{category.name}</h2>
                 <p>{category.description}</p> 

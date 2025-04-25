@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/CategoryList.tsx", "src/app/api/products/id/route.ts", "src/app/product/page.tsx", "src/app/admin/edit-product/Ediproduct.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/CategoryList.tsx", "src/app/api/products/id/route.ts", "src/app/product/page.tsx", "src/app/admin/product/edit-product/Ediproduct.jsx"],
   "exclude": ["node_modules"]
 }

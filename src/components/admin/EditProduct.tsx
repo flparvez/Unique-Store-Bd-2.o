@@ -56,7 +56,7 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
   const [currentSpec, setCurrentSpec] = useState({ key: '', value: '' });
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-console.log(product)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

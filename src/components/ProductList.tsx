@@ -1,50 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { apiClient } from "@/lib/api-client";
+import { useState } from "react";
+
 import { ApiResponse, IProduct, Pagination } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, ShoppingCart, Heart } from "lucide-react";
 
-const ProductList = () => {
-  const [data, setData] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await apiClient.getProducts();
-        setData(response);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load products"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) return <ProductListSkeleton />;
-  if (error) return <ErrorDisplay message={error} />;
-  if (!data?.products.length) return <EmptyState />;
+const ProductList = ({product}:{product:ApiResponse}) => {
+ 
+ 
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-8 text-gray-800">Our Products</h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {data.products.map((product) => (
+        {product?.products?.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
 
-      <PaginationControls pagination={data.pagination} />
+      <PaginationControls pagination={product.pagination} />
     </div>
   );
 };
@@ -131,34 +108,14 @@ const PaginationControls = ({ pagination }: { pagination: Pagination }) => (
   <div className="mt-8 flex justify-center">
     <div className="join">
       <button className="join-item btn">«</button>
-      <button className="join-item btn">Page {pagination.page}</button>
+      <button className="join-item btn">Page {pagination?.page}</button>
       <button className="join-item btn">»</button>
     </div>
   </div>
 );
 
-const ProductListSkeleton = () => (
-  <div className="container mx-auto px-4 py-8">
-    {/* Skeleton loader */}
-  </div>
-);
 
-const ErrorDisplay = ({ message }: { message: string }) => (
-  <div className="text-center py-12">
-    <p className="text-red-500 mb-4">{message}</p>
-    <button
-      onClick={() => window.location.reload()}
-      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-    >
-      Retry
-    </button>
-  </div>
-);
 
-const EmptyState = () => (
-  <div className="text-center py-12">
-    <p className="text-gray-500 text-lg">No products found</p>
-  </div>
-);
+
 
 export default ProductList;

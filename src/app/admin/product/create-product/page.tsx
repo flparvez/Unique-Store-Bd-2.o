@@ -42,7 +42,8 @@ console.log(params.id)
 
 
   return (
-    <div className="container py-8">
+    <div className="px-4 py-8 mx-auto ">
+      <h1 className="text-2xl font-bold mb-4">Create Product</h1>
       <ProductUploadForm 
         categories={categories} 
        

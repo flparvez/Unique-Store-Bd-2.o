@@ -31,6 +31,8 @@ export async function GET(request: NextRequest) {
     
  
   try {
+
+    connectToDb();
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -57,7 +59,7 @@ export async function GET(request: NextRequest) {
     }
 
     const skip = (page - 1) * limit;
-    connectToDb();
+   
     const [products, total] = await Promise.all([
       Product.find(query)
         .sort({ popularityScore: -1, createdAt: -1 })

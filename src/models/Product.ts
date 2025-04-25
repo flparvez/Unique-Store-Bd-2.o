@@ -38,6 +38,7 @@ export interface IProduct extends Document {
   reviews: mongoose.Types.ObjectId[];
   rating?: number;
   isFeatured: boolean;
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -78,7 +79,7 @@ const productSchema = new Schema<IProduct, IProductModel>({
     type: String, 
     required: [true, 'Product name is required'],
     trim: true,
-    maxlength: [100, 'Product name cannot exceed 100 characters']
+    maxlength: [150, 'Product name cannot exceed 150 characters']
   },
   slug: { 
     type: String, 
@@ -88,13 +89,13 @@ const productSchema = new Schema<IProduct, IProductModel>({
   shortName: {
     type: String,
     required: true,
-    maxlength: [50, 'Short name cannot exceed 50 characters']
+    maxlength: [100, 'Short name cannot exceed 150 characters']
   },
   description: { 
     type: String, 
     required: true,
     minlength: [50, 'Description should be at least 50 characters'],
-    maxlength: [2000, 'Description cannot exceed 2000 characters']
+    maxlength: [10000, 'Description cannot exceed 10000 characters']
   },
   category: {
     type: Schema.Types.ObjectId,
@@ -175,6 +176,10 @@ const productSchema = new Schema<IProduct, IProductModel>({
   isFeatured: {
     type: Boolean,
     default: false
+  },
+  isActive:{
+    type:Boolean,
+    default:true
   }
 }, {
   timestamps: true,

@@ -14,10 +14,10 @@ request: NextRequest,
 
 
 const {slug} = (await params)
-console.log("tests",slug)
-  connectToDb();
+
   try {
 
+    connectToDb();
 
     const product = await Product.findOne({ slug: slug })
       .populate("")

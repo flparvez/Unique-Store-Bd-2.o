@@ -6,18 +6,18 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { ImageUploader } from '@/components/ImageUploadp';
-import { IProduct, IProductImage } from '@/models/Product';
+import { IProductImage, IProduct } from '@/models/Product';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-
-import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { ICategory } from '@/models/Category';
+import RichTextEditor from '@/components/RichTextEditor';
+import { Badge } from '@/components/ui/badge';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -27,13 +27,14 @@ const formSchema = z.object({
   seo: z.string().max(150),
   description: z.string().min(50, {
     message: 'Description must be at least 50 characters.',
-  }).max(2000),
+  }).max(20000),
   category: z.string().min(1, 'Category is required'),
   price: z.coerce.number().min(1, 'Price must be at least 1'),
   originalPrice: z.coerce.number().optional(),
   stock: z.coerce.number().min(0, 'Stock cannot be negative'),
   warranty: z.string().default('7 day warranty'),
   isFeatured: z.boolean().default(false),
+  isActive: z.boolean().default(true),
   specifications: z.array(
     z.object({
       key: z.string().min(1, 'Spec key is required'),
@@ -43,67 +44,58 @@ const formSchema = z.object({
 });
 
 interface ProductEditFormProps {
-  categories: { _id: string; name: string }[];
-  initialProduct: IProduct;
+  categories: ICategory[];
+  product?: IProduct;
 }
 
-export function ProductEditForm({ categories, initialProduct }: ProductEditFormProps) {
-
+export function ProductEditForm({ categories, product }: ProductEditFormProps) {
   const router = useRouter();
-  const [images, setImages] = useState<IProductImage[]>(initialProduct.images || []);
+  const [images, setImages] = useState<IProductImage[]>(product?.images || []);
   const [isLoading, setIsLoading] = useState(false);
-  const [specs, setSpecs] = useState<{ key: string; value: string }[]>(initialProduct.specifications || []);
+  const [specs, setSpecs] = useState<{ key: string; value: string }[]>(product?.specifications || []);
   const [currentSpec, setCurrentSpec] = useState({ key: '', value: '' });
   const [previewOpen, setPreviewOpen] = useState(false);
-
-
+  const [isDeleting, setIsDeleting] = useState(false);
+console.log(product)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: initialProduct.name,
-      shortName: initialProduct.shortName,
-      seo: initialProduct.seo || '',
-      description: initialProduct.description,
-      category: initialProduct.category._id || initialProduct.category.toString(),
-      price: initialProduct.price,
-      originalPrice: initialProduct.originalPrice,
-      stock: initialProduct.stock,
-      warranty: initialProduct.warranty || '7 day warranty',
-      isFeatured: initialProduct.isFeatured || false,
-      specifications: initialProduct.specifications || [],
+      name: product?.name || '',
+      shortName: product?.shortName || '',
+      seo: product?.seo || '',
+      description: product?.description || '',
+      category: product?.category?._id || '',
+      price: product?.price || 0,
+      originalPrice: product?.originalPrice || undefined,
+      stock: product?.stock || 0,
+      warranty: product?.warranty || '7 day warranty',
+      isFeatured: product?.isFeatured || false,
+      // isActive: product?.isActive ?? true,
+      specifications: product?.specifications || [],
     },
   });
 
   useEffect(() => {
-    if (initialProduct) {
-      form.reset({
-        name: initialProduct.name,
-        shortName: initialProduct.shortName,
-        seo: initialProduct.seo || '',
-        description: initialProduct.description,
-        category: initialProduct.category._id || initialProduct.category.toString(),
-        price: initialProduct.price,
-        originalPrice: initialProduct.originalPrice,
-        stock: initialProduct.stock,
-        warranty: initialProduct.warranty || '7 day warranty',
-        isFeatured: initialProduct.isFeatured || false,
-      });
-      setImages(initialProduct.images || []);
-      setSpecs(initialProduct.specifications || []);
+    if (product) {
+      setImages(product.images || []);
+      setSpecs(product.specifications || []);
     }
-  }, [initialProduct, form]);
+  }, [product]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (images.length === 0) {
-toast.error("please upload atelast 1 image");
+      toast.error("Please upload at least 1 image");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/products/${initialProduct._id}`, {
-        method: 'PATCH',
+      const method = product ? 'PATCH' : 'POST';
+      const url = product ? `/api/products/id/${product._id}` : '/api/products';
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -115,22 +107,42 @@ toast.error("please upload atelast 1 image");
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update product');
+        throw new Error(`Failed to ${product ? 'update' : 'create'} product`);
       }
 
       const data = await response.json();
-
-toast.success("Image uploaded")
-
+      toast.success(`Product ${product ? 'updated' : 'created'} successfully`);
       router.push(`/products/${data.data._id}`);
-      router.refresh();
     } catch (error) {
-      console.log(error)
-toast.error("Failed to update product")
+      console.error(error);
+      toast.error(`Failed to ${product ? 'update' : 'create'} product`);
     } finally {
       setIsLoading(false);
     }
   }
+
+  const handleDeleteProduct = async () => {
+    if (!product) return;
+    
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/products/${product._id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete product');
+      }
+
+      toast.success('Product deleted successfully');
+      router.push('/products');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to delete product');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const handleImageUpload = (uploadedImages: IProductImage[]) => {
     setImages(prev => [...prev, ...uploadedImages]);
@@ -151,11 +163,29 @@ toast.error("Failed to update product")
     setSpecs(prev => prev.filter((_, i) => i !== index));
   };
 
- 
   return (
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Edit Product</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">
+            {product ? `Edit ${product.name}` : 'Add New Product'}
+          </h1>
+          {product && (
+            <div className="flex items-center gap-2">
+              {/* <Badge variant={product.isActive ? 'default' : 'destructive'}>
+                {product.isActive ? 'Active' : 'Inactive'}
+              </Badge> */}
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDeleteProduct}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Product'}
+              </Button>
+            </div>
+          )}
+        </div>
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -167,7 +197,7 @@ toast.error("Failed to update product")
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product Name</FormLabel>
+                      <FormLabel>Product Name *</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter product name" {...field} />
                       </FormControl>
@@ -198,7 +228,7 @@ toast.error("Failed to update product")
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel>Category *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -206,13 +236,27 @@ toast.error("Failed to update product")
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {categories.map(category => (
+                          {categories?.map(category => (
                             <SelectItem key={category._id} value={category._id}>
                               {category.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="seo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>SEO Tags</FormLabel>
+                      <FormControl>
+                        <Input placeholder="SEO tags (comma separated)" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -226,7 +270,7 @@ toast.error("Failed to update product")
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price (৳)</FormLabel>
+                      <FormLabel>Price (৳) *</FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="Enter price" {...field} />
                       </FormControl>
@@ -263,7 +307,7 @@ toast.error("Failed to update product")
                   name="stock"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Stock Quantity</FormLabel>
+                      <FormLabel>Stock Quantity *</FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="Available quantity" {...field} />
                       </FormControl>
@@ -286,40 +330,49 @@ toast.error("Failed to update product")
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="seo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>SEO Tags</FormLabel>
-                      <FormControl>
-                        <Input placeholder="SEO tags" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="isFeatured"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>Featured Product</FormLabel>
+                          <FormDescription>
+                            Show in featured section
+                          </FormDescription>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="isFeatured"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Featured Product</FormLabel>
-                        <FormDescription>
-                          Show this product in featured section
-                        </FormDescription>
-                      </div>
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={form.control}
+                    name="isActive"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>Active</FormLabel>
+                          <FormDescription>
+                            Visible to customers
+                          </FormDescription>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 
@@ -329,14 +382,17 @@ toast.error("Failed to update product")
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Description *</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Detailed product description"
-                      className="min-h-[120px]"
-                      {...field}
+                    <RichTextEditor
+                      content={field.value}
+                      onChange={field.onChange}
+                      placeholder="Detailed product description..."
                     />
                   </FormControl>
+                  <FormDescription>
+                    Minimum 50 characters. Include features, benefits, and specifications.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -344,14 +400,15 @@ toast.error("Failed to update product")
 
             {/* Image Upload */}
             <div>
-              <FormLabel>Product Images</FormLabel>
+              <FormLabel>Product Images *</FormLabel>
               <ImageUploader
                 onUploadComplete={handleImageUpload}
                 initialImages={images}
                 onRemoveImage={handleRemoveImage}
+                // maxImages={10}
               />
               <FormDescription>
-                Upload high-quality images of your product (max 10 images)
+                First image will be used as the main product image
               </FormDescription>
             </div>
 
@@ -359,51 +416,54 @@ toast.error("Failed to update product")
             <div>
               <FormLabel>Specifications</FormLabel>
               <div className="space-y-2">
-                {specs.map((spec, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <span className="font-medium">{spec.key}:</span>
-                    <span>{spec.value}</span>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeSpecification(index)}
-                    >
-                      Remove
-                    </Button>
+                {specs.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                    {specs.map((spec, index) => (
+                      <div key={index} className="flex items-center gap-2 p-2 border rounded">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{spec.key}</p>
+                          <p className="text-sm text-muted-foreground truncate">{spec.value}</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => removeSpecification(index)}
+                        >
+                          <span className="text-destructive">×</span>
+                        </Button>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
 
-                <div className="flex gap-2 mt-4">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Input
-                    placeholder="Specification key"
+                    placeholder="Specification key (e.g. 'Color')"
                     value={currentSpec.key}
                     onChange={e => setCurrentSpec({ ...currentSpec, key: e.target.value })}
+                    className="flex-1"
                   />
                   <Input
-                    placeholder="Specification value"
+                    placeholder="Specification value (e.g. 'Black')"
                     value={currentSpec.value}
                     onChange={e => setCurrentSpec({ ...currentSpec, value: e.target.value })}
+                    className="flex-1"
                   />
                   <Button
                     type="button"
                     onClick={addSpecification}
                     disabled={!currentSpec.key || !currentSpec.value}
+                    className="sm:w-auto"
                   >
-                    Add
+                    Add Specification
                   </Button>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-              >
-                Cancel
-              </Button>
+            <div className="flex flex-col sm:flex-row justify-end gap-4 pt-4 border-t">
               <Button
                 type="button"
                 variant="outline"
@@ -412,13 +472,15 @@ toast.error("Failed to update product")
               >
                 Preview
               </Button>
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} className="min-w-[120px]">
                 {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Updating...
-                  </>
-                ) : 'Update Product'}
+                  <span className="flex items-center gap-2">
+                    <span className="animate-spin">↻</span>
+                    {product ? 'Updating...' : 'Creating...'}
+                  </span>
+                ) : (
+                  product ? 'Update Product' : 'Create Product'
+                )}
               </Button>
             </div>
           </form>
@@ -433,7 +495,7 @@ toast.error("Failed to update product")
             <div className="space-y-6">
               <h2 className="text-xl font-semibold">{form.watch('name')}</h2>
               
-              {images.length > 0 && (
+              {images.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {images.map((img, index) => (
                     <div key={index} className="aspect-square overflow-hidden rounded-md border">
@@ -447,12 +509,19 @@ toast.error("Failed to update product")
                     </div>
                   ))}
                 </div>
+              ) : (
+                <div className="aspect-video bg-gray-100 rounded-md flex items-center justify-center">
+                  <p className="text-gray-500">No images uploaded</p>
+                </div>
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-medium mb-2">Details</h3>
-                  <p className="text-muted-foreground">{form.watch('description')}</p>
+                  <div 
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: form.watch('description') || '<p>No description provided</p>' }}
+                  />
                 </div>
 
                 <div className="space-y-4">
@@ -475,7 +544,15 @@ toast.error("Failed to update product")
 
                   <div>
                     <h3 className="font-medium">Warranty</h3>
-                    <p>{form.watch('warranty')}</p>
+                    <p>{form.watch('warranty') || 'Not specified'}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium">Status</h3>
+                    <p>{form.watch('isFeatured') && <Badge className="mr-2">Featured</Badge>}
+                    <Badge variant={form.watch('isActive') ? 'default' : 'destructive'}>
+                      {form.watch('isActive') ? 'Active' : 'Inactive'}
+                    </Badge></p>
                   </div>
                 </div>
               </div>

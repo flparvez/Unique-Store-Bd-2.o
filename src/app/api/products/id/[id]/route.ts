@@ -9,11 +9,11 @@ import { Review } from '@/models/Review';
 
 
 export async function GET(
-req: NextRequest
+req: NextRequest,
+{params}: {params : Promise<{id: string}>} 
 ) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
-  connectToDb();
+const {id} = (await params)
+  
   try {
     if (!mongoose.Types.ObjectId.isValid(id!)) {
       return NextResponse.json(
@@ -21,7 +21,7 @@ req: NextRequest
         { status: 400 }
       );
     }
-
+    connectToDb();
     const product = await Product.findById(id)
       .populate('category', 'name slug')
       .populate({
@@ -40,8 +40,7 @@ req: NextRequest
     }
 
     return NextResponse.json({
-      success: true,
-      data: product
+      product
     });
   } catch (error: unknown) {
     return NextResponse.json(
@@ -54,13 +53,11 @@ req: NextRequest
 // PATCH and DELETE handlers remain the same as in your original code
 export async function PATCH(
   req: NextRequest,
- 
+  {params}: {params : Promise<{id: string}>} 
 ) {
 
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
+const {id} = (await params)
 
-  connectToDb();
   try {
     if (!mongoose.Types.ObjectId.isValid(id!)) {
       return NextResponse.json(
@@ -68,7 +65,7 @@ export async function PATCH(
         { status: 400 }
       );
     }
-
+    connectToDb();
     const currentProduct = await Product.findById(id);
     if (!currentProduct) {
       return NextResponse.json(
@@ -99,8 +96,8 @@ export async function PATCH(
       id,
       updateData,
       { new: true, runValidators: true }
-    ).populate('category', 'name slug');
-
+    )
+console.log(updatedProduct)
     if (!updatedProduct) {
       return NextResponse.json(
         { success: false, error: 'Update failed' },

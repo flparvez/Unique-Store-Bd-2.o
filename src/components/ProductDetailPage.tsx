@@ -1,31 +1,37 @@
-"use client";
+'use client';
+
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import ProductLoadingSkeleton from './ProductLoadingSkeleton';
 import { apiClient } from '@/lib/api-client';
 import { ApiResponseP } from '@/types/product';
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { Star, ShoppingCart } from 'lucide-react';
-import ProductLoadingSkeleton from './ProductLoadingSkeleton';
-
-
 
 interface ProductDetailPageProps {
   slug: string;
 }
 
-const ProductDetailPage = ({ slug }: ProductDetailPageProps) => {
+interface ProductImage {
+  url: string;
+  altText?: string;
+}
+
+export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
   const [data, setData] = useState<ApiResponseP | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
         const response = await apiClient.getProductBySlug(slug);
-        
-        
-        
         setData(response);
+        if (response?.product?.images?.length) {
+          setSelectedImage(response.product.images[0]);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load product');
       } finally {
@@ -36,130 +42,195 @@ const ProductDetailPage = ({ slug }: ProductDetailPageProps) => {
     fetchProduct();
   }, [slug]);
 
-  if (loading || error) {
+  if (loading || error || !data?.product) {
     return <ProductLoadingSkeleton />;
   }
 
+  const product = data.product;
+  const {
+    name,
+    shortName,
+    description,
+    price,
+    originalPrice,
+    stock,
+    warranty,
+    images = [],
+    specifications = [],
+  } = product;
 
-
-
-  const product = data?.product;
-if (!product) {
-  return <ProductLoadingSkeleton />;
-}
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Product Images */}
-        <div className="grid grid-cols-2 gap-4">
-      {
-        product.images?.map((image, index) => (
-          <div key={index} className="aspect-square relative">
-          <Image
-            src={image.url}
-            alt={`${product.name} - Image ${index + 1}`}
-            fill
-            className="object-cover rounded-lg"
-            priority={index === 0}
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        </div>
-        ))
-      }
+    <div className="container px-4 py-8 md:py-12">
+      {/* Main Product Section */}
+      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+        {/* Image Gallery */}
+        <div className="w-full md:w-1/2">
+          {/* Main Image */}
+          <div className="aspect-square w-full bg-gray-50 rounded-lg overflow-hidden mb-4">
+            {selectedImage ? (
+              <Image
+                src={selectedImage.url}
+                alt={selectedImage.altText || `${name} - Main Image`}
+                width={600}
+                height={600}
+                className="w-full h-full object-contain"
+                priority
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 animate-pulse" />
+            )}
+          </div>
+
+          {/* Thumbnail Gallery */}
+          <div className="flex gap-3 overflow-x-auto py-2">
+            {images.map((img, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedImage(img)}
+                className={cn(
+                  'flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-md overflow-hidden border-2',
+                  selectedImage?.url === img.url
+                    ? 'border-primary ring-2 ring-primary/30'
+                    : 'border-transparent'
+                )}
+                aria-label={`View ${name} image ${index + 1}`}
+              >
+                <Image
+                  src={img.url}
+                  alt={img.altText || `${name} thumbnail ${index + 1}`}
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Product Info */}
-        <div>
-          <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-          <div className="flex items-center mb-4">
-            <div className="flex text-yellow-400 mr-2">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={20}
-                  fill={i < (product.rating || 0) ? "currentColor" : "none"}
-                />
-              ))}
-            </div>
-            <span className="text-gray-500">
-              ({product.reviews?.length || 0} reviews)
+        <div className="w-full md:w-1/2 space-y-6">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{name}</h1>
+            {shortName && (
+              <p className="text-sm md:text-base text-muted-foreground">{shortName}</p>
+            )}
+          </div>
+
+          {/* Price Section */}
+          <div className="flex items-baseline gap-3">
+            <span className="text-2xl md:text-3xl font-semibold text-primary">
+              ৳{price?.toLocaleString()}
             </span>
+            {originalPrice && originalPrice > price && (
+              <span className="text-lg line-through text-muted-foreground">
+                ৳{originalPrice.toLocaleString()}
+              </span>
+            )}
           </div>
 
-          <div className="mb-6">
-          {
-            product?.discount ?   <span className="bg-red-100 text-red-800 text-sm font-medium px-2.5 py-0.5 rounded">
-            {product.discount}% OFF
-          </span> : null
-          }
-            <div className="flex items-center mt-2">
-              <p className="text-3xl font-bold text-gray-900">
-                ${product.price.toFixed(2)}
-              </p>
-              {product.originalPrice && (
-                <p className="ml-2 text-lg text-gray-500 line-through">
-                  ${product.originalPrice.toFixed(2)}
-                </p>
+          {/* Stock Status */}
+          <div className="flex items-center gap-2">
+            <span
+              className={cn(
+                'text-sm font-medium',
+                stock > 0 ? 'text-green-600' : 'text-red-600'
               )}
-            </div>
+            >
+              {stock > 0 ? `${stock} in stock` : 'Out of stock'}
+            </span>
+            <span className="text-xs text-gray-500">•</span>
+            <span className="text-sm text-gray-600">Warranty: {warranty}</span>
           </div>
 
-          <p className="mb-6 text-gray-700">{product?.description}</p>
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <Button
+              size="lg"
+              className="flex-1"
+              disabled={stock <= 0}
+            >
+              Add to Cart
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="flex-1"
+            >
+              Buy Now
+            </Button>
+          </div>
 
-          <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2">
-            <ShoppingCart size={20} />
-            Add to Cart
-          </button>
+          {/* Quick Specs */}
+          {specifications.length > 0 && (
+            <div className="pt-4">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                Key Specifications
+              </h3>
+              <ul className="space-y-2">
+                {specifications.slice(0, 4).map((spec, idx) => (
+                  <li key={idx} className="flex">
+                    <span className="text-sm text-gray-600 w-24 flex-shrink-0">
+                      {spec.key}
+                    </span>
+                    <span className="text-sm text-gray-900">
+                      {spec.value}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Reviews Section */}
-      {/* <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
-        {product?.reviews?.length ? (
-          <div className="space-y-6">
-            {product.reviews.map((review) => (
-              <div key={review._id} className="border-b pb-6">
-                <div className="flex items-center mb-2">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
-                    {review.user.image && (
-                      <Image
-                        src={review.user.image}
-                        alt={review.user.name}
-                        width={40}
-                        height={40}
-                        className="object-cover"
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-medium">{review.user.name}</p>
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={16}
-                          fill={i < review.rating ? "currentColor" : "none"}
-                        />
-                      ))}
-                    </div>
-                  </div>
+      {/* Product Tabs */}
+      <div className="mt-12 md:mt-16">
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8">
+            <button className="py-4 px-1 border-b-2 font-medium text-sm border-primary text-primary">
+              Description
+            </button>
+            <button className="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700">
+              Specifications
+            </button>
+            <button className="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700">
+              Reviews
+            </button>
+          </nav>
+        </div>
+
+        {/* Description Section */}
+        <div className="py-8">
+          <div
+            className="prose max-w-none prose-p:leading-relaxed prose-li:leading-relaxed
+                      prose-headings:font-medium prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3
+                      prose-img:rounded-lg prose-img:shadow-sm prose-img:border"
+            dangerouslySetInnerHTML={{ __html: description || '' }}
+          />
+        </div>
+
+        {/* Full Specifications Section */}
+        {specifications.length > 0 && (
+          <div className="py-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">
+              Full Specifications
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {specifications.map((spec, idx) => (
+                <div
+                  key={idx}
+                  className="border rounded-lg p-4 hover:shadow-sm transition-shadow"
+                >
+                  <h3 className="text-sm font-medium text-gray-600 mb-1">
+                    {spec.key}
+                  </h3>
+                  <p className="text-base text-gray-900">{spec.value}</p>
                 </div>
-                <p className="text-gray-700">{review.comment}</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  {new Date(review.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        ) : (
-          <p className="text-gray-500">No reviews yet</p>
         )}
       </div>
-
-       */}
     </div>
   );
 };
-
-export default ProductDetailPage;

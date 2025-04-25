@@ -1,4 +1,4 @@
-import ProductDetailPage from '@/components/ProductDetailPage';
+import {ProductDetailsPage} from '@/components/ProductDetailPage';
 
 import React from 'react'
 
@@ -7,8 +7,8 @@ const {slug} = (await params)
 
   return (
     <div>
-      <h2>Test</h2>
-      <ProductDetailPage slug = {slug} />
+
+      <ProductDetailsPage slug = {slug} />
     </div>
   )
 }

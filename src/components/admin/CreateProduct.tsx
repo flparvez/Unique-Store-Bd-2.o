@@ -6,10 +6,8 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ImageUploader } from '@/components/ImageUploadp';
@@ -18,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { ICategory } from '@/models/Category';
+import RichTextEditor from '@/components/RichTextEditor'; // Import the rich text editor
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -27,7 +26,7 @@ const formSchema = z.object({
   seo: z.string().max(150),
   description: z.string().min(50, {
     message: 'Description must be at least 50 characters.',
-  }).max(2000),
+  }).max(20000), // Increased max length for HTML content
   category: z.string().min(1, 'Category is required'),
   price: z.coerce.number().min(1, 'Price must be at least 1'),
   originalPrice: z.coerce.number().optional(),
@@ -42,8 +41,7 @@ const formSchema = z.object({
   ).optional(),
 });
 
-export function ProductUploadForm({ categories }: { categories: ICategory[] })  {
-
+export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
   const router = useRouter();
   const [images, setImages] = useState<IProductImage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +68,7 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (images.length === 0) {
-      toast.error("please upload atelast 1 image");
+      toast.error("Please upload at least 1 image");
       return;
     }
 
@@ -94,13 +92,11 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
       }
 
       const data = await response.json();
-
- toast.success("Image uploaded")
-
+      toast.success("Product created successfully");
       router.push(`/products/${data.data._id}`);
     } catch (error) {
-        console.log(error)
-     toast.error("not upload")
+      console.log(error);
+      toast.error("Failed to create product");
     } finally {
       setIsLoading(false);
     }
@@ -258,14 +254,15 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
                     </FormItem>
                   )}
                 />
-       <FormField
+
+                <FormField
                   control={form.control}
                   name="seo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>seo</FormLabel>
+                      <FormLabel>SEO Tags</FormLabel>
                       <FormControl>
-                        <Input placeholder="seo tags" {...field} />
+                        <Input placeholder="SEO tags (comma separated)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -295,7 +292,7 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
               </div>
             </div>
 
-            {/* Description */}
+            {/* Description - Updated to use RichTextEditor */}
             <FormField
               control={form.control}
               name="description"
@@ -303,12 +300,16 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Detailed product description"
-                      className="min-h-[120px]"
-                      {...field}
+                    <RichTextEditor
+                      content={field.value}
+                      onChange={field.onChange}
+                      placeholder="Detailed product description..."
+     
                     />
                   </FormControl>
+                  <FormDescription>
+                    Write a detailed description with features, benefits, and specifications
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -398,8 +399,8 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
                   {images?.map((img, index) => (
                     <div key={index} className="aspect-square overflow-hidden rounded-md border">
                       <Image
-                      width={100}
-                      height={100}
+                        width={100}
+                        height={100}
                         src={img.url}
                         alt={img.altText || `Product image ${index + 1}`}
                         className="w-full h-full object-cover"
@@ -412,7 +413,10 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] })  
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-medium mb-2">Details</h3>
-                  <p className="text-muted-foreground">{form.watch('description')}</p>
+                  <div 
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: form.watch('description') }}
+                  />
                 </div>
 
                 <div className="space-y-4">

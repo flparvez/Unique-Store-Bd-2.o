@@ -70,7 +70,12 @@ class ApiClient {
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, config);
 
-      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `Request failed with status ${response.status}`
+        );
+      }
 
       // Handle 204 No Content responses
       if (response.status === 204) {

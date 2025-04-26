@@ -1,4 +1,3 @@
-// components/RichTextEditor.tsx
 'use client'
 
 import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react'
@@ -25,18 +24,16 @@ const RichTextEditor = ({
   characterLimit = 10000,
 }: RichTextEditorProps) => {
   const [hydrated, setHydrated] = useState(false)
+  const [showHtmlEditor, setShowHtmlEditor] = useState(false)
+  const [htmlContent, setHtmlContent] = useState(content)
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: {
-          levels: [2, 3, 4],
-        },
+        heading: { levels: [2, 3, 4] },
       }),
       Image.configure({
-        HTMLAttributes: {
-          class: 'object-cover rounded-lg',
-        },
+        HTMLAttributes: { class: 'object-cover rounded-lg' },
       }),
       Link.configure({
         openOnClick: false,
@@ -45,19 +42,15 @@ const RichTextEditor = ({
           class: 'text-blue-600 hover:underline',
         },
       }),
-      Placeholder.configure({
-        placeholder,
-      }),
-      CharacterCount.configure({
-        limit: characterLimit,
-      }),
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
+      Placeholder.configure({ placeholder }),
+      CharacterCount.configure({ limit: characterLimit }),
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML())
+      const updatedHtml = editor.getHTML()
+      setHtmlContent(updatedHtml)
+      onChange(updatedHtml)
     },
     editorProps: {
       attributes: {
@@ -69,9 +62,17 @@ const RichTextEditor = ({
   useEffect(() => {
     if (editor && content && !hydrated) {
       editor.commands.setContent(content)
+      setHtmlContent(content)
       setHydrated(true)
     }
   }, [editor, content, hydrated])
+
+  const handleHtmlChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value
+    setHtmlContent(value)
+    editor?.commands.setContent(value)
+    onChange(value)
+  }
 
   if (!editor) {
     return null
@@ -79,10 +80,28 @@ const RichTextEditor = ({
 
   return (
     <div className="flex flex-col">
-      <EditorMenuBar editor={editor} />
-      
-      <EditorContent editor={editor} />
-      
+      <div className="flex items-center justify-between mb-2">
+        <EditorMenuBar editor={editor} />
+
+        <button
+        type='button'
+          onClick={() => setShowHtmlEditor(!showHtmlEditor)}
+          className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300"
+        >
+          {showHtmlEditor ? 'Visual Editor' : 'HTML Editor'}
+        </button>
+      </div>
+
+      {showHtmlEditor ? (
+        <textarea
+          value={htmlContent}
+          onChange={handleHtmlChange}
+          className="w-full min-h-[300px] p-4 border border-gray-300 rounded-lg font-mono text-sm"
+        />
+      ) : (
+        <EditorContent editor={editor} />
+      )}
+
       {editor.isActive('link') && (
         <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
           <div className="flex gap-2 p-2 bg-white border border-gray-200 rounded shadow-lg">
@@ -99,6 +118,7 @@ const RichTextEditor = ({
               className="px-2 py-1 text-sm border rounded"
             />
             <button
+              type="button"
               onClick={() => editor.chain().focus().unsetLink().run()}
               className="px-2 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600"
             >
@@ -107,7 +127,7 @@ const RichTextEditor = ({
           </div>
         </BubbleMenu>
       )}
-      
+
       <div className="flex justify-between mt-2 text-sm text-gray-500">
         <div>
           {editor.storage.characterCount.characters()}/{characterLimit} characters

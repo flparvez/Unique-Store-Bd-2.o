@@ -4,7 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -21,14 +29,10 @@ import { Badge } from '@/components/ui/badge';
 import { ApiResponseP } from '@/types/product';
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: 'Product name must be at least 2 characters.',
-  }).max(100),
+  name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(100),
   shortName: z.string().max(50),
   seo: z.string().max(150),
-  description: z.string().min(50, {
-    message: 'Description must be at least 50 characters.',
-  }).max(20000),
+  description: z.string().min(50, { message: 'Description must be at least 50 characters.' }).max(20000),
   category: z.string().min(1, 'Category is required'),
   price: z.coerce.number().min(1, 'Price must be at least 1'),
   originalPrice: z.coerce.number().optional(),
@@ -52,6 +56,7 @@ interface ProductEditFormProps {
 export function ProductEditForm({ categories, products }: ProductEditFormProps) {
   const product = products?.product;
   const router = useRouter();
+
   const [images, setImages] = useState<IProductImage[]>(product?.images || []);
   const [isLoading, setIsLoading] = useState(false);
   const [specs, setSpecs] = useState<{ key: string; value: string }[]>(product?.specifications || []);
@@ -72,7 +77,7 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
       stock: product?.stock || 0,
       warranty: product?.warranty || '7 day warranty',
       isFeatured: product?.isFeatured || false,
-      // isActive: product?.isActive ?? true,
+      isActive: product?.isActive ?? true,
       specifications: product?.specifications || [],
     },
   });
@@ -86,7 +91,7 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (images.length === 0) {
-      toast.error("Please upload at least 1 image");
+      toast.error('Please upload at least 1 image');
       return;
     }
 
@@ -112,9 +117,9 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
         throw new Error(`Failed to ${product ? 'update' : 'create'} product`);
       }
 
-      const data = await response.json();
+  
       toast.success(`Product ${product ? 'updated' : 'created'} successfully`);
-      router.push(`/products/${data.data._id}`);
+      router.push(`/admin`);
     } catch (error) {
       console.error(error);
       toast.error(`Failed to ${product ? 'update' : 'create'} product`);
@@ -125,12 +130,10 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
 
   const handleDeleteProduct = async () => {
     if (!product) return;
-    
+
     setIsDeleting(true);
     try {
-      const response = await fetch(`/api/products/${product._id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(`/api/products/${product._id}`, { method: 'DELETE' });
 
       if (!response.ok) {
         throw new Error('Failed to delete product');
@@ -174,9 +177,9 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
           </h1>
           {product && (
             <div className="flex items-center gap-2">
-              {/* <Badge variant={product.isActive ? 'default' : 'destructive'}>
+              <Badge variant={product.isActive ? 'default' : 'destructive'}>
                 {product.isActive ? 'Active' : 'Inactive'}
-              </Badge> */}
+              </Badge>
               <Button
                 variant="destructive"
                 size="sm"
@@ -188,12 +191,14 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
             </div>
           )}
         </div>
-        
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Basic Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Product Basic Info */}
+              {/* Left */}
               <div className="space-y-4">
+                {/* Product Name */}
                 <FormField
                   control={form.control}
                   name="name"
@@ -207,7 +212,7 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                     </FormItem>
                   )}
                 />
-
+                {/* Short Name */}
                 <FormField
                   control={form.control}
                   name="shortName"
@@ -217,14 +222,12 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                       <FormControl>
                         <Input placeholder="Short name for display" {...field} />
                       </FormControl>
-                      <FormDescription>
-                        Shorter version of product name (max 50 chars)
-                      </FormDescription>
+                      <FormDescription>Optional shorter name</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
+                {/* Category */}
                 <FormField
                   control={form.control}
                   name="category"
@@ -238,7 +241,7 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {categories?.map(category => (
+                          {categories.map(category => (
                             <SelectItem key={category._id} value={category._id}>
                               {category.name}
                             </SelectItem>
@@ -249,7 +252,7 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                     </FormItem>
                   )}
                 />
-
+                {/* SEO */}
                 <FormField
                   control={form.control}
                   name="seo"
@@ -265,8 +268,9 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                 />
               </div>
 
-              {/* Pricing & Stock */}
+              {/* Right */}
               <div className="space-y-4">
+                {/* Price */}
                 <FormField
                   control={form.control}
                   name="price"
@@ -280,30 +284,28 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                     </FormItem>
                   )}
                 />
-
+                {/* Original Price */}
                 <FormField
                   control={form.control}
                   name="originalPrice"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Original Price (৳)</FormLabel>
+                      <FormLabel>Original Price</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="Original price before discount"
+                          placeholder="Before discount"
                           {...field}
                           value={field.value || ''}
                           onChange={e => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
                         />
                       </FormControl>
-                      <FormDescription>
-                        Leave empty if no discount
-                      </FormDescription>
+                      <FormDescription>Optional if discounted</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
+                {/* Stock */}
                 <FormField
                   control={form.control}
                   name="stock"
@@ -311,13 +313,13 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                     <FormItem>
                       <FormLabel>Stock Quantity *</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Available quantity" {...field} />
+                        <Input type="number" placeholder="Available stock" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
+                {/* Warranty */}
                 <FormField
                   control={form.control}
                   name="warranty"
@@ -331,45 +333,40 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                     </FormItem>
                   )}
                 />
-
+                {/* Status */}
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="isFeatured"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                      <FormItem className="flex items-start space-x-3 border p-4 rounded-md">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Featured Product</FormLabel>
-                          <FormDescription>
-                            Show in featured section
-                          </FormDescription>
+                        <div>
+                          <FormLabel>Featured</FormLabel>
+                          <FormDescription>Show on homepage</FormDescription>
                         </div>
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="isActive"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                      <FormItem className="flex items-start space-x-3 border p-4 rounded-md">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
-                        <div className="space-y-1 leading-none">
+                        <div>
                           <FormLabel>Active</FormLabel>
-                          <FormDescription>
-                            Visible to customers
-                          </FormDescription>
+                          <FormDescription>Product is visible</FormDescription>
                         </div>
                       </FormItem>
                     )}
@@ -389,100 +386,50 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                     <RichTextEditor
                       content={field.value}
                       onChange={field.onChange}
-                      placeholder="Detailed product description..."
+                      placeholder="Enter full description"
                     />
                   </FormControl>
-                  <FormDescription>
-                    Minimum 50 characters. Include features, benefits, and specifications.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Image Upload */}
+            {/* Images */}
             <div>
               <FormLabel>Product Images *</FormLabel>
               <ImageUploader
                 onUploadComplete={handleImageUpload}
                 initialImages={images}
                 onRemoveImage={handleRemoveImage}
-                // maxImages={10}
               />
-              <FormDescription>
-                First image will be used as the main product image
-              </FormDescription>
+              <FormDescription>First image will be the cover photo</FormDescription>
             </div>
 
             {/* Specifications */}
             <div>
               <FormLabel>Specifications</FormLabel>
               <div className="space-y-2">
-                {specs.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-                    {specs.map((spec, index) => (
-                      <div key={index} className="flex items-center gap-2 p-2 border rounded">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{spec.key}</p>
-                          <p className="text-sm text-muted-foreground truncate">{spec.value}</p>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8"
-                          onClick={() => removeSpecification(index)}
-                        >
-                          <span className="text-destructive">×</span>
-                        </Button>
-                      </div>
-                    ))}
+                {specs.map((spec, index) => (
+                  <div key={index} className="flex gap-2">
+                    <div className="flex-1">{spec.key}: {spec.value}</div>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => removeSpecification(index)}>
+                      ×
+                    </Button>
                   </div>
-                )}
-
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Input
-                    placeholder="Specification key (e.g. 'Color')"
-                    value={currentSpec.key}
-                    onChange={e => setCurrentSpec({ ...currentSpec, key: e.target.value })}
-                    className="flex-1"
-                  />
-                  <Input
-                    placeholder="Specification value (e.g. 'Black')"
-                    value={currentSpec.value}
-                    onChange={e => setCurrentSpec({ ...currentSpec, value: e.target.value })}
-                    className="flex-1"
-                  />
-                  <Button
-                    type="button"
-                    onClick={addSpecification}
-                    disabled={!currentSpec.key || !currentSpec.value}
-                    className="sm:w-auto"
-                  >
-                    Add Specification
-                  </Button>
+                ))}
+                <div className="flex gap-2 mt-2">
+                  <Input placeholder="Spec Key" value={currentSpec.key} onChange={e => setCurrentSpec({ ...currentSpec, key: e.target.value })} />
+                  <Input placeholder="Spec Value" value={currentSpec.value} onChange={e => setCurrentSpec({ ...currentSpec, value: e.target.value })} />
+                  <Button type="button" onClick={addSpecification}>Add</Button>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-end gap-4 pt-4 border-t">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setPreviewOpen(true)}
-                disabled={!form.formState.isDirty && images.length === 0}
-              >
-                Preview
-              </Button>
-              <Button type="submit" disabled={isLoading} className="min-w-[120px]">
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="animate-spin">↻</span>
-                    {product ? 'Updating...' : 'Creating...'}
-                  </span>
-                ) : (
-                  product ? 'Update Product' : 'Create Product'
-                )}
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-4 pt-4">
+              <Button variant="outline" type="button" onClick={() => setPreviewOpen(true)}>Preview</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Saving...' : 'Save Product'}
               </Button>
             </div>
           </form>
@@ -490,88 +437,19 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
 
         {/* Preview Dialog */}
         <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Product Preview</DialogTitle>
             </DialogHeader>
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold">{form.watch('name')}</h2>
-              
-              {images.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {images.map((img, index) => (
-                    <div key={index} className="aspect-square overflow-hidden rounded-md border">
-                      <Image
-                        width={200}
-                        height={200}
-                        src={img.url}
-                        alt={img.altText || `Product image ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="aspect-video bg-gray-100 rounded-md flex items-center justify-center">
-                  <p className="text-gray-500">No images uploaded</p>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-medium mb-2">Details</h3>
-                  <div 
-                    className="prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: form.watch('description') || '<p>No description provided</p>' }}
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-medium">Price</h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl font-bold">৳{form.watch('price')?.toLocaleString()}</span>
-                      {form.watch('originalPrice') && (
-                        <span className="text-muted-foreground line-through">
-                          ৳{form.watch('originalPrice')?.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium">Stock</h3>
-                    <p>{form.watch('stock')} available</p>
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium">Warranty</h3>
-                    <p>{form.watch('warranty') || 'Not specified'}</p>
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium">Status</h3>
-                    <p>{form.watch('isFeatured') && <Badge className="mr-2">Featured</Badge>}
-                    <Badge variant={form.watch('isActive') ? 'default' : 'destructive'}>
-                      {form.watch('isActive') ? 'Active' : 'Inactive'}
-                    </Badge></p>
-                  </div>
-                </div>
+            {/* Preview Content */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold">{form.getValues().name}</h2>
+              <p>{form.getValues().description}</p>
+              <div className="flex flex-wrap gap-2">
+                {images.map((img, idx) => (
+                  <Image key={idx} src={img.url} alt="Product Image" width={100} height={100} />
+                ))}
               </div>
-
-              {specs.length > 0 && (
-                <div>
-                  <h3 className="font-medium mb-2">Specifications</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {specs.map((spec, index) => (
-                      <div key={index} className="border p-3 rounded-md">
-                        <h4 className="font-medium">{spec.key}</h4>
-                        <p className="text-muted-foreground">{spec.value}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </DialogContent>
         </Dialog>

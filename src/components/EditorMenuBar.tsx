@@ -26,6 +26,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
     <div className="flex flex-wrap items-center gap-2 p-2 border border-gray-300 rounded-t-lg bg-gray-50">
       {/* Text formatting */}
       <button
+      type='button'
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-gray-200' : ''}`}
         title="Bold"
@@ -33,6 +34,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
         <strong>B</strong>
       </button>
       <button
+      type='button'
         onClick={() => editor.chain().focus().toggleItalic().run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-gray-200' : ''}`}
         title="Italic"
@@ -40,6 +42,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
         <em>I</em>
       </button>
       <button
+      type='button'
         onClick={() => editor.chain().focus().toggleStrike().run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('strike') ? 'bg-gray-200' : ''}`}
         title="Strikethrough"
@@ -49,6 +52,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
       
       {/* Headings */}
       <button
+      type='button'
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`}
         title="Heading 2"
@@ -56,6 +60,8 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
         H2
       </button>
       <button
+
+      type='button'
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''}`}
         title="Heading 3"
@@ -65,6 +71,8 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
       
       {/* Lists */}
       <button
+
+      type='button'
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-gray-200' : ''}`}
         title="Bullet List"
@@ -72,6 +80,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
         • List
       </button>
       <button
+      type='button'
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-gray-200' : ''}`}
         title="Numbered List"
@@ -81,6 +90,8 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
       
       {/* Text alignment */}
       <button
+
+      type='button'
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''}`}
         title="Align Left"
@@ -88,6 +99,8 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
         ←
       </button>
       <button
+
+      type='button'
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''}`}
         title="Align Center"
@@ -95,6 +108,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
         ↔
       </button>
       <button
+      type='button'
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''}`}
         title="Align Right"
@@ -104,6 +118,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
       
       {/* Links */}
       <button
+      type='button'
         onClick={() => {
           const previousUrl = editor.getAttributes('link').href
           const url = window.prompt('URL', previousUrl)
@@ -132,6 +147,7 @@ const EditorMenuBar = ({ editor }: EditorMenuBarProps) => {
           className="px-2 py-1 text-sm border rounded"
         />
         <button
+        type='button'
           onClick={addImage}
           className="px-2 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
         >

@@ -26,5 +26,7 @@ export default function EditProductPage({id}: {id: string}) {
 
   if (!product) return <div><ProductLoadingSkeleton /></div>;
 
-  return <ProductEditForm products={product} categories={categories} />;
+  return <div className='w-full py-4 px-2 '> 
+    <ProductEditForm products={product} categories={categories} />
+  </div>;
 }

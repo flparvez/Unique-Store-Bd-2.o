@@ -1,39 +1,40 @@
+"use client";
+import { apiClient } from '@/lib/api-client';
 import { ApiResponse } from '@/types/product';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ProductLoadingSkeleton from '../ProductLoadingSkeleton';
 
-interface AdminComponentProps {
-  product: ApiResponse | null;
-}
 
-const AdminComponent: React.FC<AdminComponentProps> = ({ product }) => {
-  // Early return for loading/error states
-  if (!product) {
-    return (
-      <div className="p-4">
-        <h2>Admin</h2>
-        <p>Loading products...</p>
-      </div>
-    );
-  }
+
+const AdminComponent = () => {
+ const [product, setProduct] = useState<ApiResponse>();
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const data = await apiClient.getProducts();
+        setProduct(data);
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+ 
 
   // Check for empty products array
-  if (!product.products || product.products.length === 0) {
-    return (
-      <div className="p-4">
-        <h2>Admin</h2>
-        <Link className="text-xl" href="/admin/product/create-product">
-          Create Product
-        </Link>
-        <p className="mt-4">No products found</p>
-      </div>
-    );
+  if (!product?.products || product.products.length === 0) {
+  
+      return <ProductLoadingSkeleton />;
+    
   }
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Admin</h2>
+      <h2 className="text-2xl font-bold mb-4"> Admin</h2>
 
       <Link 
         className="text-xl mb-6 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition" 

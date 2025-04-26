@@ -127,7 +127,7 @@ class ApiClient {
   }
 
   async getProduct(id: string) {
-    return this.fetch<IProduct>(`/products/id/${id}`);
+    return this.fetch<ApiResponseP>(`/products/id/${id}`);
   }
 
   async getProductBySlug(slug: string) {

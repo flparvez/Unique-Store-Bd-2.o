@@ -11,13 +11,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { ImageUploader } from '@/components/ImageUploadp';
-import { IProductImage, IProduct } from '@/models/Product';
+import { IProductImage } from '@/models/Product';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { ICategory } from '@/models/Category';
 import RichTextEditor from '@/components/RichTextEditor';
 import { Badge } from '@/components/ui/badge';
+import { ApiResponseP } from '@/types/product';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -45,10 +46,11 @@ const formSchema = z.object({
 
 interface ProductEditFormProps {
   categories: ICategory[];
-  product?: IProduct;
+  products?: ApiResponseP;
 }
 
-export function ProductEditForm({ categories, product }: ProductEditFormProps) {
+export function ProductEditForm({ categories, products }: ProductEditFormProps) {
+  const product = products?.product;
   const router = useRouter();
   const [images, setImages] = useState<IProductImage[]>(product?.images || []);
   const [isLoading, setIsLoading] = useState(false);

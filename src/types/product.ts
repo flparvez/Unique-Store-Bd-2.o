@@ -88,6 +88,7 @@ export interface IProduct {
       reviews: mongoose.Types.ObjectId[];
       rating?: number;
       isFeatured: boolean;
+      isActive: boolean;
       createdAt?: Date;
       updatedAt?: Date;
     };

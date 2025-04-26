@@ -40,7 +40,8 @@ const {id} = (await params)
     }
 
     return NextResponse.json({
-      product
+      success: true,
+      product: product
     });
   } catch (error: unknown) {
     return NextResponse.json(

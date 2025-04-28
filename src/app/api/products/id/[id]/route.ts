@@ -98,7 +98,7 @@ const {id} = (await params)
       updateData,
       { new: true, runValidators: true }
     )
-console.log(updatedProduct)
+
     if (!updatedProduct) {
       return NextResponse.json(
         { success: false, error: 'Update failed' },

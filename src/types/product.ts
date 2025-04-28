@@ -1,3 +1,4 @@
+import { IImage } from "@/models/Category";
 import { IProductImage } from "@/models/Product";
 import mongoose from "mongoose";
 
@@ -29,10 +30,20 @@ export interface IProduct {
     reviews: mongoose.Types.ObjectId[];
     rating?: number;
     isFeatured: boolean;
+    isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;
   }
-  
+  export interface ICategory {
+    _id: string;
+    name: string;
+    slug: string;
+    tags?: string;
+    description?: string;
+    images: IImage[];
+    createdAt?: Date;
+    updatedAt?: Date;
+  }
   export interface IReview {
     _id: string;
     user: {

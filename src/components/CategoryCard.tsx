@@ -1,24 +1,34 @@
 'use client';
 
 import { ICategory } from '@/models/Category';
+import Image from 'next/image';
 
 
-export default function CategoryList({ category }: { category: ICategory }) {
+export default function CategoryList({ category }: { category: ICategory[] }) {
 
-  
+
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className='border-2'>
 
-        <div 
-    
-          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-        >
-          <h3 className="font-semibold text-lg">{category.name}</h3>
-          <p className="text-gray-600 mt-2">{category.description}</p>
-     
-        </div>
-
+      {
+        category && category?.map((category) => (
+            <div key={category._id} className='container'>
+                <h2>{category.name}</h2>
+                <p>{category.description}</p> 
+                <div className='flex'>
+                {
+                  category?.images && category.images.length > 0 &&  category.images.map((image) => (
+                    <Image key={image.publicId} src={image.url} alt={category.name} width={200} height={200} />
+                  ))
+                }
+                </div>
+              
+               
+            </div>
+        ))
+      }
     </div>
+
   );
 }

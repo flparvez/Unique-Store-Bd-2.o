@@ -1,32 +1,18 @@
-"use client";
-import { apiClient } from '@/lib/api-client';
-import { ApiResponse } from '@/types/product';
+
+
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ProductLoadingSkeleton from '../ProductLoadingSkeleton';
+import { getAllProducts } from '@/lib/action/product-action';
 
 
 
-const AdminComponent = () => {
- const [product, setProduct] = useState<ApiResponse>();
+const AdminComponent = async () => {
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const data = await apiClient.getProducts();
-        setProduct(data);
-      } catch (error) {
-        console.error("Error fetching videos:", error);
-      }
-    };
-
-    fetchVideos();
-  }, []);
- 
-
+const products = (await getAllProducts())
   // Check for empty products array
-  if (!product?.products || product.products.length === 0) {
+  if (products.length === 0) {
   
       return <ProductLoadingSkeleton />;
     
@@ -44,7 +30,7 @@ const AdminComponent = () => {
       </Link>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {product.products.map((product) => {
+        {products.map((product) => {
           // Ensure image URL exists
           const imageUrl = product.images?.[0]?.url || "/placeholder-product.jpg";
           const altText = product.name || "Product image";

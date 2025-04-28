@@ -2,10 +2,18 @@
 import Link from "next/link";
 
 import ProductList from "@/components/ProductList";
-import CategoryList from "@/components/CategoryList";
+
+import { getAllProducts } from "@/lib/action/product-action";
+
+
+
+
 // import CategoryList from "@/components/CategoryList";
-export default async function Home() {
+export default async function HomePage() {
  
+    const products=(await getAllProducts()).slice(0, 10);
+
+
   return (
     <div className="container mx-auto px-4 py-8">
     <div className="flex justify-between items-center mb-8">
@@ -23,15 +31,13 @@ export default async function Home() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Featured Products</h2>
        
-            <ProductList  />
+            <ProductList 
+           data={products}
+            />
        
         </section>
 
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Categories</h2>
-          <CategoryList />
-        </section>
-  
+   
   </div>
   );
 }

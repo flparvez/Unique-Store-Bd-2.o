@@ -5,59 +5,25 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ProductLoadingSkeleton from './ProductLoadingSkeleton';
-import { apiClient } from '@/lib/api-client';
-import { ApiResponseP } from '@/types/product';
-
-interface ProductDetailPageProps {
-  slug: string;
-}
+import { IProduct } from '@/types/product';
 
 interface ProductImage {
   url: string;
   altText?: string;
 }
 
-export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
-  const [data, setData] = useState<ApiResponseP | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const ProductDetailPage = ({ product }: { product: IProduct }) => {
   const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        const response = await apiClient.getProductBySlug(slug);
-        setData(response);
-        if (response?.product?.images?.length) {
-          setSelectedImage(response.product.images[0]);
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load product');
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (product?.images?.length > 0) {
+      setSelectedImage(product.images[0]);
+    }
+  }, [product.images]);
 
-    fetchProduct();
-  }, [slug]);
-
-  if (loading || error || !data?.product) {
+  if (!product) {
     return <ProductLoadingSkeleton />;
   }
-
-  const product = data.product;
-  const {
-    name,
-    shortName,
-    description,
-    price,
-    originalPrice,
-    stock,
-    warranty,
-    images = [],
-    specifications = [],
-  } = product;
 
   return (
     <div className="container px-4 py-8 md:py-12">
@@ -70,7 +36,7 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
             {selectedImage ? (
               <Image
                 src={selectedImage.url}
-                alt={selectedImage.altText || `${name} - Main Image`}
+                alt={selectedImage.altText || `${product.name} - Main Image`}
                 width={600}
                 height={600}
                 className="w-full h-full object-contain"
@@ -83,7 +49,7 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
 
           {/* Thumbnail Gallery */}
           <div className="flex gap-3 overflow-x-auto py-2">
-            {images.map((img, index) => (
+            {product.images.map((img, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedImage(img)}
@@ -93,11 +59,11 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
                     ? 'border-primary ring-2 ring-primary/30'
                     : 'border-transparent'
                 )}
-                aria-label={`View ${name} image ${index + 1}`}
+                aria-label={`View ${product.name} image ${index + 1}`}
               >
                 <Image
                   src={img.url}
-                  alt={img.altText || `${name} thumbnail ${index + 1}`}
+                  alt={img.altText || `${product.name} thumbnail ${index + 1}`}
                   width={80}
                   height={80}
                   className="w-full h-full object-cover"
@@ -109,37 +75,42 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
 
         {/* Product Info */}
         <div className="w-full md:w-1/2 space-y-6">
+          {/* Product Name and Short Description */}
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{name}</h1>
-            {shortName && (
-              <p className="text-sm md:text-base text-muted-foreground">{shortName}</p>
-            )}
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+              {product.name}
+            </h1>
+            <p className="text-sm md:text-base text-muted-foreground">
+              {product.shortName}
+            </p>
           </div>
 
           {/* Price Section */}
           <div className="flex items-baseline gap-3">
             <span className="text-2xl md:text-3xl font-semibold text-primary">
-              ৳{price?.toLocaleString()}
+              ৳{product.price?.toLocaleString()}
             </span>
-            {originalPrice && originalPrice > price && (
+            {product.originalPrice && product.originalPrice > product.price && (
               <span className="text-lg line-through text-muted-foreground">
-                ৳{originalPrice.toLocaleString()}
+                ৳{product.originalPrice.toLocaleString()}
               </span>
             )}
           </div>
 
-          {/* Stock Status */}
+          {/* Stock and Warranty */}
           <div className="flex items-center gap-2">
             <span
               className={cn(
                 'text-sm font-medium',
-                stock > 0 ? 'text-green-600' : 'text-red-600'
+                product.stock > 0 ? 'text-green-600' : 'text-red-600'
               )}
             >
-              {stock > 0 ? `${stock} in stock` : 'Out of stock'}
+              {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
             </span>
             <span className="text-xs text-gray-500">•</span>
-            <span className="text-sm text-gray-600">Warranty: {warranty}</span>
+            <span className="text-sm text-gray-600">
+              Warranty: {product.warranty}
+            </span>
           </div>
 
           {/* Action Buttons */}
@@ -147,7 +118,7 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
             <Button
               size="lg"
               className="flex-1"
-              disabled={stock <= 0}
+              disabled={product.stock <= 0}
             >
               Add to Cart
             </Button>
@@ -161,13 +132,13 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
           </div>
 
           {/* Quick Specs */}
-          {specifications.length > 0 && (
+          {product.specifications.length > 0 && (
             <div className="pt-4">
               <h3 className="text-sm font-semibold text-gray-900 mb-2">
                 Key Specifications
               </h3>
               <ul className="space-y-2">
-                {specifications.slice(0, 4).map((spec, idx) => (
+                {product.specifications.slice(0, 4).map((spec, idx) => (
                   <li key={idx} className="flex">
                     <span className="text-sm text-gray-600 w-24 flex-shrink-0">
                       {spec.key}
@@ -205,18 +176,18 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
             className="prose max-w-none prose-p:leading-relaxed prose-li:leading-relaxed
                       prose-headings:font-medium prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3
                       prose-img:rounded-lg prose-img:shadow-sm prose-img:border"
-            dangerouslySetInnerHTML={{ __html: description || '' }}
+            dangerouslySetInnerHTML={{ __html: product.description || '' }}
           />
         </div>
 
         {/* Full Specifications Section */}
-        {specifications.length > 0 && (
+        {product.specifications.length > 0 && (
           <div className="py-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
               Full Specifications
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {specifications.map((spec, idx) => (
+              {product.specifications.map((spec, idx) => (
                 <div
                   key={idx}
                   className="border rounded-lg p-4 hover:shadow-sm transition-shadow"
@@ -234,3 +205,5 @@ export const ProductDetailsPage = ({ slug }: ProductDetailPageProps) => {
     </div>
   );
 };
+
+export default ProductDetailPage;

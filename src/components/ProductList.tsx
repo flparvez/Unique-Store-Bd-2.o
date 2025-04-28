@@ -1,43 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
-import { ApiResponse, IProduct, Pagination } from "@/types/product";
+import {   IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, ShoppingCart, Heart } from "lucide-react";
-import { apiClient } from "@/lib/api-client";
 
-const ProductList = () => {
-  const [product, setProduct] = useState<ApiResponse>();
+const ProductList = ({data}:{data:IProduct[]}) => {
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const data = await apiClient.getProducts();
-        setProduct(data);
-      } catch (error) {
-        console.error("Error fetching videos:", error);
-      }
-    };
 
-    fetchVideos();
-  }, []);
- 
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-8 text-gray-800">Our Products</h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {product?.products?.map((product) => (
+        {data?.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
 
-   {    product?.pagination && (
+   {/* {    d?.pagination && (
         <PaginationControls pagination={product.pagination} />
-      )}
+      )} */}
     </div>
   );
 };
@@ -120,15 +106,15 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 };
 
 
-const PaginationControls = ({ pagination }: { pagination: Pagination }) => (
-  <div className="mt-8 flex justify-center">
-    <div className="join">
-      <button className="join-item btn">«</button>
-      <button className="join-item btn">Page {pagination?.page}</button>
-      <button className="join-item btn">»</button>
-    </div>
-  </div>
-);
+// const PaginationControls = ({ pagination }: { pagination: Pagination }) => (
+//   <div className="mt-8 flex justify-center">
+//     <div className="join">
+//       <button className="join-item btn">«</button>
+//       <button className="join-item btn">Page {pagination?.page}</button>
+//       <button className="join-item btn">»</button>
+//     </div>
+//   </div>
+// );
 
 
 

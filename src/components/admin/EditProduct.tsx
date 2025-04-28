@@ -23,10 +23,10 @@ import { IProductImage } from '@/models/Product';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
-import { ICategory } from '@/models/Category';
+
 import RichTextEditor from '@/components/RichTextEditor';
 import { Badge } from '@/components/ui/badge';
-import { ApiResponseP } from '@/types/product';
+import {  IProduct } from '@/types/product';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(100),
@@ -47,14 +47,17 @@ const formSchema = z.object({
     })
   ).optional(),
 });
-
+interface ICategory {
+  _id: string;
+  name: string;
+}
 interface ProductEditFormProps {
   categories: ICategory[];
-  products?: ApiResponseP;
+  product?: IProduct;
 }
 
-export function ProductEditForm({ categories, products }: ProductEditFormProps) {
-  const product = products?.product;
+export function ProductEditForm({ categories, product }: ProductEditFormProps) {
+
   const router = useRouter();
 
   const [images, setImages] = useState<IProductImage[]>(product?.images || []);
@@ -241,7 +244,7 @@ export function ProductEditForm({ categories, products }: ProductEditFormProps) 
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {categories.map(category => (
+                          {categories?.map(category => (
                             <SelectItem key={category._id} value={category._id}>
                               {category.name}
                             </SelectItem>

@@ -109,10 +109,12 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
             {product.discount ? (
               <>
                 <span className="text-3xl font-bold text-red-600">
-                  ${(product.price * (1 - product.discount / 100)).toFixed(2)}
+                ৳{(product.price.toFixed(2))}
                 </span>
                 <span className="text-xl text-gray-500 line-through">
-                  ${product.price.toFixed(2)}
+                {
+  product.originalPrice?  <span>                ৳{product.originalPrice.toFixed(2)}</span> : null
+}
                 </span>
                 <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-0.5 rounded">
                   {product.discount}% OFF
@@ -120,7 +122,7 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
               </>
             ) : (
               <span className="text-3xl font-bold text-gray-900">
-                ${product.price.toFixed(2)}
+                ৳{product.price.toFixed(2)}
               </span>
             )}
           </div>

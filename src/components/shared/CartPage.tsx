@@ -58,10 +58,7 @@ const CartPage = () => {
           {/* Cart Items */}
           <div className="md:col-span-2 space-y-6">
             {cart.items.map((item) => {
-              const discountedPrice = item.product.discount
-                ? item.product.price * (1 - item.product.discount / 100)
-                : item.product.price;
-
+           
               return (
                 <div
                   key={`${item.product._id}-${item.selectedVariant || 'default'}`}
@@ -140,15 +137,15 @@ const CartPage = () => {
                         {item.product.discount ? (
                           <div>
                             <span className="text-lg font-semibold text-red-600">
-                              ${(discountedPrice * item.quantity).toFixed(2)}
+                            ৳{(item.product.price * item.quantity).toFixed(2)}
                             </span>
                             <span className="ml-2 text-sm text-gray-500 line-through">
-                              ${(item.product.price * item.quantity).toFixed(2)}
+                            ৳ {(item.product.originalPrice! * item.quantity).toFixed(2)}
                             </span>
                           </div>
                         ) : (
                           <span className="text-lg font-semibold">
-                            ${(item.product.price * item.quantity).toFixed(2)}
+                            ৳{(item.product.price * item.quantity).toFixed(2)}
                           </span>
                         )}
                       </div>
@@ -175,33 +172,28 @@ const CartPage = () => {
                 Order Summary
               </h2>
               <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="text-gray-900">
-                    ${(cart.totalPrice + cart.totalDiscount).toFixed(2)}
-                  </span>
-                </div>
+            
                 {cart.totalDiscount > 0 && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">Discount</span>
                     <span className="text-green-600">
-                      -${cart.totalDiscount.toFixed(2)}
+                      -৳{cart.totalDiscount.toFixed(2)}
                     </span>
                   </div>
                 )}
-                <div className="border-t pt-4 flex justify-between">
+                <div className="border-t mb-4 pt-4 flex justify-between">
                   <span className="font-medium text-gray-900">Total</span>
                   <span className="font-medium text-gray-900">
-                    ${cart.totalPrice.toFixed(2)}
+                  ৳{cart.totalPrice.toFixed(2)}
                   </span>
                 </div>
               </div>
-              <button
-                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-medium"
+              <Link href={'checkout'}
+                className="w-full mt-14 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-medium"
                 onClick={() => alert('Proceeding to checkout')}
               >
                 Checkout
-              </button>
+              </Link>
               <div className="mt-4 flex justify-center">
                 <Link
                   href="/products"

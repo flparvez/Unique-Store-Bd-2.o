@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+
 import { cn } from '@/lib/utils';
 import ProductLoadingSkeleton from './ProductLoadingSkeleton';
 import { IProduct } from '@/types/product';
+import { useCart } from '@/hooks/useCart';
+import toast from 'react-hot-toast';
+
 
 interface ProductImage {
   url: string;
@@ -14,12 +17,28 @@ interface ProductImage {
 
 const ProductDetailPage = ({ product }: { product: IProduct }) => {
   const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<string>();
+  const [quantity, setQuantity] = useState(1);
+  const { addToCart, getItem, isInitialized } = useCart();
 
+  const cartItem = getItem(product._id, selectedVariant);
+  const currentQuantity = cartItem?.quantity || 0;
+  const availableStock = product.stock - currentQuantity;
   useEffect(() => {
     if (product?.images?.length > 0) {
       setSelectedImage(product.images[0]);
     }
   }, [product.images]);
+
+  const handleAddToCart = () => {
+    if (availableStock <= 0) return;
+    addToCart(product, quantity, selectedVariant);
+    toast.success('Product added to cart');
+  };
+
+  if (!isInitialized) return <div className="text-center py-8">Loading cart...</div>;
+
+
 
   if (!product) {
     return <ProductLoadingSkeleton />;
@@ -85,50 +104,88 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
             </p>
           </div>
 
-          {/* Price Section */}
-          <div className="flex items-baseline gap-3">
-            <span className="text-2xl md:text-3xl font-semibold text-primary">
-              ৳{product.price?.toLocaleString()}
-            </span>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-lg line-through text-muted-foreground">
-                ৳{product.originalPrice.toLocaleString()}
+ {/* Price Section */}
+ <div className="flex items-center space-x-4">
+            {product.discount ? (
+              <>
+                <span className="text-3xl font-bold text-red-600">
+                  ${(product.price * (1 - product.discount / 100)).toFixed(2)}
+                </span>
+                <span className="text-xl text-gray-500 line-through">
+                  ${product.price.toFixed(2)}
+                </span>
+                <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-0.5 rounded">
+                  {product.discount}% OFF
+                </span>
+              </>
+            ) : (
+              <span className="text-3xl font-bold text-gray-900">
+                ${product.price.toFixed(2)}
               </span>
             )}
           </div>
 
-          {/* Stock and Warranty */}
-          <div className="flex items-center gap-2">
-            <span
-              className={cn(
-                'text-sm font-medium',
-                product.stock > 0 ? 'text-green-600' : 'text-red-600'
-              )}
-            >
-              {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-            </span>
-            <span className="text-xs text-gray-500">•</span>
-            <span className="text-sm text-gray-600">
-              Warranty: {product.warranty}
+          {/* Variant Selection (if applicable) */}
+          {product.specifications.some((spec) => spec.key === 'Color') && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-900">Color</h3>
+              <div className="flex space-x-2 mt-2">
+                {product.specifications
+                  .filter((spec) => spec.key === 'Color')
+                  .map((spec) => (
+                    <button
+                      key={spec.value}
+                      onClick={() => setSelectedVariant(spec.value)}
+                      className={`w-8 h-8 rounded-full border-2 ${
+                        selectedVariant === spec.value
+                          ? 'border-blue-500'
+                          : 'border-transparent'
+                      }`}
+                      style={{ backgroundColor: spec.value }}
+                      title={spec.value}
+                    />
+                  ))}
+              </div>
+            </div>
+          )}
+  
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+   {/* Quantity Selector */}
+   <div className="flex items-center space-x-4">
+            <div className="flex items-center border rounded-md">
+              <button
+                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                disabled={quantity <= 1}
+                className="px-3 py-1 text-lg disabled:opacity-50"
+              >
+                -
+              </button>
+              <span className="px-4 py-1">{quantity}</span>
+              <button
+                onClick={() => setQuantity((prev) => Math.min(availableStock, prev + 1))}
+                disabled={quantity >= availableStock}
+                className="px-3 py-1 text-lg disabled:opacity-50"
+              >
+                +
+              </button>
+            </div>
+            <span className="text-sm text-gray-500">
+              {availableStock} available
             </span>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <Button
-              size="lg"
-              className="flex-1"
-              disabled={product.stock <= 0}
-            >
-              Add to Cart
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="flex-1"
-            >
-              Buy Now
-            </Button>
+          {/* Add to Cart Button */}
+          <button
+            onClick={handleAddToCart}
+            disabled={availableStock <= 0}
+            className={`w-full py-3 px-4 rounded-md font-medium ${
+              availableStock <= 0
+                ? 'bg-gray-300 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700 text-white'
+            }`}
+          >
+            {availableStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+          </button>
           </div>
 
           {/* Quick Specs */}

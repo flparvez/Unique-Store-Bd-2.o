@@ -81,9 +81,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const getItem = (productId: string, selectedVariant?: string) => {
-    return cart.items.find(
+    return cart?.items?.find(
       (item) =>
-        item.product._id === productId &&
+        item?.product?._id === productId &&
         (selectedVariant ? item.selectedVariant === selectedVariant : true)
     );
   };

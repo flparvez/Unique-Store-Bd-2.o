@@ -1,3 +1,4 @@
+import { Navbar } from '@/components/Navbar';
 import ProductDetailPage from '@/components/ProductDetailPage';
 import { fetchProductBySlug } from '@/lib/action/product-action';
 
@@ -9,7 +10,7 @@ const product = await fetchProductBySlug(slug)
 
   return (
     <div>
-
+       <Navbar />
       <ProductDetailPage product = {product} />
     </div>
   )

@@ -4,6 +4,8 @@ import { connectToDb } from '@/lib/db';
 import mongoose from 'mongoose';
 import {  IProduct } from '@/types/product';
 import Category, { ICategory } from '@/models/Category';
+import { Order } from '@/models/Order';
+import User from '@/models/User';
 
 const PAGE_SIZE = 10;
 const MAX_PRICE = 10000000;
@@ -72,7 +74,7 @@ export async function fetchProducts(params: FetchProductsParams = {}): Promise<P
 
   try {
     const filters = {
-      isPublished: true,
+ 
       ...(query && { name: { $regex: query, $options: 'i' } }),
       ...(category && mongoose.Types.ObjectId.isValid(category) && { category: new mongoose.Types.ObjectId(category) }),
       ...(tag && { tags: tag }),
@@ -212,6 +214,34 @@ export async function getAllCategory():Promise<ICategory[]> {
     const category = await Category.find()
     
     return JSON.parse(JSON.stringify(category));
+  } catch (error) {
+    console.error('Failed to fetch all Category:', error);
+    throw new Error('Failed to fetch all category');
+  }
+ 
+}
+
+export async function getAllOrders() {
+  await connectToDb()
+
+  try {
+    const order = await Order.find()
+    
+    return JSON.parse(JSON.stringify(order));
+  } catch (error) {
+    console.error('Failed to fetch all Category:', error);
+    throw new Error('Failed to fetch all category');
+  }
+ 
+}
+
+export async function getAllUsers() {
+  await connectToDb()
+
+  try {
+    const user = await User.find()
+    
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
     console.error('Failed to fetch all Category:', error);
     throw new Error('Failed to fetch all category');

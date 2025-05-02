@@ -19,7 +19,7 @@ export default async function HomePage() {
     <div className="flex justify-between items-center mb-8">
       <h1 className="text-3xl font-bold">Welcome to Our Store</h1>
       <Link 
-        href="/admin/product/create-product" 
+        href="/admin/products/create-product" 
         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
       >
         Create Product

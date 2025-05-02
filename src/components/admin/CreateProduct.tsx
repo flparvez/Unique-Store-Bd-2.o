@@ -13,10 +13,11 @@ import { useState } from 'react';
 import { ImageUploader } from '@/components/ImageUploadp';
 import { IProductImage } from '@/models/Product';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import toast from 'react-hot-toast';
+
 import Image from 'next/image';
 import { ICategory } from '@/models/Category';
 import RichTextEditor from '@/components/RichTextEditor'; // Import the rich text editor
+import toast from 'react-hot-toast';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -42,6 +43,8 @@ const formSchema = z.object({
 });
 
 export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
+
+  const site = process.env.SITE_URL || 'http://localhost:3000/';
   const router = useRouter();
   const [images, setImages] = useState<IProductImage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +78,7 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/products', {
+      const response = await fetch(`${site}api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,9 +94,9 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
         throw new Error('Failed to create product');
       }
 
-      const data = await response.json();
+ 
       toast.success("Product created successfully");
-      router.push(`/products/${data.data._id}`);
+      router.push('/admin/products');
     } catch (error) {
       console.log(error);
       toast.error("Failed to create product");

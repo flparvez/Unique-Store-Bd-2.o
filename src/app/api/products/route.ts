@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     const product = await Product.create({
       ...body,
       slug: slugify(body.name, { lower: true, strict: true }),
-      shortName: body.shortName || body.name.substring(0, 50),
+      shortName: body.shortName || body.name.substring(0, 80),
       stock: body.stock || 0,
       sold: body.sold || 0
     });

@@ -13,10 +13,9 @@ import { useState } from 'react';
 import { ImageUploader } from '@/components/ImageUploadp';
 import { IProductImage } from '@/models/Product';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-
 import Image from 'next/image';
 import { ICategory } from '@/models/Category';
-import RichTextEditor from '@/components/RichTextEditor'; // Import the rich text editor
+import RichTextEditor from '@/components/RichTextEditor';
 import toast from 'react-hot-toast';
 
 const formSchema = z.object({
@@ -27,7 +26,7 @@ const formSchema = z.object({
   seo: z.string().max(150),
   description: z.string().min(50, {
     message: 'Description must be at least 50 characters.',
-  }).max(20000), // Increased max length for HTML content
+  }).max(20000),
   category: z.string().min(1, 'Category is required'),
   price: z.coerce.number().min(1, 'Price must be at least 1'),
   originalPrice: z.coerce.number().optional(),
@@ -43,8 +42,6 @@ const formSchema = z.object({
 });
 
 export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
-
-  const site = process.env.SITE_URL || 'https://landig-store.vercel.app/';
   const router = useRouter();
   const [images, setImages] = useState<IProductImage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +75,7 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${site}api/products`, {
+      const response = await fetch(`https://landig-store.vercel.app/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,17 +85,20 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
           images,
           specifications: specs.length > 0 ? specs : undefined,
         }),
+        credentials: 'include' // Include cookies for auth if needed
       });
-console.log(response)
+
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to create product');
+        throw new Error(data.message || 'Failed to create product');
       }
 
- 
       toast.success("Product created successfully");
       router.push('/admin/products');
+      router.refresh(); // Ensure the product list updates
     } catch (error) {
-      console.log(error);
+      console.error('Product creation error:', error);
       toast.error("Failed to create product");
     } finally {
       setIsLoading(false);
@@ -295,7 +295,7 @@ console.log(response)
               </div>
             </div>
 
-            {/* Description - Updated to use RichTextEditor */}
+            {/* Description */}
             <FormField
               control={form.control}
               name="description"
@@ -307,7 +307,6 @@ console.log(response)
                       content={field.value}
                       onChange={field.onChange}
                       placeholder="Detailed product description..."
-     
                     />
                   </FormControl>
                   <FormDescription>
@@ -325,6 +324,7 @@ console.log(response)
                 onUploadComplete={handleImageUpload}
                 initialImages={images}
                 onRemoveImage={handleRemoveImage}
+            
               />
               <FormDescription>
                 Upload high-quality images of your product (max 10 images)

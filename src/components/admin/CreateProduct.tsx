@@ -89,7 +89,7 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
           specifications: specs.length > 0 ? specs : undefined,
         }),
       });
-
+console.log(response)
       if (!response.ok) {
         throw new Error('Failed to create product');
       }

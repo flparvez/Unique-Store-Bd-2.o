@@ -44,7 +44,7 @@ const formSchema = z.object({
 
 export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
 
-  const site = process.env.SITE_URL || 'http://localhost:3000/';
+  const site = process.env.SITE_URL || 'https://landig-store.vercel.app/';
   const router = useRouter();
   const [images, setImages] = useState<IProductImage[]>([]);
   const [isLoading, setIsLoading] = useState(false);

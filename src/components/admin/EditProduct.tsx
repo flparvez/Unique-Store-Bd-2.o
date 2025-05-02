@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { revalidatePath } from 'next/cache';
+
 import {
   Form,
   FormControl,
@@ -123,7 +123,7 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
 
   
       toast.success(`Product ${product ? 'updated' : 'created'} successfully`);
-      revalidatePath('/admin/products');
+      router.push(`/admin`);
     } catch (error) {
       console.error(error);
       toast.error(`Failed to ${product ? 'update' : 'create'} product`);

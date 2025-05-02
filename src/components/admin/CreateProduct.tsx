@@ -21,8 +21,8 @@ import toast from 'react-hot-toast';
 const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Product name must be at least 2 characters.',
-  }).max(100),
-  shortName: z.string().max(50),
+  }).max(200),
+  shortName: z.string().max(130),
   seo: z.string().max(150),
   description: z.string().min(50, {
     message: 'Description must be at least 50 characters.',
@@ -57,9 +57,9 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
       shortName: '',
       description: '',
       category: '',
-      price: 0,
+      price:undefined ,
       originalPrice: undefined,
-      stock: 0,
+      stock: 1,
       warranty: '7 day warranty',
       isFeatured: false,
       specifications: [],
@@ -75,7 +75,7 @@ export function ProductUploadForm({ categories }: { categories: ICategory[] }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`https://landig-store.vercel.app/api/products`, {
+      const response = await fetch(`/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

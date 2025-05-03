@@ -71,10 +71,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('❌ API Error:', error);
 
-    if (error instanceof mongoose.Error.ValidationError) {
-      const messages = Object.values(error.errors).map(e => e.message);
-      return NextResponse.json({ success: false, error: messages.join(', ') }, { status: 400 });
-    }
+ 
 
     return NextResponse.json(
       { success: false, error: 'Server error while creating product' },

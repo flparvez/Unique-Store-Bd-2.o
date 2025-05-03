@@ -13,7 +13,7 @@ const sidebarItems = [
   { name: "Categories", href: "/admin/categories" },
   { name: "Orders", href: "/admin/orders" },
   { name: "Users", href: "/admin/users" },
-  { name: "Settings", href: "/admin/settings" },
+  { name: "Category", href: "/admin/category" },
 ];
 
 export function Sidebar() {

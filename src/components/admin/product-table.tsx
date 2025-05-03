@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { IProduct } from "@/types/product";
+import { handleDelete } from "./DeleteProduct";
+
 
 
 export function ProductTable({ products }: { products: IProduct[] }) {
@@ -55,8 +57,10 @@ export function ProductTable({ products }: { products: IProduct[] }) {
                       Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem className="text-red-600">
+                     
+                      <button onClick={() => handleDelete(product._id)} >
                       <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
+                        Delete</button>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

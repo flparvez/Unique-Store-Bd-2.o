@@ -250,7 +250,24 @@ export async function getAllUsers() {
 }
 
 
+// delete product
+export async function deleteProduct(id: string) {
+  await connectToDb();
 
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error('Invalid product ID');
+    } 
+    const product = await Product.findByIdAndDelete(id)
+    if (!product) {
+      throw new Error('Product not found');
+    }
+    return JSON.parse(JSON.stringify(product));
+  } catch (error) {
+    console.error('Failed to delete product:', error);
+    throw new Error('Failed to delete product');
+  }
+}
 
 export async function getAllProducts(): Promise<IProduct[]> {
   await connectToDb();

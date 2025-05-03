@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     if (!name || !price || !category) {
       return NextResponse.json(
         { success: false, error: 'Name, price, and category are required' },
-        { status: 400 }
+        { status: 401 }
       );
     }
 
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     if (!mongoose.Types.ObjectId.isValid(category)) {
       return NextResponse.json(
         { success: false, error: 'Invalid category ID' },
-        { status: 400 }
+        { status: 402 }
       );
     }
 

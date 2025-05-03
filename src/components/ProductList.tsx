@@ -23,7 +23,7 @@ const ProductList = ({data}:{data:IProduct[]}) => {
            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
     
          >
-           <Link href={`/products/${product._id}`} className="block">
+           <Link href={`/product/${product.slug}`} className="block">
              <div className="relative aspect-square">
                <Image
                    src={product.images[0].url || "/placeholder-product.jpg"}

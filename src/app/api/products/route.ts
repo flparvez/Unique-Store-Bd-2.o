@@ -11,7 +11,7 @@ export async function GET() {
     // ⏱ Connect to DB first
     await connectToDb();
    const products = await Product.find()    
-    return NextResponse.json({ success: true, data: products }, { status: 200 });
+    return NextResponse.json({ success: true,  products }, { status: 200 });
   } catch (error) {
     console.error('❌ API Error:', error);
     return NextResponse.json(

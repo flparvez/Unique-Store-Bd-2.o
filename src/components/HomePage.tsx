@@ -1,6 +1,8 @@
+"use client";
 
+import useSWR from 'swr';
 import Link from "next/link";
-import { getAllProducts } from "@/lib/action/product-action";
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 import ProductList from "./shared/product/ProductList";
 
 
@@ -8,10 +10,8 @@ import ProductList from "./shared/product/ProductList";
 
 
 // import CategoryList from "@/components/CategoryList";
-export default async function HomePage() {
- 
-    const products=(await getAllProducts()).slice(0, 10);
-
+export default  function HomePage() {
+  const { data } = useSWR('/api/products', fetcher);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -31,7 +31,7 @@ export default async function HomePage() {
           <h2 className="text-2xl font-semibold mb-4">Featured Products</h2>
        
             <ProductList 
-           data={products}
+           data={data?.products}
             />
        
         </section>

@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const products = await productsRes.json();
   const categories = await categoriesRes.json();
-console.log(products)
+
   // Generate all dynamic URLs
   const productUrls = products.products?.map((product:IProduct) => ({
     url: `${baseUrl}/product/${product.slug}`,

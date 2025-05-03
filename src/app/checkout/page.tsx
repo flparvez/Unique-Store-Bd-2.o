@@ -70,7 +70,7 @@ const CheckoutPage = () => {
       alert('❌ Something went wrong!');
     }
   };
-  console.log(cart.totalPrice)
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <h2 className="text-2xl font-bold mb-6">🛒 Checkout</h2>

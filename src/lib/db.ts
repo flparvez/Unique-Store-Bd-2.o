@@ -1,39 +1,20 @@
-import mongoose from "mongoose";
-const   MONGODB_URI =  process.env.MONGODB_URI!;
+import mongoose from 'mongoose'
 
-if (!MONGODB_URI) {
-    throw new Error("Please Define Mongodb Uri in .env file");
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const cached = (global as any).mongoose || { conn: null, promise: null }
 
-let cached = global.mongoose;
+export const connectToDb = async (
+    DATABASE_URL = process.env.MONGODB_URI
+) => {
 
+  if (cached.conn) return cached.conn
 
-if (!cached) {
-    cached = global.mongoose = { conn: null, promise: null };
-}
+  if (!DATABASE_URL) throw new Error('DATABASE URL is missing')
+  cached.promise = cached.promise || mongoose.connect(DATABASE_URL)
 
-export async function connectToDb() {
-    if (cached.conn) {
-        return cached.conn;
-    }
+  cached.conn = await cached.promise
+  console.log(cached)
 
-    if (!cached.promise) {
-        const opts = {
-            bufferCommands: true,
-            maxPoolSize: 10,
-        }
- 
-
-    cached.promise = mongoose
-    .connect(MONGODB_URI , opts)
-    .then(()=> mongoose.connection)
-}
-
-try {
-    cached.conn = await cached.promise;
-} catch (error) {
-    cached.promise = null;
-    throw new Error("Check Database File"+error);
-}
-
+  console.log('connection success')
+  return cached.conn
 }

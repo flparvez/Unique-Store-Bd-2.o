@@ -70,12 +70,14 @@ export function ProductCreateForm({ categories }: { categories: ICategory[] }) {
 
     try {
       setLoading(true);
-
+      const compactImages = images.map(({ url, altText }) => ({ url, altText }));
       const res = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ ...data, images, specifications: specs }),
+        body: JSON.stringify({ ...data,
+           images: compactImages,
+            specifications: specs }),
       });
 
       const result = await res.json();

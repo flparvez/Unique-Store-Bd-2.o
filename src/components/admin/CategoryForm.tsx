@@ -60,7 +60,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
         throw new Error('Failed to save category');
       }
 
-      router.push('/categories');
+      router.push('/admin');
       router.refresh();
     } catch (error) {
       console.error('Error saving category:', error);

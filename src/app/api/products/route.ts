@@ -84,16 +84,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Validate required fields
-    const requiredFields = ['name', 'price', 'category'];
-    const missingFields = requiredFields.filter(field => !body[field]);
-    
-    if (missingFields.length > 0) {
-      return NextResponse.json(
-        { success: false, error: `Missing fields: ${missingFields.join(', ')}` },
-        { status: 400 }
-      );
-    }
+
 
     // Validate category
     if (!mongoose.Types.ObjectId.isValid(body.category)) {

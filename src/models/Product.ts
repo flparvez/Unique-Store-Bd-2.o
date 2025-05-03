@@ -81,7 +81,7 @@ const productSchema = new Schema<IProduct, IProductModel>({
     type: String, 
     required: [true, 'Product name is required'],
     trim: true,
-    maxlength: [150, 'Product name cannot exceed 150 characters']
+    maxlength: [200, 'Product name cannot exceed 150 characters']
   },
   slug: { 
     type: String, 
@@ -91,13 +91,13 @@ const productSchema = new Schema<IProduct, IProductModel>({
   shortName: {
     type: String,
     required: true,
-    maxlength: [100, 'Short name cannot exceed 150 characters']
+    maxlength: [150, 'Short name cannot exceed 150 characters']
   },
   description: { 
     type: String, 
     required: true,
     minlength: [50, 'Description should be at least 50 characters'],
-    maxlength: [10000, 'Description cannot exceed 10000 characters']
+    maxlength: [20000, 'Description cannot exceed 10000 characters']
   },
   category: {
     type: Schema.Types.ObjectId,

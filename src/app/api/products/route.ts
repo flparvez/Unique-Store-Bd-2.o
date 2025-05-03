@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     if (!mongoose.Types.ObjectId.isValid(body.category)) {
       return NextResponse.json(
         { success: false, error: 'Invalid category ID' },
-        { status: 400 }
+        { status: 401 }
       );
     }
 
@@ -110,13 +110,7 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     console.error('POST /api/products error:', error);
     
-    if (error instanceof mongoose.Error.ValidationError) {
-      const errors = Object.values(error.errors).map(err => err.message);
-      return NextResponse.json(
-        { success: false, error: errors.join(', ') },
-        { status: 400 }
-      );
-    }
+ 
     
     return NextResponse.json(
       { success: false, error: 'Failed to create product' },

@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: product }, { status: 201 });
   } catch (error) {
-    console.error('❌ API Error:', error);
+    console.log('❌ API Error:', error);
 
  
 

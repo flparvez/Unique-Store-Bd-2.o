@@ -30,8 +30,8 @@ import { Badge } from '@/components/ui/badge';
 import {  IProduct } from '@/types/product';
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(100),
-  shortName: z.string().max(50),
+  name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(200),
+  shortName: z.string().max(150),
   seo: z.string().max(150),
   description: z.string().min(50, { message: 'Description must be at least 50 characters.' }).max(20000),
   category: z.string().min(1, 'Category is required'),

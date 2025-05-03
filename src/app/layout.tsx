@@ -66,8 +66,8 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
     ],
   },
   verification: {
-    google: "VKVgwIwR97h-QBA0tBfEcxu6axUU2O7JXp9wYRtqh9M",
-   
+    google: "ZEjE-cLJCoXI1DyyLXq-ErqHg540Nq9mlZO3cq1A2Bs",
+    
   },
   alternates: {
     canonical: "https://landig-store.vercel.app",

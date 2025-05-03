@@ -2,6 +2,7 @@ import mongoose, { Document, Schema, models, Model } from 'mongoose';
 import slugify from 'slugify';
 
 export interface IProductImage extends Document {
+
   url: string;
   publicId: string;
   width?: number;

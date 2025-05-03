@@ -8,6 +8,7 @@ cloudinary.config({
 });
 
 export interface CloudinaryUploadResult {
+  
   url: string;
   publicId: string;
   width?: number;

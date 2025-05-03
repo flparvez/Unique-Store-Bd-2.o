@@ -70,13 +70,13 @@ export function ProductCreateForm({ categories }: { categories: ICategory[] }) {
 
     try {
       setLoading(true);
-      const compactImages = images.map(({ url, altText }) => ({ url, altText }));
+      // const compactImages = images.map(({ url, altText,publicId }) => ({ url, altText,publicId }));
       const res = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ ...data,
-           images: compactImages,
+           images,
             specifications: specs }),
       });
 

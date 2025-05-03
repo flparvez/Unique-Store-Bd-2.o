@@ -61,13 +61,13 @@ const CartPage = () => {
            
               return (
                 <div
-                  key={`${item.product._id}-${item.selectedVariant || 'default'}`}
+                  key={`${item?.product?._id}-${item?.selectedVariant || 'default'}`}
                   className="flex flex-col sm:flex-row border rounded-lg overflow-hidden"
                 >
                   <div className="w-full sm:w-1/3 bg-gray-50 flex items-center justify-center p-4">
                     <Image
-                      src={item.product.images[0]?.url || '/placeholder-product.jpg'}
-                      alt={item.product.name}
+                      src={item?.product?.images[0]?.url || '/placeholder-product.jpg'}
+                      alt={item?.product?.name || 'Product Image'}
                       width={200}
                       height={200}
                       className="w-full h-auto max-h-48 object-contain"
@@ -77,20 +77,20 @@ const CartPage = () => {
                     <div className="flex justify-between">
                       <div>
                         <h3 className="text-lg font-medium text-gray-900">
-                          {item.product.name}
+                          {item?.product?.name}
                         </h3>
-                        {item.selectedVariant && (
+                        {item?.selectedVariant && (
                           <p className="text-sm text-gray-500 mt-1">
-                            Variant: {item.selectedVariant}
+                            Variant: {item?.selectedVariant}
                           </p>
                         )}
                         <p className="text-sm text-gray-500 mt-1">
-                          {item.product.shortName}
+                          {item?.product?.shortName}
                         </p>
                       </div>
                       <button
                         onClick={() =>
-                          removeFromCart(item.product._id, item.selectedVariant)
+                          removeFromCart(item?.product?._id, item?.selectedVariant)
                         }
                         className="text-gray-400 hover:text-red-500"
                       >
@@ -127,17 +127,17 @@ const CartPage = () => {
                           onClick={() =>
                             incrementQuantity(item.product._id, item.selectedVariant)
                           }
-                          disabled={item.quantity >= item.product.stock}
+                          disabled={item?.quantity >= item?.product?.stock}
                           className="w-8 h-8 flex items-center justify-center border rounded-md disabled:opacity-50"
                         >
                           +
                         </button>
                       </div>
                       <div className="text-right">
-                        {item.product.discount ? (
+                        {item?.product?.discount ? (
                           <div>
                             <span className="text-lg font-semibold text-red-600">
-                            ৳{(item.product.price * item.quantity).toFixed(2)}
+                            ৳{(item?.product.price * item?.quantity).toFixed(2)}
                             </span>
                             <span className="ml-2 text-sm text-gray-500 line-through">
                             ৳ {(item.product.originalPrice! * item.quantity).toFixed(2)}
@@ -145,7 +145,7 @@ const CartPage = () => {
                           </div>
                         ) : (
                           <span className="text-lg font-semibold">
-                            ৳{(item.product.price * item.quantity).toFixed(2)}
+                            ৳{(item?.product?.price * item?.quantity).toFixed(2)}
                           </span>
                         )}
                       </div>
@@ -184,7 +184,7 @@ const CartPage = () => {
                 <div className="border-t mb-4 pt-4 flex justify-between">
                   <span className="font-medium text-gray-900">Total</span>
                   <span className="font-medium text-gray-900">
-                  ৳{cart.totalPrice.toFixed(2)}
+                  ৳{cart.totalPrice?.toFixed(2)}
                   </span>
                 </div>
               </div>

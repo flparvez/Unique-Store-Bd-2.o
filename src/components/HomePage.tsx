@@ -1,9 +1,8 @@
 
 import Link from "next/link";
-
-import ProductList from "@/components/ProductList";
-
 import { getAllProducts } from "@/lib/action/product-action";
+import ProductList from "./shared/product/ProductList";
+
 
 
 

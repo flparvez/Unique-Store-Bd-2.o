@@ -7,15 +7,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, User, Search, X } from "lucide-react";
+import { ShoppingCart, User, Search, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { IProduct } from "@/types/product";
 import { fetchProducts } from "@/lib/action/product-action";
 import Image from "next/image";
 import Link from "next/link";
-import ProductLoadingSkeleton from "./ProductLoadingSkeleton";
-
+import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
 
 
 export function Navbar() {
@@ -159,9 +158,9 @@ console.log(searchResults)
 
       {/* Right side icons */}
       <div className="flex items-center gap-x-4">
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Bell className="h-5 w-5" />
-        </Button>
+       <Link href="/cart">
+          <ShoppingCart className="h-5 w-5" />
+       </Link>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

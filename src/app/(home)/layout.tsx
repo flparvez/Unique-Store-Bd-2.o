@@ -1,7 +1,8 @@
 
-import { Navbar } from "@/components/Navbar";
+
 import Footer from "@/components/shared/footer";
 import Header from "@/components/shared/header";
+import { Navbar } from "@/components/shared/header/Navbar";
 
 export default async function HomeLayout({children}:{children: React.ReactNode}){
     return(

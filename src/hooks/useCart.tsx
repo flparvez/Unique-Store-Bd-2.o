@@ -105,7 +105,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const removeFromCart = (productId: string, selectedVariant?: string) => {
     const filtered = cart.items.filter(
-      (item) => !(item.product._id === productId && item.selectedVariant === selectedVariant)
+      (item) => !(item?.product?._id === productId && item.selectedVariant === selectedVariant)
     );
     setCart(recalculate(filtered));
   };

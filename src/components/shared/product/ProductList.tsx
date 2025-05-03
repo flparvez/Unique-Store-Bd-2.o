@@ -5,7 +5,7 @@
 import {   IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ShoppingCart, Heart } from "lucide-react";
+import { Star, ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 
 
@@ -17,7 +17,7 @@ const ProductList = ({data}:{data:IProduct[]}) => {
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-8 text-gray-800">Our Products</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {data?.map((product) => (
            <div key={product._id} 
            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
@@ -78,9 +78,7 @@ const ProductList = ({data}:{data:IProduct[]}) => {
                  <button   onClick={() => addToCart(product)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
                    <ShoppingCart size={18} />
                  </button>
-                 <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
-                   <Heart size={18} />
-                 </button>
+              
                </div>
              </div>
            </div>

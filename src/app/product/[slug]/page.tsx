@@ -1,5 +1,6 @@
-import { Navbar } from '@/components/Navbar';
+
 import ProductDetailPage from '@/components/ProductDetailPage';
+import { Navbar } from '@/components/shared/header/Navbar';
 import { fetchProductBySlug } from '@/lib/action/product-action';
 
 import React from 'react'

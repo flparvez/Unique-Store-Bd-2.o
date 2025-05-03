@@ -32,6 +32,7 @@ export default function Login() {
 
   return (
     <div className="max-w-md mx-auto">
+      
       <h1 className="text-2xl font-bold mb-4">Login</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

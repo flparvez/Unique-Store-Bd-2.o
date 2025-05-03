@@ -56,9 +56,9 @@ function getSortOrder(sort: string): Record<string, 1 | -1> {
 }
 
 // Main Fetch Functions
-
 export async function fetchProducts(params: FetchProductsParams = {}): Promise<ProductsResponse> {
   await connectToDb();
+
   const {
     query = '',
     category = '',
@@ -74,7 +74,6 @@ export async function fetchProducts(params: FetchProductsParams = {}): Promise<P
 
   try {
     const filters = {
- 
       ...(query && { name: { $regex: query, $options: 'i' } }),
       ...(category && mongoose.Types.ObjectId.isValid(category) && { category: new mongoose.Types.ObjectId(category) }),
       ...(tag && { tags: tag }),
@@ -85,11 +84,12 @@ export async function fetchProducts(params: FetchProductsParams = {}): Promise<P
 
     const [products, total] = await Promise.all([
       Product.find(filters)
-        .sort(getSortOrder(sort))
+        .sort(getSortOrder(sort)) // ✅ sort logic applied here
         .skip((page - 1) * limit)
         .limit(limit)
         .populate('category')
         .lean(),
+
       Product.countDocuments(filters),
     ]);
 
@@ -108,7 +108,6 @@ export async function fetchProducts(params: FetchProductsParams = {}): Promise<P
     throw new Error('Failed to fetch products');
   }
 }
-
 export async function fetchProductById(id: string): Promise<IProduct> {
   await connectToDb();
 

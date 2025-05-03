@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import Link from "next/link";
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 import ProductList from "./shared/product/ProductList";
+import ProductLoadingSkeleton from './ProductLoadingSkeleton';
 
 
 
@@ -12,7 +13,9 @@ import ProductList from "./shared/product/ProductList";
 // import CategoryList from "@/components/CategoryList";
 export default  function HomePage() {
   const { data } = useSWR('/api/products', fetcher);
-
+if (!data) {
+  <ProductLoadingSkeleton />
+}
   return (
     <div className="container mx-auto px-4 py-8">
     <div className="flex justify-between items-center mb-8">

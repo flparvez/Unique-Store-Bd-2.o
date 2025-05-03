@@ -3,117 +3,81 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDb } from '@/lib/db';
 import mongoose from 'mongoose';
 import slugify from 'slugify';
-import Category from '@/models/Category';
-export const dynamic = 'force-dynamic';
-
-// Connect to DB once when the module loads
 
 
-interface ProductQuery {
-  price: { $gte: number; $lte: number };
-  category?: mongoose.Types.ObjectId;
-  isFeatured?: boolean;
-  $text?: { $search: string };
-}
 
-const DEFAULT_LIMIT = 10;
-const DEFAULT_PAGE = 1;
-const MAX_PRICE = 10000000;
-
-export async function GET(request: NextRequest) {
-
-  connectToDb()
+export async function GET() {
   try {
-
-    await Category.find();
-    const { searchParams } = new URL(request.url);
-    
-    // Parse query params with defaults
-    const page = parseInt(searchParams.get('page') || `${DEFAULT_PAGE}`);
-    const limit = parseInt(searchParams.get('limit') || `${DEFAULT_LIMIT}`);
-    const minPrice = parseFloat(searchParams.get('minPrice') || '0');
-    const maxPrice = parseFloat(searchParams.get('maxPrice') || `${MAX_PRICE}`);
-    
-    // Build query
-    const query: ProductQuery = { price: { $gte: minPrice, $lte: maxPrice } };
-    
-    const category = searchParams.get('category');
-    if (category && mongoose.Types.ObjectId.isValid(category)) {
-      query.category = new mongoose.Types.ObjectId(category);
-    }
-    
-    if (searchParams.get('featured') === 'true') {
-      query.isFeatured = true;
-    }
-    
-    const search = searchParams.get('search');
-    if (search) {
-      query.$text = { $search: search };
-    }
-    
-    // Execute parallel queries for better performance
-    const [products, total] = await Promise.all([
-      Product.find(query)
-        .sort({ popularityScore: -1, createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .populate('category'), // Fixed: lowercase 'category' to match schema
-      Product.countDocuments(query)
-    ]);
-
-    return NextResponse.json({
-      success: true,
-      products,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    });
+    // ⏱ Connect to DB first
+    await connectToDb();
+   const products = await Product.find()    
+    return NextResponse.json({ success: true, data: products }, { status: 200 });
   } catch (error) {
-    console.error('GET /api/products error:', error);
+    console.error('❌ API Error:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch products' },
+      { success: false, error: 'Server error while fetching products' },
       { status: 500 }
     );
   }
 }
+// POST /api/products
 
 export async function POST(request: NextRequest) {
   try {
+    // ⏱ Connect to DB first
+    await connectToDb();
+
     const body = await request.json();
 
+    // ✅ Minimal required field check
+    const { name, price, category } = body;
 
-
-    // Validate category
-    if (!mongoose.Types.ObjectId.isValid(body.category)) {
+    if (!name || !price || !category) {
       return NextResponse.json(
-        { success: false, error: 'Invalid category ID' },
-        { status: 401 }
+        { success: false, error: 'Name, price, and category are required' },
+        { status: 400 }
       );
     }
 
-    // Create product with defaults
+    // ✅ Validate MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(category)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid category ID' },
+        { status: 400 }
+      );
+    }
+
+    // ✅ Limit the fields you store to prevent huge payload
     const product = await Product.create({
-      ...body,
+      name: body.name,
+      shortName: body.shortName || body.name.slice(0, 80),
+      seo: body.seo || '',
       slug: slugify(body.name, { lower: true, strict: true }),
-      shortName: body.shortName || body.name.substring(0, 80),
-      stock: body.stock || 0,
-      sold: body.sold || 0
+      price: Number(body.price),
+      originalPrice: body.originalPrice || null,
+      stock: Number(body.stock) || 0,
+      warranty: body.warranty || '7 day warranty',
+      category,
+      description: body.description,
+      isFeatured: Boolean(body.isFeatured),
+      images:body.images || [],
+      specifications: Array.isArray(body.specifications)
+        ? body.specifications.slice(0, 100) // avoid too large specs
+        : [],
+      sold: 0,
     });
 
+    return NextResponse.json({ success: true, data: product }, { status: 201 });
+  } catch (error) {
+    console.error('❌ API Error:', error);
+
+    if (error instanceof mongoose.Error.ValidationError) {
+      const messages = Object.values(error.errors).map(e => e.message);
+      return NextResponse.json({ success: false, error: messages.join(', ') }, { status: 400 });
+    }
+
     return NextResponse.json(
-      { success: true, data: product },
-      { status: 201 }
-    );
-  } catch (error: unknown) {
-    console.error('POST /api/products error:', error);
-    
- 
-    
-    return NextResponse.json(
-      { success: false, error: 'Failed to create product' },
+      { success: false, error: 'Server error while creating product' },
       { status: 500 }
     );
   }

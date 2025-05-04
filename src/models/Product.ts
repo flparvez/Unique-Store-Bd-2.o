@@ -43,6 +43,7 @@ export interface IProduct extends Document {
   isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  lastUpdatedIndex? : number
 }
 
 interface IProductModel extends Model<IProduct> {
@@ -182,7 +183,11 @@ const productSchema = new Schema<IProduct, IProductModel>({
   isActive:{
     type:Boolean,
     default:true
-  }
+  },
+  lastUpdatedIndex: {
+    type: Number,
+    default: 1, 
+  },
 }, {
   timestamps: true,
   toJSON: { virtuals: true },

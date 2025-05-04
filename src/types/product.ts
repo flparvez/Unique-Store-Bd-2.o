@@ -33,6 +33,7 @@ export interface IProduct {
     isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;
+    lastUpdatedIndex? : number
   }
   export interface ICategory {
     _id: string;

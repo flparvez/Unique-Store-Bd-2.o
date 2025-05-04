@@ -27,7 +27,7 @@ if (!data) {
            className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden "
     
          >
-          <Link href={`/product/${product.slug}`} >
+         <Link href={`/product/${product.slug}`} prefetch={true}>
              <div className="relative aspect-square">
                <Image
                    src={product.images[0].url || "/placeholder-product.jpg"}
@@ -45,12 +45,12 @@ if (!data) {
            
              </Link>
            <div className="p-4">
-         
+           <Link href={`/product/${product.slug}`} prefetch={true}>
                <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
                  {product.shortName}
                </h3>
          
-     
+     </Link>
             
      
              <div className="flex items-center justify-between">
@@ -64,16 +64,21 @@ if (!data) {
                    </p>
                  )}
                </div>
-          
+           
+
+               {/* add to cart */}
                <div className={`flex space-x-2 transition-opacity  hover:opacity-100 opacity-0}`}>
                  <button   onClick={() => addToCart(product)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
                    <ShoppingCart size={18} />
                  </button>
               
-               </div>
+              
              </div>
+
+
+
            </div>
-           
+           </div>
           
          </div>
       

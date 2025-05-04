@@ -7,7 +7,7 @@ import { htmlToText } from 'html-to-text';
 import { Navbar } from '@/components/shared/header/Navbar';
 import ProductDetailPage from '@/components/ProductDetailPage';
 import ProductLoadingSkeleton from '@/components/ProductLoadingSkeleton';
-import { getAllProducts } from '@/lib/action/product-action';
+
 import { IProduct } from '@/types/product';
 
 
@@ -22,7 +22,11 @@ type Props = {
 async function getProduct(slug: string): Promise<IProduct | null> {
   try {
     const res = await fetch(`https://landig-store.vercel.app/api/products/${slug}`, {
-      next: { revalidate: 60 * 60 * 12, tags: [`product_${slug}`] },
+
+      next: {
+        revalidate: 60 * 60 * 12,
+        tags: [`product_${slug}`]
+      }
     });
     if (!res.ok) return null;
     return await res.json();
@@ -87,12 +91,11 @@ const ProductPage = async ({ params }: Props) => {
   const product = await getProduct(slug);
   if (!product) return <ProductLoadingSkeleton />;
 
-  const products = await getAllProducts();
-
+ 
   return (
     <div>
       <Navbar />
-      <ProductDetailPage product={product} products={products} />
+      <ProductDetailPage product={product}  />
 
       {/* FAQ Section for SEO */}
       <section className="mx-4 py-4">

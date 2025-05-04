@@ -8,8 +8,10 @@ import ProductLoadingSkeleton from './ProductLoadingSkeleton';
 import { IProduct } from '@/types/product';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
-import { ShoppingCart } from 'lucide-react';
-import Link from 'next/link';
+import LatestProduct from './shared/product/LatestProduct';
+import LatestProductm from './shared/product/LatestPm';
+// import { ShoppingCart } from 'lucide-react';
+// import Link from 'next/link';
 
 
 interface ProductImage {
@@ -18,10 +20,11 @@ interface ProductImage {
 }
 interface Props {
   product: IProduct;
-  products: IProduct[];
+  
 }
 
-const ProductDetailPage = ({ product,products }:Props) => {
+const ProductDetailPage = ({ product }:Props) => {
+
 
   const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<string>();
@@ -53,7 +56,7 @@ const ProductDetailPage = ({ product,products }:Props) => {
   }
 
 
-  const latestproducts = products.slice(3, 13);
+  // const latestproducts = products.slice(3, 13);
 
   return (
 <div className="container mx-auto px-4 py-8 md:py-12">
@@ -101,61 +104,7 @@ const ProductDetailPage = ({ product,products }:Props) => {
       </div>
 
         {/* Latest Products Section */}
-  <div className="hidden sm:block mt-16">
-    <h2 className="text-xl font-bold text-gray-900 mb-4">Latest Products</h2>
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {latestproducts?.map((product) => (
-      <div key={product._id} 
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
-
-    >
-      <Link href={`/product/${product.slug}`} className="block">
-        <div className="relative aspect-square">
-          <Image
-              src={product.images[0].url || "/placeholder-product.jpg"}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          />
-      {
-        product?.discount ?  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-        {product?.discount}% OFF
-      </span> : null
-      }
-        </div>
-      </Link>
-
-      <div className="p-4">
-        <Link href={`/product/${product.slug}`}>
-          <h3 className=" text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
-            {product.shortName}
-          </h3>
-        </Link>
-
-       
-
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-lg font-bold text-gray-800">
-            ৳{product.price}
-            </p>
-        
-          
-          </div>
-     
-          <div className={`flex space-x-2 transition-opacity  hover:opacity-100 opacity-0}`}>
-            <button   onClick={() => addToCart(product)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
-              <ShoppingCart size={18} />
-            </button>
-         
-          </div>
-        </div>
-      </div>
-    </div>
-      ))}
-    </div>
-  </div>
+<LatestProduct />
     </div>
 
     {/* Right: All Product Info */}
@@ -262,64 +211,7 @@ const ProductDetailPage = ({ product,products }:Props) => {
   </div>
 
   {/* Latest Products Section */}
-  <div className="block sm:hidden mt-16">
-    <h2 className="text-xl font-bold text-gray-900 mb-4">Latest Products</h2>
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {latestproducts?.map((product) => (
-      <div key={product._id} 
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
-
-    >
-      <Link href={`/product/${product.slug}`} className="block">
-        <div className="relative aspect-square">
-          <Image
-              src={product.images[0].url || "/placeholder-product.jpg"}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          />
-      {
-        product?.discount ?  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-        {product?.discount}% OFF
-      </span> : null
-      }
-        </div>
-      </Link>
-
-      <div className="p-4">
-        <Link href={`/product/${product.slug}`}>
-          <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
-            {product.shortName}
-          </h3>
-        </Link>
-
-       
-
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-lg font-bold text-gray-800">
-            ৳{product.price}
-            </p>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <p className="text-sm text-gray-500 line-through">
-                ৳{product.originalPrice}
-              </p>
-            )}
-          </div>
-     
-          <div className={`flex space-x-2 transition-opacity  hover:opacity-100 opacity-0}`}>
-            <button   onClick={() => addToCart(product)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
-              <ShoppingCart size={18} />
-            </button>
-         
-          </div>
-        </div>
-      </div>
-    </div>
-      ))}
-    </div>
-  </div>
+ <LatestProductm />
 </div>
 
   );

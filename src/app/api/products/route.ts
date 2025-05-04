@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       name: body.name,
       shortName: body.shortName || body.name.slice(0, 80),
       seo: body.seo || '',
-      slug: slugify(body.name, { lower: true, strict: true }),
+      slug: slugify(body.shortName, { lower: true, strict: true }),
       price: Number(body.price),
       originalPrice: body.originalPrice || null,
       stock: Number(body.stock) || 0,

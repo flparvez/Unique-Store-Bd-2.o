@@ -22,12 +22,12 @@ if (!data) {
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {data?.map((product) => (
-            <Link href={`/product/${product.slug}`} key={product._id}>
+           
            <div key={product._id} 
-           className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+           className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden "
     
          >
-         
+          <Link href={`/product/${product.slug}`} >
              <div className="relative aspect-square">
                <Image
                    src={product.images[0].url || "/placeholder-product.jpg"}
@@ -73,8 +73,10 @@ if (!data) {
                </div>
              </div>
            </div>
+           
+           </Link>
          </div>
-         </Link>
+      
         ))}
       </div>
       </div>

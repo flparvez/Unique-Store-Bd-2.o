@@ -44,6 +44,7 @@ export interface IProduct extends Document {
   createdAt?: Date;
   updatedAt?: Date;
   lastUpdatedIndex? : number
+  advanced? : number
 }
 
 interface IProductModel extends Model<IProduct> {
@@ -188,6 +189,12 @@ const productSchema = new Schema<IProduct, IProductModel>({
     type: Number,
     default: 1, 
   },
+  advanced: {
+    type: Number,
+    default: 100, 
+  },
+
+
 }, {
   timestamps: true,
   toJSON: { virtuals: true },

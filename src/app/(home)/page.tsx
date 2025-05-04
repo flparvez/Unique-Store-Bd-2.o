@@ -10,7 +10,6 @@
 import CategoryList from "@/components/CategoryCard";
 import HomePage from "@/components/HomePage";
 import { getAllCategory } from "@/lib/action/product-action";
-import Link from "next/link";
 
 export default async function Home() {
 
@@ -72,11 +71,9 @@ export default async function Home() {
     <div>
   
         <HomePage />
-<Link href={"/cart"} className="bg-blue-500 text-white p-2 rounded">
-          Go to Cart
-        </Link>
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Categories</h2>
+
+        <section className="container">
+          <h2 className="text-2xl  font-semibold mb-4">Categories</h2>
           <CategoryList category={categories} />
         </section>
   

@@ -39,6 +39,7 @@ const formSchema = z.object({
   originalPrice: z.coerce.number().optional(),
   stock: z.coerce.number().min(0, 'Stock cannot be negative'),
   lastUpdatedIndex: z.coerce.number().min(0, 'Last Index Number').optional(),
+  advanced: z.coerce.number().min(0, 'advanced').optional(),
   warranty: z.string().default('7 day warranty'),
   isFeatured: z.boolean().default(false),
   isActive: z.boolean().default(true),
@@ -84,7 +85,8 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
       isFeatured: product?.isFeatured || false,
       isActive: product?.isActive ?? true,
       specifications: product?.specifications || [],
-      lastUpdatedIndex: product?.lastUpdatedIndex || 1
+      lastUpdatedIndex: product?.lastUpdatedIndex || 1,
+      advanced: product?.advanced || 100
     },
   });
 
@@ -335,6 +337,21 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
                       <FormLabel>lastUpdatedIndex </FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="lastUpdatedIndex" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+     {/* advanced */}
+                <FormField
+                  control={form.control}
+                  name="advanced"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>advanced </FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="advanced" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

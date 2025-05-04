@@ -34,6 +34,7 @@ export interface IProduct {
     createdAt?: Date;
     updatedAt?: Date;
     lastUpdatedIndex? : number
+    advanced? : number
   }
   export interface ICategory {
     _id: string;

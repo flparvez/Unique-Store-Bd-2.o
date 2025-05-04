@@ -82,8 +82,9 @@ export async function generateMetadata({ params }:Props): Promise<Metadata> {
 }
 
 // Page Component
-const ProductPage = async ({ params }: { params: { slug: string } }) => {
-  const product = await getProduct(params.slug);
+const ProductPage = async ({ params }: Props) => {
+  const { slug } = await params;
+  const product = await getProduct(slug);
   if (!product) return <ProductLoadingSkeleton />;
 
   const products = await getAllProducts();

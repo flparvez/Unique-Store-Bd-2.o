@@ -11,7 +11,7 @@ export async function GET(
     await connectToDb();
 
     // Only return necessary fields (you can customize this list)
-    const product = await Product.findOne({ slug }).populate("category"); // Add specific fields if needed
+    const product = await Product.findOne({ slug }).populate(""); // Add specific fields if needed
 
     if (!product) {
       return NextResponse.json(

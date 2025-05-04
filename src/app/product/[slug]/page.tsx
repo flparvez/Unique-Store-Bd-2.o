@@ -21,6 +21,7 @@ type Props = {
 // Utility: fetch single product by slug
 async function getProduct(slug: string): Promise<IProduct | null> {
   try {
+    // const res = await fetch(`http://localhost:3000/api/products/${slug}`, {
     const res = await fetch(`https://landig-store.vercel.app/api/products/${slug}`, {
 
       next: {

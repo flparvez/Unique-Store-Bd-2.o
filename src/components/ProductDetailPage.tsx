@@ -37,6 +37,8 @@ const ProductDetailPage = ({ product,products }:Props) => {
     }
   }, [product.images]);
 
+
+
   const handleAddToCart = () => {
     if (availableStock <= 0) return;
     addToCart(product, quantity, selectedVariant);
@@ -46,10 +48,10 @@ const ProductDetailPage = ({ product,products }:Props) => {
   if (!isInitialized) return <div className="text-center py-8">Loading cart...</div>;
 
 
-
-  if (!product || !product.images || !product.specifications) {
+  if (!product || !product.specifications ) {
     return <ProductLoadingSkeleton />;
   }
+
 
   const latestproducts = products.slice(3, 13);
 
@@ -138,11 +140,8 @@ const ProductDetailPage = ({ product,products }:Props) => {
             <p className="text-lg font-bold text-gray-800">
             ৳{product.price}
             </p>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <p className="text-sm text-gray-500 line-through">
-                ৳{product.originalPrice}
-              </p>
-            )}
+        
+          
           </div>
      
           <div className={`flex space-x-2 transition-opacity  hover:opacity-100 opacity-0}`}>
@@ -169,19 +168,15 @@ const ProductDetailPage = ({ product,products }:Props) => {
 
       {/* Price & Discount */}
       <div className="flex items-center gap-4">
-        {product.discount ? (
+      
           <>
             <span className="text-3xl font-bold text-red-600">৳{product.price}</span>
-            <span className="line-through text-xl text-gray-400">
+            <span className="line-through text-xl text-gray-500">
               ৳{product.originalPrice?.toFixed(2)}
             </span>
-            <span className="bg-red-100 text-red-700 text-sm font-semibold px-2 py-0.5 rounded">
-              {product.discount}% OFF
-            </span>
+        
           </>
-        ) : (
-          <span className="text-3xl font-bold text-gray-800">৳{product.price?.toFixed(2)}</span>
-        )}
+ 
       </div>
 
       {/* Variant (Color) */}

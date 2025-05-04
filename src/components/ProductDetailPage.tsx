@@ -8,14 +8,21 @@ import ProductLoadingSkeleton from './ProductLoadingSkeleton';
 import { IProduct } from '@/types/product';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
+import { ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
 
 
 interface ProductImage {
   url: string;
   altText?: string;
 }
+interface Props {
+  product: IProduct;
+  products: IProduct[];
+}
 
-const ProductDetailPage = ({ product }: { product: IProduct }) => {
+const ProductDetailPage = ({ product,products }:Props) => {
+
   const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<string>();
   const [quantity, setQuantity] = useState(1);
@@ -40,228 +47,286 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
 
 
 
-  if (!product) {
+  if (!product || !product.images || !product.specifications) {
     return <ProductLoadingSkeleton />;
   }
 
+  const latestproducts = products.slice(3, 13);
+
   return (
-    <div className="container px-4 py-8 md:py-12">
-      {/* Main Product Section */}
-      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-        {/* Image Gallery */}
-        <div className="w-full md:w-1/2">
-          {/* Main Image */}
-          <div className="aspect-square w-full bg-gray-50 rounded-lg overflow-hidden mb-4">
-            {selectedImage ? (
-              <Image
-                src={selectedImage.url}
-                alt={selectedImage.altText || `${product.name} - Main Image`}
-                width={600}
-                height={600}
-                className="w-full h-full object-contain"
-                priority
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 animate-pulse" />
-            )}
-          </div>
-
-          {/* Thumbnail Gallery */}
-          <div className="flex gap-3 overflow-x-auto py-2">
-            {product.images.map((img, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedImage(img)}
-                className={cn(
-                  'flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-md overflow-hidden border-2',
-                  selectedImage?.url === img.url
-                    ? 'border-primary ring-2 ring-primary/30'
-                    : 'border-transparent'
-                )}
-                aria-label={`View ${product.name} image ${index + 1}`}
-              >
-                <Image
-                  src={img.url}
-                  alt={img.altText || `${product.name} thumbnail ${index + 1}`}
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Product Info */}
-        <div className="w-full md:w-1/2 space-y-6">
-          {/* Product Name and Short Description */}
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
-              {product.name}
-            </h1>
-            <p className="text-sm md:text-base text-muted-foreground">
-              {product.shortName}
-            </p>
-          </div>
-
- {/* Price Section */}
- <div className="flex items-center space-x-4">
-            {product.discount ? (
-              <>
-                <span className="text-3xl font-bold text-red-600">
-                ৳{(product.price.toFixed(2))}
-                </span>
-                <span className="text-xl text-gray-500 line-through">
-                {
-  product.originalPrice?  <span>                ৳{product.originalPrice.toFixed(2)}</span> : null
-}
-                </span>
-                <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-0.5 rounded">
-                  {product.discount}% OFF
-                </span>
-              </>
-            ) : (
-              <span className="text-3xl font-bold text-gray-900">
-                ৳{product.price.toFixed(2)}
-              </span>
-            )}
-          </div>
-
-          {/* Variant Selection (if applicable) */}
-          {product.specifications.some((spec) => spec.key === 'Color') && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-900">Color</h3>
-              <div className="flex space-x-2 mt-2">
-                {product.specifications
-                  .filter((spec) => spec.key === 'Color')
-                  .map((spec) => (
-                    <button
-                      key={spec.value}
-                      onClick={() => setSelectedVariant(spec.value)}
-                      className={`w-8 h-8 rounded-full border-2 ${
-                        selectedVariant === spec.value
-                          ? 'border-blue-500'
-                          : 'border-transparent'
-                      }`}
-                      style={{ backgroundColor: spec.value }}
-                      title={spec.value}
-                    />
-                  ))}
-              </div>
-            </div>
-          )}
-  
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-   {/* Quantity Selector */}
-   <div className="flex items-center space-x-4">
-            <div className="flex items-center border rounded-md">
-              <button
-                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-                disabled={quantity <= 1}
-                className="px-3 py-1 text-lg disabled:opacity-50"
-              >
-                -
-              </button>
-              <span className="px-4 py-1">{quantity}</span>
-              <button
-                onClick={() => setQuantity((prev) => Math.min(availableStock, prev + 1))}
-                disabled={quantity >= availableStock}
-                className="px-3 py-1 text-lg disabled:opacity-50"
-              >
-                +
-              </button>
-            </div>
-            <span className="text-sm text-gray-500">
-              {availableStock} available
-            </span>
-          </div>
-
-          {/* Add to Cart Button */}
-          <button
-            onClick={handleAddToCart}
-            disabled={availableStock <= 0}
-            className={`w-full py-3 px-4 rounded-md font-medium ${
-              availableStock <= 0
-                ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
-            }`}
-          >
-            {availableStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
-          </button>
-          </div>
-
-          {/* Quick Specs */}
-          {product.specifications.length > 0 && (
-            <div className="pt-4">
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                Key Specifications
-              </h3>
-              <ul className="space-y-2">
-                {product.specifications.slice(0, 4).map((spec, idx) => (
-                  <li key={idx} className="flex">
-                    <span className="text-sm text-gray-600 w-24 flex-shrink-0">
-                      {spec.key}
-                    </span>
-                    <span className="text-sm text-gray-900">
-                      {spec.value}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Product Tabs */}
-      <div className="mt-12 md:mt-16">
-        <div className="border-b border-gray-200">
-          <nav className="flex space-x-8">
-            <button className="py-4 px-1 border-b-2 font-medium text-sm border-primary text-primary">
-              Description
-            </button>
-            <button className="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700">
-              Specifications
-            </button>
-            <button className="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700">
-              Reviews
-            </button>
-          </nav>
-        </div>
-
-        {/* Description Section */}
-        <div className="py-8">
-          <div
-            className="prose max-w-none prose-p:leading-relaxed prose-li:leading-relaxed
-                      prose-headings:font-medium prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3
-                      prose-img:rounded-lg prose-img:shadow-sm prose-img:border"
-            dangerouslySetInnerHTML={{ __html: product.description || '' }}
+<div className="container mx-auto px-4 py-8 md:py-12">
+  <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+    {/* Left: Image Gallery */}
+    <div className="w-full lg:w-1/2 space-y-4">
+      {/* Main Image */}
+      <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+        {selectedImage ? (
+          <Image
+            src={selectedImage.url}
+            alt={selectedImage.altText || product.name}
+            width={600}
+            height={600}
+            className="w-full h-full object-contain"
+            priority
           />
-        </div>
-
-        {/* Full Specifications Section */}
-        {product.specifications.length > 0 && (
-          <div className="py-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Full Specifications
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {product.specifications.map((spec, idx) => (
-                <div
-                  key={idx}
-                  className="border rounded-lg p-4 hover:shadow-sm transition-shadow"
-                >
-                  <h3 className="text-sm font-medium text-gray-600 mb-1">
-                    {spec.key}
-                  </h3>
-                  <p className="text-base text-gray-900">{spec.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        ) : (
+          <div className="w-full h-full bg-gray-200 animate-pulse" />
         )}
       </div>
+
+      {/* Thumbnails */}
+      <div className=" flex gap-2 overflow-x-auto">
+        {product?.images?.map((img, idx) => (
+          <button
+            key={idx}
+            onClick={() => setSelectedImage(img)}
+            className={cn(
+              'w-16 h-16 rounded-md overflow-hidden border-2',
+              selectedImage?.url === img.url
+                ? 'border-primary ring-2 ring-primary/30'
+                : 'border-transparent'
+            )}
+          >
+            <Image
+              src={img.url}
+              alt={img.altText || `${product.name} thumb ${idx + 1}`}
+              width={64}
+              height={64}
+              className="w-full h-full object-cover"
+            />
+          </button>
+        ))}
+      </div>
+
+        {/* Latest Products Section */}
+  <div className="hidden sm:block mt-16">
+    <h2 className="text-xl font-bold text-gray-900 mb-4">Latest Products</h2>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {latestproducts?.map((product) => (
+      <div key={product._id} 
+      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+
+    >
+      <Link href={`/product/${product.slug}`} className="block">
+        <div className="relative aspect-square">
+          <Image
+              src={product.images[0].url || "/placeholder-product.jpg"}
+            alt={product.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          />
+      {
+        product?.discount ?  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+        {product?.discount}% OFF
+      </span> : null
+      }
+        </div>
+      </Link>
+
+      <div className="p-4">
+        <Link href={`/product/${product.slug}`}>
+          <h3 className=" text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
+            {product.shortName}
+          </h3>
+        </Link>
+
+       
+
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-lg font-bold text-gray-800">
+            ৳{product.price}
+            </p>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <p className="text-sm text-gray-500 line-through">
+                ৳{product.originalPrice}
+              </p>
+            )}
+          </div>
+     
+          <div className={`flex space-x-2 transition-opacity  hover:opacity-100 opacity-0}`}>
+            <button   onClick={() => addToCart(product)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+              <ShoppingCart size={18} />
+            </button>
+         
+          </div>
+        </div>
+      </div>
     </div>
+      ))}
+    </div>
+  </div>
+    </div>
+
+    {/* Right: All Product Info */}
+    <div className="w-full lg:w-1/2 space-y-6">
+      {/* Title and Short Name */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+        <p className="text-base text-muted-foreground">{product.shortName}</p>
+      </div>
+
+      {/* Price & Discount */}
+      <div className="flex items-center gap-4">
+        {product.discount ? (
+          <>
+            <span className="text-3xl font-bold text-red-600">৳{product.price}</span>
+            <span className="line-through text-xl text-gray-400">
+              ৳{product.originalPrice?.toFixed(2)}
+            </span>
+            <span className="bg-red-100 text-red-700 text-sm font-semibold px-2 py-0.5 rounded">
+              {product.discount}% OFF
+            </span>
+          </>
+        ) : (
+          <span className="text-3xl font-bold text-gray-800">৳{product.price?.toFixed(2)}</span>
+        )}
+      </div>
+
+      {/* Variant (Color) */}
+      {product.specifications.some((s) => s.key === 'Color') && (
+        <div>
+          <h3 className="text-sm font-medium">Color</h3>
+          <div className="flex space-x-2 mt-2">
+            {product.specifications
+              .filter((s) => s.key === 'Color')
+              .map((spec) => (
+                <button
+                  key={spec.value}
+                  onClick={() => setSelectedVariant(spec.value)}
+                  className={`w-8 h-8 rounded-full border-2 ${
+                    selectedVariant === spec.value ? 'border-blue-600' : 'border-gray-300'
+                  }`}
+                  style={{ backgroundColor: spec.value }}
+                  title={spec.value}
+                />
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* Quantity + Add to Cart */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex items-center border rounded-md">
+          <button
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            className="px-3 py-1 text-lg"
+            disabled={quantity <= 1}
+          >
+            -
+          </button>
+          <span className="px-4 py-1">{quantity}</span>
+          <button
+            onClick={() => setQuantity(Math.min(availableStock, quantity + 1))}
+            className="px-3 py-1 text-lg"
+            disabled={quantity >= availableStock}
+          >
+            +
+          </button>
+        </div>
+        <span className="text-sm text-gray-500">{availableStock} available</span>
+
+        <button
+          onClick={handleAddToCart}
+          disabled={availableStock <= 0}
+          className={`w-full sm:w-auto py-3 px-6 rounded-md font-semibold ${
+            availableStock <= 0
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700 text-white'
+          }`}
+        >
+          {availableStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+        </button>
+      </div>
+
+      {/* Quick Specs */}
+      {product.specifications.length > 0 && (
+        <div className="pt-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Key Specifications</h3>
+          <ul className="space-y-1">
+            {product.specifications.slice(0, 4).map((spec, idx) => (
+              <li key={idx} className="flex text-sm text-gray-800">
+                <span className="w-24 flex-shrink-0 text-gray-600">{spec.key}</span>
+                <span>{spec.value}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Description */}
+      <div className="pt-6">
+        <h3 className="text-sm font-semibold text-gray-900 mb-2">Product Description</h3>
+        <div
+          className="prose prose-sm max-w-none prose-p:leading-relaxed prose-li:leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: product.description || '<p>No description available.</p>' }}
+        />
+      </div>
+    </div>
+  </div>
+
+  {/* Latest Products Section */}
+  <div className="block sm:hidden mt-16">
+    <h2 className="text-xl font-bold text-gray-900 mb-4">Latest Products</h2>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {latestproducts?.map((product) => (
+      <div key={product._id} 
+      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+
+    >
+      <Link href={`/product/${product.slug}`} className="block">
+        <div className="relative aspect-square">
+          <Image
+              src={product.images[0].url || "/placeholder-product.jpg"}
+            alt={product.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          />
+      {
+        product?.discount ?  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+        {product?.discount}% OFF
+      </span> : null
+      }
+        </div>
+      </Link>
+
+      <div className="p-4">
+        <Link href={`/product/${product.slug}`}>
+          <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
+            {product.shortName}
+          </h3>
+        </Link>
+
+       
+
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-lg font-bold text-gray-800">
+            ৳{product.price}
+            </p>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <p className="text-sm text-gray-500 line-through">
+                ৳{product.originalPrice}
+              </p>
+            )}
+          </div>
+     
+          <div className={`flex space-x-2 transition-opacity  hover:opacity-100 opacity-0}`}>
+            <button   onClick={() => addToCart(product)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+              <ShoppingCart size={18} />
+            </button>
+         
+          </div>
+        </div>
+      </div>
+    </div>
+      ))}
+    </div>
+  </div>
+</div>
+
   );
 };
 

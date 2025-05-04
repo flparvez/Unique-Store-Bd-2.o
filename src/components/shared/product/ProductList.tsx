@@ -5,7 +5,7 @@
 import {   IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ShoppingCart } from "lucide-react";
+import {  ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 
 
@@ -14,7 +14,7 @@ const ProductList = ({data}:{data:IProduct[]}) => {
 
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto sm:px-4 sm:py-4">
       <h2 className="text-2xl font-bold mb-8 text-gray-800">Our Products</h2>
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -42,34 +42,21 @@ const ProductList = ({data}:{data:IProduct[]}) => {
      
            <div className="p-4">
              <Link href={`/product/${product.slug}`}>
-               <h3 className="font-semibold text-lg mb-1 line-clamp-2 hover:text-blue-600 transition">
-                 {product.name}
+               <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
+                 {product.shortName}
                </h3>
              </Link>
      
-             <div className="flex items-center mb-2">
-               <div className="flex text-yellow-400">
-                 {[...Array(5)].map((_, i) => (
-                   <Star
-                     key={i}
-                     size={16}
-                     fill={i < (product.rating || 0) ? "currentColor" : "none"}
-                   />
-                 ))}
-               </div>
-               <span className="text-gray-500 text-sm ml-1">
-                 ({product.reviews?.length || 0})
-               </span>
-             </div>
+            
      
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-lg font-bold text-gray-800">
-                 ৳{product.price.toFixed(2)}
+                 ৳{product.price}
                  </p>
                  {product.originalPrice && product.originalPrice > product.price && (
                    <p className="text-sm text-gray-500 line-through">
-                     ৳{product.originalPrice.toFixed(2)}
+                     ৳{product.originalPrice}
                    </p>
                  )}
                </div>

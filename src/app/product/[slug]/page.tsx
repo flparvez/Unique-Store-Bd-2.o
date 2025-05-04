@@ -1,10 +1,13 @@
 
 import ProductDetailPage from '@/components/ProductDetailPage';
 import { Navbar } from '@/components/shared/header/Navbar';
-import { fetchProductBySlug } from '@/lib/action/product-action';
+
 import { Metadata } from 'next';
 import { htmlToText } from "html-to-text";
 import React from 'react'
+import { IProduct } from '@/types/product';
+import ProductLoadingSkeleton from '@/components/ProductLoadingSkeleton';
+import { getAllProducts } from '@/lib/action/product-action';
 
 
 type Props = {
@@ -12,6 +15,31 @@ type Props = {
   
 };
 
+// Enhanced fetch with error handling
+async function getProduct(slug: string): Promise<IProduct | null>  {
+  try {
+    const res = await fetch(
+      // `http://localhost:3000/api/products/${slug}`,
+      `https://landig-store.vercel.app/api/products/${slug}`,
+      { 
+        next: { 
+          revalidate: 60*60*12,
+          tags: [`product_${slug}`]
+        } 
+      }
+    );
+    
+    if (!res.ok) {
+      console.error(`Failed to fetch product ${slug}: ${res.status}`);
+      return null;
+    }
+    
+    return await res.json();
+  } catch (error) {
+    console.error(`Network error fetching product ${slug}:`, error);
+    return null;
+  }
+}
 
 
 
@@ -20,7 +48,8 @@ export async function generateMetadata({ params }: Props,
   
 ): Promise<Metadata> {
   const { slug } = await params;
-  const product = await fetchProductBySlug(slug)
+  const product = await getProduct(slug);
+
   if (!product) {
     return {
       title: "Product Not Found | Unique Store BD",
@@ -39,10 +68,10 @@ export async function generateMetadata({ params }: Props,
   
   // Generate keywords from existing data
   const keywords = [
-    ...(product.seo?.split(',') || []),
+    ...(product?.seo?.split(',') || []),
     'buy online',
     'price in Bangladesh',
-    product.category?.name || '',
+    product?.category?.name || '',
     'Unique Store BD'
   ].filter(Boolean).join(', ');
 
@@ -76,12 +105,17 @@ export async function generateMetadata({ params }: Props,
 
 const ProductPage = async ({params}: {params : Promise<{slug: string}>}) => {
 const {slug} = (await params)
-const product = await fetchProductBySlug(slug)
+const product = await getProduct(slug);
+console.log(product)
+if (!product) {
+  return <ProductLoadingSkeleton />
+}
 
+const products = (await getAllProducts()) || [];
   return (
     <div>
        <Navbar />
-      <ProductDetailPage product = {product} />
+      <ProductDetailPage products={products} product = {product} />
        {/* FAQ section for SEO */}
        <section className="mx-4 py-4">
           <h2 className="text-xl font-bold mb-4">Frequently Asked Questions</h2>

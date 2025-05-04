@@ -30,10 +30,7 @@ const {slug} = (await params)
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      product: product
-    });
+    return NextResponse.json(product );
   } catch (error: unknown) {
     console.log(error)
     return NextResponse.json(

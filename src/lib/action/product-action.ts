@@ -35,12 +35,7 @@ interface ProductsResponse {
   };
 }
 
-interface RelatedProductsParams {
-  category: string;
-  productId: string;
-  limit?: number;
-  page?: number;
-}
+
 
 // Helper: Determine sort order
 function getSortOrder(sort: string): Record<string, 1 | -1> {
@@ -152,41 +147,7 @@ export async function fetchProductBySlug(slug: string): Promise<IProduct> {
   }
 }
 
-export async function fetchRelatedProducts(params: RelatedProductsParams): Promise<ProductsResponse> {
-  await connectToDb();
-  const { category, productId, limit = 4, page = 1 } = params;
-  await Category.find()
-  try {
-    const filters = {
-      isPublished: true,
-      category: new mongoose.Types.ObjectId(category),
-      _id: { $ne: new mongoose.Types.ObjectId(productId) },
-    };
 
-    const [products, total] = await Promise.all([
-      Product.find(filters)
-        .sort({ numSales: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .lean(),
-      Product.countDocuments(filters),
-    ]);
-
-    return {
-      success: true,
-      products: JSON.parse(JSON.stringify(products)),
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
-      },
-    };
-  } catch (error) {
-    console.error('Failed to fetch related products:', error);
-    throw new Error('Failed to fetch related products');
-  }
-}
 
 export async function fetchFeaturedProducts(limit = 5): Promise<IProduct[]> {
   await connectToDb();

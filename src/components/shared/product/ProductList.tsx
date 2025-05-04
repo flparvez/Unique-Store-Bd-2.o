@@ -7,11 +7,14 @@ import Image from "next/image";
 import Link from "next/link";
 import {  ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
+import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
 
 
 const ProductList = ({data}:{data:IProduct[]}) => {
   const { addToCart } = useCart();
-
+if (!data) {
+  return <ProductLoadingSkeleton />
+}
 
   return (
     <div className="container mx-auto sm:px-4 sm:py-4">
@@ -19,11 +22,12 @@ const ProductList = ({data}:{data:IProduct[]}) => {
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {data?.map((product) => (
+            <Link href={`/product/${product.slug}`} key={product._id}>
            <div key={product._id} 
            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
     
          >
-           <Link href={`/product/${product.slug}`} className="block">
+         
              <div className="relative aspect-square">
                <Image
                    src={product.images[0].url || "/placeholder-product.jpg"}
@@ -38,14 +42,14 @@ const ProductList = ({data}:{data:IProduct[]}) => {
            </span> : null
            }
              </div>
-           </Link>
+           
      
            <div className="p-4">
-             <Link href={`/product/${product.slug}`}>
+         
                <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
                  {product.shortName}
                </h3>
-             </Link>
+         
      
             
      
@@ -70,6 +74,7 @@ const ProductList = ({data}:{data:IProduct[]}) => {
              </div>
            </div>
          </div>
+         </Link>
         ))}
       </div>
       </div>

@@ -163,7 +163,7 @@ const ProductDetailPage = ({ product,products }:Props) => {
     <div className="w-full lg:w-1/2 space-y-6">
       {/* Title and Short Name */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+        <h1 className="text-xl sm:text-3xl font-bold text-gray-900">{product.name}</h1>
         <p className="text-base text-muted-foreground">{product.shortName}</p>
       </div>
 

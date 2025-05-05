@@ -41,6 +41,7 @@ const formSchema = z.object({
   lastUpdatedIndex: z.coerce.number().min(0, 'Last Index Number').optional(),
   advanced: z.coerce.number().min(0, 'advanced').optional(),
   warranty: z.string().default('7 day warranty'),
+  video: z.string().optional(),
   isFeatured: z.boolean().default(false),
   isActive: z.boolean().default(true),
   specifications: z.array(
@@ -81,6 +82,7 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
       price: product?.price || 0,
       originalPrice: product?.originalPrice || undefined,
       stock: product?.stock || 0,
+      video: product?.video,
       warranty: product?.warranty || '7 day warranty',
       isFeatured: product?.isFeatured || false,
       isActive: product?.isActive ?? true,
@@ -274,6 +276,22 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
                     </FormItem>
                   )}
                 />
+       <FormField
+                  control={form.control}
+                  name="video"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>video</FormLabel>
+                      <FormControl>
+                        <Input placeholder="video" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+
+
               </div>
 
               {/* Right */}
@@ -374,6 +392,8 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
                     </FormItem>
                   )}
                 />
+
+
                 {/* Status */}
                 <div className="grid grid-cols-2 gap-4">
                   <FormField

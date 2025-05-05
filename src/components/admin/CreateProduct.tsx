@@ -26,6 +26,7 @@ import type { IProductImage } from '@/models/Product';
 const productSchema = z.object({
   name: z.string().min(2).max(200),
   shortName: z.string().max(130),
+  video: z.string().max(130).optional(),
   seo: z.string().max(150),
   description: z.string().min(50).max(20000),
   category: z.string().min(1, 'Category is required'),
@@ -57,6 +58,7 @@ export function ProductCreateForm({ categories }: { categories: ICategory[] }) {
       price: undefined,
       originalPrice: undefined,
       stock: 1,
+      video: "",
       warranty: '7 day warranty',
       isFeatured: false,
     },
@@ -225,6 +227,20 @@ export function ProductCreateForm({ categories }: { categories: ICategory[] }) {
                 </FormItem>
               )}
             />
+
+                   <FormField
+              control={form.control}
+              name="video"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>video</FormLabel>
+                  <FormControl><Input {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            
 
             <FormField
               control={form.control}

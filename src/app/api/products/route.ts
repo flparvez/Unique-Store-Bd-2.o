@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
       price: Number(body.price),
       originalPrice: body.originalPrice || null,
       stock: Number(body.stock) || 0,
+      video: body.video,
       warranty: body.warranty || '7 day warranty',
       category,
       description: body.description,

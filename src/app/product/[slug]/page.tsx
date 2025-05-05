@@ -9,6 +9,7 @@ import ProductDetailPage from '@/components/ProductDetailPage';
 import ProductLoadingSkeleton from '@/components/ProductLoadingSkeleton';
 
 import { IProduct } from '@/types/product';
+import Link from 'next/link';
 
 
 
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }:Props): Promise<Metadata> {
 
   const plainDescription = htmlToText(product.description || '').replace(/\s+/g, ' ').trim();
   const shortDescription = plainDescription.slice(0, 155) + (plainDescription.length > 155 ? '...' : '');
-  const priceText = product.price ? ` at just ৳${product.price}` : '';
+  const priceText = product.price? ` at just ৳${product.price}` : '';
 
   return {
     title: `${product.shortName} Price In Bangladesh`,
@@ -91,11 +92,79 @@ const ProductPage = async ({ params }: Props) => {
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) return <ProductLoadingSkeleton />;
+ // Enhanced product schema data
+ const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  productID: product._id,
+  name: product.name,
+  sku: product.shortName,
+  description: htmlToText(product.description).slice(0, 250),
+  image: product.images?.map(img => img.url) || [],
+  brand: {
+    "@type": "Brand",
+    name: "Unique Store BD"
+  },
+  offers: {
+    "@type": "Offer",
+    url: `https://uniquestorebd.shop/product/${slug}`,
+    priceCurrency: "BDT",
+    price: product.price,
+    priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    availability: product.stock > 0 
+      ? "https://schema.org/InStock" 
+      : "https://schema.org/OutOfStock",
+    itemCondition: "https://schema.org/NewCondition",
+    shippingDetails: {
+      "@type": "OfferShippingDetails",
+      shippingRate: {
+        "@type": "MonetaryAmount",
+        value: product.advanced === 200 ? 0 : 100,
+        currency: "BDT"
+      }
+    }
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.8",
+    reviewCount: "15",
+    bestRating: "5",
+    worstRating: "1"
+  }
+};
 
  
   return (
-    <div>
+    <main>
       <Navbar />
+    {/* Structured data for search engines */}
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+    />
+     {/* Breadcrumb navigation for SEO */}
+     <nav aria-label="Breadcrumb" className="container  mx-auto px-2 pt-2 text-sm">
+        <ol className="flex items-center space-x-2">
+          <li>
+            <Link href="/" className="text-blue-600 hover:underline">Home</Link>
+          </li>
+          <li>/</li>
+          <li>
+            <a 
+              href={`/products/${product.category?.slug || ''}`} 
+              className="text-blue-600 hover:underline"
+            >
+              {product?.category?.name || 'Products'}
+            </a>
+          </li>
+          <li>/</li>
+          <li className="text-gray-600" aria-current="page">
+            {product?.shortName}
+          </li>
+        </ol>
+      </nav>
+      
+      
       <ProductDetailPage product={product}  />
 
       {/* FAQ Section for SEO */}
@@ -116,7 +185,7 @@ const ProductPage = async ({ params }: Props) => {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 

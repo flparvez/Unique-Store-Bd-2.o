@@ -136,10 +136,10 @@ export function Navbar() {
                         {product.name}
                       </p>
                       <p className="text-sm text-gray-500">
-                        ${product.price.toFixed(2)}
+                      ৳{product.price}
                         {product.originalPrice && (
                           <span className="ml-2 text-xs text-gray-400 line-through">
-                            ${product.originalPrice.toFixed(2)}
+                            ৳{product.originalPrice}
                           </span>
                         )}
                       </p>

@@ -12,6 +12,7 @@ export interface IProduct {
     category: {
       _id: string;
       name: string;
+      slug: string
     };
     price: number;
     originalPrice?: number;

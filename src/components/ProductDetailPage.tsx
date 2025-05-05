@@ -1,5 +1,5 @@
 'use client';
-
+import { YouTubeEmbed } from '@next/third-parties/google';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
@@ -46,7 +46,9 @@ const ProductDetailPage = ({ product }:Props) => {
     if (availableStock <= 0) return;
     addToCart(product, quantity, selectedVariant);
     toast.success('Product added to cart');
+    
   };
+const advanced = product?.advanced || 100
 
   if (!isInitialized) return <div className="text-center py-8">Loading cart...</div>;
 
@@ -112,7 +114,7 @@ const ProductDetailPage = ({ product }:Props) => {
       {/* Title and Short Name */}
       <div>
         <h1 className="text-xl sm:text-3xl font-bold text-gray-900">{product.name}</h1>
-        <p className="text-base text-muted-foreground">{product.shortName}</p>
+      
       </div>
 
       {/* Price & Discount */}
@@ -121,7 +123,7 @@ const ProductDetailPage = ({ product }:Props) => {
           <>
             <span className="text-3xl font-bold text-red-600">৳{product.price}</span>
             <span className="line-through text-xl text-gray-500">
-              ৳{product.originalPrice?.toFixed(2)}
+              ৳{product.originalPrice}
             </span>
         
           </>
@@ -183,7 +185,12 @@ const ProductDetailPage = ({ product }:Props) => {
           {availableStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
         </button>
       </div>
-
+ {/* Payment Info */}
+ <div className="mb-4">
+              <p className="text-red-600 font-bold">
+                {advanced} Taka or full payment in advance is required
+              </p>
+            </div>
       {/* Quick Specs */}
       {product.specifications.length > 0 && (
         <div className="pt-4">
@@ -202,6 +209,19 @@ const ProductDetailPage = ({ product }:Props) => {
       {/* Description */}
       <div className="pt-6">
         <h3 className="text-sm font-semibold text-gray-900 mb-2">Product Description</h3>
+        <h1 className="font-bold sm:text-xl  border-b text-black my-2 "> {product.shortName} in Bangladesh
+        </h1> 
+ {/* Product Video */}
+ {product?.video?    <div className="mb-2">
+                <h2 className="text-lg font-semibold mb-2">Product Video</h2>
+                <div className="aspect-w-16 aspect-h-9">
+                  <YouTubeEmbed 
+                    videoid={product.video} 
+                    params="controls=1&color=red&rel=0" 
+                  />
+                </div>
+              </div> : null }
+
         <div
           className="prose prose-sm max-w-none prose-p:leading-relaxed prose-li:leading-relaxed"
           dangerouslySetInnerHTML={{ __html: product.description || '<p>No description available.</p>' }}

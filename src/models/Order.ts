@@ -1,5 +1,32 @@
 import  { Schema, models, model } from 'mongoose';
 
+export interface IOrder {
+  _id?: string;
+  name: string;
+  userid: string;
+  mobile: string;
+  address: string;
+  city: string;
+  paymentType: string;
+  bkashTransactionId: string;
+  deliveryCharge: number;
+  payNowAmount: number;
+  payToRiderAmount: number;
+  cartItems: {
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+    selectedVariant: string;
+  }[];
+  subtotal: number;
+  totalAmount: number;
+  isInsideDhaka: boolean;
+  createdAt?: string;
+  updatedAt?: Date;
+}
+
+
 const orderSchema = new Schema(
   {
     name: { type: String, required: true },

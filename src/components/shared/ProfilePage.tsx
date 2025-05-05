@@ -1,11 +1,17 @@
 "use client"
+import { IOrder } from '@/models/Order'
 import { useSession,signOut } from 'next-auth/react'
 
 import React from 'react'
+import OrderTable from './OrderTable'
 
-const ProfilePage = () => {
+const ProfilePage = ({orders}: {orders: IOrder[]}) => {
     const {data:session} = useSession()
-  
+
+     // Filter orders by user ID
+  const userOrders = orders.filter((order) => order.userid === session?.user?.id);
+
+
     return (
         <div className="flex flex-col items-center justify-center bg-gray-100 p-4">
         <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-sm">
@@ -44,7 +50,7 @@ const ProfilePage = () => {
        
         </div>
   
-        {/* <OrderTable orders={userOrders} /> */}
+        <OrderTable orders={userOrders} />
       </div>
     )
 }

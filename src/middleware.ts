@@ -39,7 +39,7 @@ export default withAuth(
 export const config = {
   matcher: [
     "/admin/:path*",    // all admin routes
-    "/profile/:path*",  // all profile routes
+    "/profile/:path*",  
     "/auth/login",      // exact login path
     "/auth/register",   // exact register path
   ],

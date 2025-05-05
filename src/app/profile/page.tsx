@@ -12,7 +12,10 @@ export const metadata = {
 
 
 
-const Profile =  () => {
+const Profile =async  () => {
+
+  const res = await fetch('https://landig-store.vercel.app/api/order')
+  const data = await res.json()
 
   // Fetch orders
 
@@ -20,12 +23,10 @@ const Profile =  () => {
 
 
 
-  // Filter orders by user ID
-//   const userOrders = orders.filter((order) => order.user === user?.id);
-
+ 
   return (
 <div>
-    <ProfilePage />
+    <ProfilePage orders ={data?.orders} />
 </div>
   );
 };

@@ -1,5 +1,5 @@
 import  { Document, model, models, Schema } from 'mongoose';
-import slugify from 'slugify';
+
 export interface IImage extends Document {
   url: string;
   publicId: string;
@@ -38,17 +38,7 @@ const CategorySchema: Schema = new Schema(
   { timestamps: true }
 );
 
-// Generate slug from name before saving
-CategorySchema.pre<ICategory>("save", function (next) {
-  if (this.isModified('name')) {
-    this.slug = slugify(this.name, {
-      lower: true,
-      strict: true,
-      remove: /[*+~.()'"!:@]/g
-    });
-  }
-  next();
-});
+
 
 
 // Create or retrieve the model

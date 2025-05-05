@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, models, Model } from 'mongoose';
-import slugify from 'slugify';
+
 
 export interface IProductImage extends Document {
 
@@ -201,22 +201,7 @@ const productSchema = new Schema<IProduct, IProductModel>({
   toObject: { virtuals: true }
 });
 
-// Define other indexes (remove the slug index since it's already handled by unique: true)
-productSchema.index({ name: 'text', shortName: 'text', description: 'text', 'specifications.key': 'text', 'specifications.value': 'text' });
-productSchema.index({ category: 1 });
-productSchema.index({ isFeatured: 1 });
-productSchema.index({ popularityScore: 1 });
-// Auto-generate slug before saving
-productSchema.pre<IProduct>('save', function(next) {
-  if (this.isModified('name')) {
-    this.slug = slugify(`${this.name} ${this.shortName}`, {
-      lower: true,
-      strict: true,
-      locale: 'bn'
-    });
-  }
-  next();
-});
+
 
 
 

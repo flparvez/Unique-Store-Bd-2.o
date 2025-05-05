@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-
+import { getServerSession } from "next-auth/next";
 import { Order } from '@/models/Order';
 
 import { connectToDb } from '@/lib/db';
+import { authOptions } from '@/lib/auth';
 interface itemP {
     quantity?: number;
     selectedVariant?: string;
@@ -20,9 +21,10 @@ interface itemP {
 }
 export const POST = async (req: Request) => {
   try {
+    const session = await getServerSession(authOptions);
     await connectToDb();
     const data = await req.json();
-const id = "432543fgf"
+const id = session?.user.id
     const isInsideDhaka = data.city.trim().toLowerCase() === 'dhaka';
 
     const order = await Order.create({

@@ -1,5 +1,5 @@
 "use client"
-import { useSession } from 'next-auth/react'
+import { useSession,signOut } from 'next-auth/react'
 
 import React from 'react'
 
@@ -34,14 +34,14 @@ const ProfilePage = () => {
               className="w-full px-3 py-2 border rounded-md bg-gray-200 cursor-not-allowed"
             />
           </div>
-          <form >
-            <button
+     
+            <button onClick={() => signOut()}
               type="submit"
               className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300"
             >
               Logout
             </button>
-          </form>
+       
         </div>
   
         {/* <OrderTable orders={userOrders} /> */}

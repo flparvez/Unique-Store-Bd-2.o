@@ -3,8 +3,9 @@ import  { Schema, models, model } from 'mongoose';
 export interface IOrder {
   _id?: string;
   name: string;
+  orderId?: number;
   userid: string;
-  mobile: string;
+  mobile: number;
   address: string;
   city: string;
   paymentType: string;
@@ -24,14 +25,27 @@ export interface IOrder {
   isInsideDhaka: boolean;
   createdAt?: string;
   updatedAt?: Date;
+  email?: string; 
+  status?: string;
+  ordertrack?: string;
 }
 
-
+const generateOrderId = () => {
+  return Math.floor(1000 + Math.random() * 9000); // Generates a random 4-digit number between 1000 and 9999
+};
 const orderSchema = new Schema(
   {
+    orderId: {
+      type: Number,
+      required: true,
+      unique: true,
+      default: generateOrderId, // Call the helper function to generate orderId
+    },
     name: { type: String, required: true },
     userid: { type: String },
     mobile: { type: String, required: true },
+    email: { type: String, default: "uniquestorebd23@gmail.com" },
+    status: { type: String, default: 'pending' },
     address: { type: String, required: true },
     city: { type: String, required: true },
     paymentType: { type: String, enum: ['full', 'partial'], required: true },
@@ -51,6 +65,7 @@ const orderSchema = new Schema(
     subtotal: Number,
     totalAmount: Number,
     isInsideDhaka: Boolean,
+    ordertrack : { type: String , default:"/profile" },
   },
   { timestamps: true }
 );

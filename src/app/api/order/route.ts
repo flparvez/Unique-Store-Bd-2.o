@@ -43,6 +43,7 @@ const id = session?.user.id
         name: item.product.name,
         price: item.product.price,
         quantity: item.quantity,
+        images: item.product.images,
         selectedVariant: item.selectedVariant || '',
       })),
       subtotal: data.cart.totalPrice,

@@ -11,7 +11,7 @@ const CheckoutPage = () => {
     mobile: '',
     address: '',
     city: '',
-    paymentType: 'full',
+    paymentType: 'partial',
     bkashTransactionId: '',
   });
 
@@ -23,20 +23,23 @@ const CheckoutPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const advanced = cart?.items[0]?.product?.advanced 
+
   useEffect(() => {
     const delivery = form.city.trim().toLowerCase() === 'dhaka' ? 60 : 120;
     setDeliveryCharge(delivery);
 
     const total = cart.totalPrice + delivery;
+    const advanced = cart?.items[0]?.product?.advanced  || 100
 
     if (form.paymentType === 'partial') {
       setPayNowAmount(100);
-      setPayToRiderAmount(total - 100);
+      setPayToRiderAmount(total - advanced);
     } else {
       setPayNowAmount(total);
       setPayToRiderAmount(0);
     }
-  }, [form.city, form.paymentType, cart.totalPrice]);
+  }, [form.city, form.paymentType, cart.totalPrice ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +132,7 @@ const CheckoutPage = () => {
             className="w-full border px-4 py-2 rounded"
           >
             <option value="full">Full Payment</option>
-            <option value="partial">Partial Payment (100৳)</option>
+            <option value="partial">Partial Payment ({advanced}৳)</option>
           </select>
         </div>
 
@@ -147,7 +150,7 @@ const CheckoutPage = () => {
 
         <div className="bg-gray-100 p-4 rounded mt-6">
           <h3 className="text-lg font-semibold mb-2">Order Summary</h3>
-          <p>Subtotal: ৳{cart.totalPrice.toFixed(2)}</p>
+          <p>Subtotal: ৳{cart.totalPrice}</p>
           <p>Delivery Charge: ৳{deliveryCharge}</p>
           <hr className="my-2" />
           <p className="font-bold">Total: ৳{(cart.totalPrice + deliveryCharge).toFixed(2)}</p>
@@ -155,7 +158,7 @@ const CheckoutPage = () => {
           <div className="mt-3">
             {form.paymentType === 'partial' ? (
               <div className="text-sm text-gray-700">
-                <p>📌 <span className="font-semibold">Pay Now:</span> ৳100 via <span className="font-bold text-pink-600">Bkash (019XXXXXXXX)</span></p>
+                <p>📌 <span className="font-semibold">Pay Now:</span> ৳{advanced} via <span className="font-bold text-pink-600">Bkash (019XXXXXXXX)</span></p>
                 <p>💸 <span className="font-semibold">Pay to Rider:</span> ৳{payToRiderAmount.toFixed(2)}</p>
               </div>
             ) : (

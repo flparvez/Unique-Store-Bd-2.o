@@ -5,7 +5,7 @@ export interface IOrder {
   name: string;
   orderId?: number;
   userid: string;
-  mobile: number;
+  mobile: string;
   address: string;
   city: string;
   paymentType: string;

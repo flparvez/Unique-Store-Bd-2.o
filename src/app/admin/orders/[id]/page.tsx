@@ -10,6 +10,7 @@ const OrderInfo =async ({
     const res = await fetch(`https://landig-store.vercel.app/api/order/${id}`, {
   
       cache: 'force-cache',
+      
     })
     const order = await res.json()
   

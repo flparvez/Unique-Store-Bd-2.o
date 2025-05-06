@@ -43,10 +43,10 @@ const OrderTable = ({orders}:{orders: IOrder[]}) => {
       <TableBody>
         {orders?.map((invoice) => (
           <TableRow key={invoice._id}>
-            <TableCell className="font-medium"><Link href={`/profile/orders/${invoice._id}`}>{invoice._id}</Link></TableCell>
+            <TableCell className="font-medium"><Link href={`/profile/orders/${invoice._id}`}>{invoice.orderId}</Link></TableCell>
             <TableCell>{invoice?.createdAt}</TableCell>
             <TableCell>{invoice.name}</TableCell>
-            <TableCell>Processing</TableCell>
+            <TableCell>{invoice?.status}</TableCell>
   
           </TableRow>
         ))}

@@ -19,11 +19,11 @@ type OrderFormData = {
     ordertrack?: string;
   };
 
-const OrderInfoPage = ({orders}: {orders: {data:IOrder}}) => {
+const OrderInfoPage = ({order}: {order: IOrder}) => {
 
 
   
- const data = orders?.data;
+ const data = order;
     
     const {
       register,

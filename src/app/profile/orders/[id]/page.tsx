@@ -22,7 +22,7 @@ const OrderInfo =async ({
 
   return (
     <div>
-      <OrderInformationPage orders={order}  />
+      <OrderInformationPage order={order}  />
     </div>
   )
 }

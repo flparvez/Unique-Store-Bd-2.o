@@ -5,9 +5,8 @@ import { Table, TableBody,  TableCell,  TableHead, TableHeader, TableRow } from 
 
 import Link from 'next/link';
 import { IOrder } from '@/models/Order';
-const OrderInformationPage = ({orders}:{orders: {data: IOrder}}) => {
+const OrderInformationPage = ({order}:{order: IOrder}) => {
 
-const order = orders?.data
 if (order) {
   return (
     <div className="container mx-auto px-4 py-8">

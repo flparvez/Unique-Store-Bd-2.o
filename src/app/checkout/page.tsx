@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/useCart';
 
+const LOCAL_STORAGE_KEY = 'checkoutFormPermanent';
+
 const CheckoutPage = () => {
-  const { clearCart,cart } = useCart();
+  const { clearCart, cart } = useCart();
 
   const [form, setForm] = useState({
     name: '',
@@ -19,31 +21,56 @@ const CheckoutPage = () => {
   const [payNowAmount, setPayNowAmount] = useState(0);
   const [payToRiderAmount, setPayToRiderAmount] = useState(0);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const advanced = cart?.items[0]?.product?.advanced || 100;
 
-  const advanced = cart?.items[0]?.product?.advanced 
+  // ✅ Load from localStorage on first load
+  useEffect(() => {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setForm((prev) => ({
+        ...prev,
+        ...parsed, // merge saved data into form
+      }));
+    }
+  }, []);
 
+  // ✅ Save form data permanently on every change
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify({
+        name: form.name,
+        mobile: form.mobile,
+        address: form.address,
+        city: form.city,
+      })
+    );
+  }, [form.name, form.mobile, form.address, form.city]);
+
+  // ✅ Calculate delivery and payment
   useEffect(() => {
     const delivery = form.city.trim().toLowerCase() === 'dhaka' ? 60 : 120;
     setDeliveryCharge(delivery);
 
     const total = cart.totalPrice + delivery;
-    const advanced = cart?.items[0]?.product?.advanced  || 100
 
     if (form.paymentType === 'partial') {
-      setPayNowAmount(100);
+      setPayNowAmount(advanced);
       setPayToRiderAmount(total - advanced);
     } else {
       setPayNowAmount(total);
       setPayToRiderAmount(0);
     }
-  }, [form.city, form.paymentType, cart.totalPrice, cart.items ]);
+  }, [form.city, form.paymentType, cart.totalPrice, cart.items]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const orderData = {
       ...form,
       deliveryCharge,
@@ -51,20 +78,20 @@ const CheckoutPage = () => {
       payToRiderAmount,
       cart,
     };
-  
+
     try {
       const res = await fetch('/api/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
       });
-  
+
       const result = await res.json();
-  
+
       if (result.success) {
         alert('✅ Order saved successfully!');
         clearCart();
-        // Optional: redirect or clear cart
+        // form clear না করে রাখলে localStorage data থাকবে
       } else {
         alert('❌ Failed to place order!');
       }
@@ -85,8 +112,9 @@ const CheckoutPage = () => {
             type="text"
             name="name"
             required
-            className="w-full border px-4 py-2 rounded"
+            value={form.name}
             onChange={handleChange}
+            className="w-full border px-4 py-2 rounded"
           />
         </div>
 
@@ -96,8 +124,9 @@ const CheckoutPage = () => {
             type="text"
             name="mobile"
             required
-            className="w-full border px-4 py-2 rounded"
+            value={form.mobile}
             onChange={handleChange}
+            className="w-full border px-4 py-2 rounded"
           />
         </div>
 
@@ -107,8 +136,9 @@ const CheckoutPage = () => {
             type="text"
             name="address"
             required
-            className="w-full border px-4 py-2 rounded"
+            value={form.address}
             onChange={handleChange}
+            className="w-full border px-4 py-2 rounded"
           />
         </div>
 
@@ -118,8 +148,9 @@ const CheckoutPage = () => {
             type="text"
             name="city"
             required
-            className="w-full border px-4 py-2 rounded"
+            value={form.city}
             onChange={handleChange}
+            className="w-full border px-4 py-2 rounded"
           />
         </div>
 
@@ -143,8 +174,9 @@ const CheckoutPage = () => {
             name="bkashTransactionId"
             placeholder="Enter Bkash Txn ID"
             required
-            className="w-full border px-4 py-2 rounded"
+            value={form.bkashTransactionId}
             onChange={handleChange}
+            className="w-full border px-4 py-2 rounded"
           />
         </div>
 
@@ -155,16 +187,14 @@ const CheckoutPage = () => {
           <hr className="my-2" />
           <p className="font-bold">Total: ৳{(cart.totalPrice + deliveryCharge).toFixed(2)}</p>
 
-          <div className="mt-3">
+          <div className="mt-3 text-sm text-gray-700">
             {form.paymentType === 'partial' ? (
-              <div className="text-sm text-gray-700">
+              <>
                 <p>📌 <span className="font-semibold">Pay Now:</span> ৳{advanced} via <span className="font-bold text-pink-600">Bkash (019XXXXXXXX)</span></p>
                 <p>💸 <span className="font-semibold">Pay to Rider:</span> ৳{payToRiderAmount.toFixed(2)}</p>
-              </div>
+              </>
             ) : (
-              <div className="text-sm text-gray-700">
-                <p>📌 <span className="font-semibold">Pay Now:</span> ৳{payNowAmount.toFixed(2)} via <span className="font-bold text-pink-600">Bkash (019XXXXXXXX)</span></p>
-              </div>
+              <p>📌 <span className="font-semibold">Pay Now:</span> ৳{payNowAmount.toFixed(2)} via <span className="font-bold text-pink-600">Bkash (019XXXXXXXX)</span></p>
             )}
           </div>
         </div>

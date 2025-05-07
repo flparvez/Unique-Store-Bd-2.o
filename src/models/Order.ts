@@ -30,16 +30,14 @@ export interface IOrder {
   ordertrack?: string;
 }
 
-const generateOrderId = () => {
-  return Math.floor(1000 + Math.random() * 9000); // Generates a random 4-digit number between 1000 and 9999
-};
+
 const orderSchema = new Schema(
   {
     orderId: {
       type: Number,
       required: true,
       unique: true,
-      default: generateOrderId, // Call the helper function to generate orderId
+     
     },
     name: { type: String, required: true },
     userid: { type: String },

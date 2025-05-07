@@ -30,6 +30,7 @@ const id = session?.user.id
     const order = await Order.create({
       name: data.name,
       userid: id,
+      orderId: data?.mobile.slice(7, 10),
       mobile: data.mobile,
       address: data.address,
       city: data.city,

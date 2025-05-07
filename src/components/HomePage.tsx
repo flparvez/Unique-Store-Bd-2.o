@@ -12,7 +12,10 @@ import ProductLoadingSkeleton from './ProductLoadingSkeleton';
 
 // import CategoryList from "@/components/CategoryList";
 export default  function HomePage() {
-  const { data } = useSWR('/api/products', fetcher);
+  const { data } = useSWR('/api/products', fetcher,{
+    refreshInterval: 5000, // 🔄 auto re-fetch every 5s
+    revalidateOnFocus: true,
+  });
 if (!data) {
   <ProductLoadingSkeleton />
 }

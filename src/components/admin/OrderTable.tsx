@@ -15,16 +15,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IOrder } from '@/models/Order';
+
+import { useOrders } from '@/hooks/UseOrders';
+import ProductLoadingSkeleton from '../ProductLoadingSkeleton';
 
 
 
 
 
-const OrderTable = ({orders}:{orders: IOrder[]}) => {
+const OrderTable = () => {
 
 
-
+  const { orders, isLoading } = useOrders();
+if (isLoading) {
+  return <ProductLoadingSkeleton />
+}
   return (
     <div >
     
@@ -41,7 +46,7 @@ const OrderTable = ({orders}:{orders: IOrder[]}) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {orders?.map((invoice) => (
+        {orders?.orders.map((invoice) => (
           <TableRow key={invoice._id}>
             <TableCell className="font-medium"><Link href={`/admin/orders/${invoice._id}`}>{invoice.orderId}</Link></TableCell>
             <TableCell>{invoice?.createdAt}</TableCell>

@@ -39,7 +39,7 @@ const CheckoutPage = () => {
       setPayNowAmount(total);
       setPayToRiderAmount(0);
     }
-  }, [form.city, form.paymentType, cart.totalPrice ]);
+  }, [form.city, form.paymentType, cart.totalPrice, cart.items ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

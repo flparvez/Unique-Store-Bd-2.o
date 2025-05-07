@@ -1,17 +1,25 @@
 "use client"
-import { IOrder } from '@/models/Order'
+
 import { useSession,signOut } from 'next-auth/react'
 
 import React from 'react'
-import OrderTable from './OrderTable'
 
-const ProfilePage = ({orders}: {orders: IOrder[]}) => {
+import { useOrders } from '@/hooks/UseOrders'
+import ProductLoadingSkeleton from '../ProductLoadingSkeleton'
+import { Table } from 'lucide-react'
+import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import Link from 'next/link'
+
+const ProfilePage = () => {
     const {data:session} = useSession()
-
+    const { orders, isLoading } = useOrders();
+   
      // Filter orders by user ID
-  const userOrders = orders.filter((order) => order.userid === session?.user?.id);
+  const userOrders = orders?.orders?.filter((order) => order.userid === session?.user?.id);
 
-
+  if (isLoading) {
+    return <ProductLoadingSkeleton />
+  }
     return (
         <div className="flex flex-col items-center justify-center bg-gray-100 p-4">
         <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-sm">
@@ -49,8 +57,36 @@ const ProfilePage = ({orders}: {orders: IOrder[]}) => {
             </button>
        
         </div>
+        <div >
+    
+    <h1 className="sm:text-3xl text-xl font-bold text-center mb-8">My Orders</h1>
+    <Table>
+      
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Order Id</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>Customer Name</TableHead>
+          <TableHead>Status</TableHead>
+          
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {userOrders?.map((invoice) => (
+          <TableRow key={invoice._id}>
+            <TableCell className="font-medium"><Link href={`/profile/orders/${invoice._id}`}>{invoice.orderId}</Link></TableCell>
+            <TableCell>{invoice?.createdAt}</TableCell>
+            <TableCell>{invoice.name}</TableCell>
+            <TableCell>{invoice?.status}</TableCell>
   
-        <OrderTable orders={userOrders} />
+          </TableRow>
+        ))}
+      </TableBody>
+      
+    </Table>
+    
+    </div>
+ 
       </div>
     )
 }

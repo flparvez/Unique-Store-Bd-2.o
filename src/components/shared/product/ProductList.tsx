@@ -10,7 +10,7 @@ import { useCart } from "@/hooks/useCart";
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
 
 
-const ProductList = ({data}:{data:IProduct[]}) => {
+const ProductList = ({data}: { data: IProduct[] }) => {
   const { addToCart } = useCart();
 if (!data) {
   return <ProductLoadingSkeleton />

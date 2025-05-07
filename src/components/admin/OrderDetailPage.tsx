@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { IOrder } from "@/models/Order";
+
+import { useOrderById } from "@/hooks/UseOrders";
 
 type OrderFormData = {
   name: string;
@@ -19,7 +20,10 @@ type OrderFormData = {
   ordertrack?: string;
 };
 
-const OrderInfoPage = ({ order }: { order: IOrder }) => {
+const OrderInfoPage = ({ id }: { id: string }) => {
+
+  const { order } = useOrderById(id);
+
   const {
     register,
     handleSubmit,
@@ -44,7 +48,7 @@ const OrderInfoPage = ({ order }: { order: IOrder }) => {
   // Handle Submit
   const onSubmit = async (formData: OrderFormData) => {
     try {
-      const response = await fetch(`https://landig-store.vercel.app/api/order/${order._id}`, {
+      const response = await fetch(`https://landig-store.vercel.app/api/order/${order?._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData }),

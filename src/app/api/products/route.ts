@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDb } from '@/lib/db';
 import mongoose from 'mongoose';
 import slugify from 'slugify';
+import Category from '@/models/Category';
 
 
 
@@ -10,6 +11,7 @@ export async function GET() {
   try {
     // ⏱ Connect to DB first
     await connectToDb();
+     await Category.find()
    const products = await Product.find().populate('category', 'name slug');    
     return NextResponse.json({ success: true,  products }, { status: 200 });
   } catch (error) {

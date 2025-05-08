@@ -1,4 +1,5 @@
 import { connectToDb } from "@/lib/db";
+import Category from "@/models/Category";
 import { Product } from "@/models/Product";
 import {  NextRequest, NextResponse } from "next/server";
 
@@ -9,9 +10,9 @@ export async function GET(
   const {slug} = (await params)
   try {
     await connectToDb();
-
+    await Category.find()
     // Only return necessary fields (you can customize this list)
-    const product = await Product.findOne({ slug }).populate(""); // Add specific fields if needed
+    const product = await Product.findOne({ slug }).populate("category"); // Add specific fields if needed
 
     if (!product) {
       return NextResponse.json(

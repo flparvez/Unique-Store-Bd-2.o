@@ -10,6 +10,7 @@ import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
 import LatestProduct from './shared/product/LatestProduct';
 import LatestProductm from './shared/product/LatestPm';
+import { useRouter } from 'next/navigation';
 // import { ShoppingCart } from 'lucide-react';
 // import Link from 'next/link';
 
@@ -30,7 +31,7 @@ const ProductDetailPage = ({ product }:Props) => {
   const [selectedVariant, setSelectedVariant] = useState<string>();
   const [quantity, setQuantity] = useState(1);
   const { addToCart, getItem, isInitialized } = useCart();
-
+const router = useRouter();
   const cartItem = getItem(product._id, selectedVariant);
   const currentQuantity = cartItem?.quantity || 0;
   const availableStock = product.stock - currentQuantity;
@@ -46,7 +47,7 @@ const ProductDetailPage = ({ product }:Props) => {
     if (availableStock <= 0) return;
     addToCart(product, quantity, selectedVariant);
     toast.success('Product added to cart');
-    
+    router.push('/checkout')
   };
 const advanced = product?.advanced || 100
 
@@ -110,7 +111,7 @@ const advanced = product?.advanced || 100
     </div>
 
     {/* Right: All Product Info */}
-    <div className="w-full lg:w-1/2 space-y-6">
+    <div className="w-full lg:w-1/2 space-y-2">
       {/* Title and Short Name */}
       <div>
         <h1 className="text-xl sm:text-3xl font-bold text-gray-900">{product.name}</h1>
@@ -121,7 +122,7 @@ const advanced = product?.advanced || 100
       <div className="flex items-center gap-4">
       
           <>
-            <span className="text-3xl font-bold text-red-600">৳{product.price}</span>
+            <span className="text-xl font-extrabold text-red-600">৳{product.price}</span>
             <span className="line-through text-xl text-gray-500">
               ৳{product.originalPrice}
             </span>
@@ -131,7 +132,7 @@ const advanced = product?.advanced || 100
       </div>
 
       {/* Variant (Color) */}
-      {product.specifications.some((s) => s.key === 'Color') && (
+      {product?.specifications.some((s) => s.key === 'Color') && (
         <div>
           <h3 className="text-sm font-medium">Color</h3>
           <div className="flex space-x-2 mt-2">
@@ -182,7 +183,7 @@ const advanced = product?.advanced || 100
               : 'bg-blue-600 hover:bg-blue-700 text-white'
           }`}
         >
-          {availableStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+          {availableStock <= 0 ? 'Out of Stock' : 'Order Now'}
         </button>
       </div>
  {/* Payment Info */}

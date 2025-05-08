@@ -12,8 +12,6 @@ import Link from 'next/link';
 
 
 
-// ✅ Utility to truncate long product names
-
   // ✅ Custom hook to avoid hydration mismatch
   const useMounted = () => {
     const [mounted, setMounted] = React.useState(false);
@@ -33,7 +31,7 @@ if (!mounted) return null;
         return <ProductLoadingSkeleton />
     }
     return (
-        <div className="w-full max-w-7xl mx-auto py-4 px-2">
+        <div className="w-full max-w-7xl mx-auto py-4 ">
       <Swiper
         autoplay={{ delay: 2500, disableOnInteraction: false }}
         pagination={{ clickable: true }}

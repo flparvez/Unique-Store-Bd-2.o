@@ -158,7 +158,7 @@ const ProductPage = async ({ params }: Props) => {
             </a>
           </li>
           <li>/</li>
-          <li className="text-gray-600" aria-current="page">
+          <li className="text-gray-600  line-clamp-2" aria-current="page">
             {product?.shortName}
           </li>
         </ol>

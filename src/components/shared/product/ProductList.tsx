@@ -1,18 +1,17 @@
 "use client";
 
-
-
-import {   IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import {  ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
+import { useProducts } from "@/hooks/UseOrders";
 
 
-const ProductList = ({data}: { data: IProduct[] }) => {
+const ProductList = () => {
+  const { products,isLoading} = useProducts()
   const { addToCart } = useCart();
-if (!data) {
+if (isLoading) {
   return <ProductLoadingSkeleton />
 }
 
@@ -21,7 +20,7 @@ if (!data) {
       <h2 className="text-2xl font-bold mb-8 text-gray-800">Our Products</h2>
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {data?.map((product) => (
+        {products?.products?.map((product) => (
            
            <div key={product._id} 
            className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden "

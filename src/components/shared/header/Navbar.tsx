@@ -15,9 +15,13 @@ import { fetchProducts } from "@/lib/action/product-action";
 import Image from "next/image";
 import Link from "next/link";
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
+import { useSession } from "next-auth/react";
 
 
 export function Navbar() {
+
+  const session = useSession();
+const admin = session.data?.user?.role==="admin"
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -81,7 +85,16 @@ export function Navbar() {
         <Link href="/" className="text-lg font-bold text-gray-900">
           Home
         </Link>  
+      
+
+
       </div>
+{
+  admin?        <Link href="/admin" className="text-lg font-bold text-gray-900">
+  Admin
+</Link>  : null
+}
+
       <div className="relative flex-1 max-w-md" ref={searchRef}>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />

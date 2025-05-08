@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from './fetcher';
 import { IOrder } from '@/models/Order';
-import { IProduct } from '@/types/product';
+import { ICategory, IProduct } from '@/types/product';
 
 interface OrderResponse {
   success: boolean;
@@ -49,6 +49,27 @@ export const useProducts = () => {
   
   return {
     products,
+    error,
+    isLoading,
+    mutate, // useful for refetching after create/update/delete
+  };
+};
+
+export const useCategory = () => {
+  const {
+    data: category,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<ICategory[]>('/api/categories', fetcher, {
+    refreshInterval: 5000, // 🔄 auto re-fetch every 5s
+    revalidateOnFocus: true,
+  });
+
+
+  
+  return {
+    category,
     error,
     isLoading,
     mutate, // useful for refetching after create/update/delete

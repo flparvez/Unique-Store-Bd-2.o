@@ -6,16 +6,17 @@ import Category from '@/models/Category';
 
 export async function GET(
   request: NextRequest,
-  {params}: {params : Promise<{id: string}>} 
+  {params}: {params : Promise<{slug: string}>} 
 ) {
 
 
-  const {id} = (await params)
+  const {slug} = (await params)
+
   await connectToDb();
   try {
 
   
-    const category = await Category.findById(id);
+    const category = await Category.findOne({slug}).populate('');
     if (!category) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });
     }
@@ -30,14 +31,14 @@ export async function GET(
 }
 export async function PATCH(
   request: Request,
-  {params}: {params : Promise<{id: string}>} 
+  {params}: {params : Promise<{slug: string}>} 
 ) {
-  const {id} = (await params)
+  const {slug} = (await params)
   await connectToDb();
   try {
 
     const body = await request.json();
-    const category = await Category.findByIdAndUpdate(id, body, {
+    const category = await Category.findOneAndUpdate({slug}, body, {
       new: true,
     });
     if (!category) {
@@ -55,13 +56,13 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  {params}: {params : Promise<{id: string}>} 
+  {params}: {params : Promise<{slug: string}>} 
 ){
-  const {id} = (await params)
+  const {slug} = (await params)
   await connectToDb();
   try {
   
-    const category = await Category.findByIdAndDelete(id);
+    const category = await Category.findOneAndDelete({slug});
     if (!category) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });
     }

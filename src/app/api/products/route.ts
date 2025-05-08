@@ -10,7 +10,7 @@ export async function GET() {
   try {
     // ⏱ Connect to DB first
     await connectToDb();
-   const products = await Product.find()    
+   const products = await Product.find().populate('category', 'name slug');    
     return NextResponse.json({ success: true,  products }, { status: 200 });
   } catch (error) {
     console.error('❌ API Error:', error);

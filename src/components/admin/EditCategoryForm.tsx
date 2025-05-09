@@ -59,7 +59,7 @@ export function CategoryForm({ slug }: { slug: string }) {
       const url = category
         ? `/api/categories/${category._id}`
         : '/api/categories';
-      const method = category ? 'PUT' : 'POST';
+      const method = category ? 'PATCH' : 'POST';
 
       const res = await fetch(url, {
         method,

@@ -28,7 +28,8 @@ import Image from 'next/image';
 import RichTextEditor from '@/components/RichTextEditor';
 import { Badge } from '@/components/ui/badge';
 
-import { useCategory, useProductByid } from '@/hooks/UseOrders';
+import { useCategory } from '@/hooks/UseOrders';
+import { IProduct } from '@/types/product';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(200),
@@ -55,13 +56,13 @@ const formSchema = z.object({
 });
 
 
-export function ProductEditForm({id}: {id: string}) {
-  const {product} = useProductByid(id!)
+export function ProductEditForm({product}: {product: IProduct}) {
+
   const {category}= useCategory()
 
   const router = useRouter();
 
-  const [images, setImages] = useState<IProductImage[]>([]);
+  const [images, setImages] = useState<IProductImage[]>(product.images || []);
   const [specs, setSpecs] = useState<{ key: string; value: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -75,7 +76,7 @@ export function ProductEditForm({id}: {id: string}) {
       shortName: '',
       seo: '',
       description: '',
-      category: '',
+      category: product.category._id || '',
       price: 0,
       originalPrice: undefined,
       stock: 0,
@@ -99,7 +100,7 @@ export function ProductEditForm({id}: {id: string}) {
         shortName: product.shortName || '',
         seo: product.seo || '',
         description: product.description || '',
-        category: product.category?._id || '',
+        category: product.category._id || '',
         price: product.price || 0,
         originalPrice: product.originalPrice,
         stock: product.stock || 0,
@@ -119,7 +120,7 @@ export function ProductEditForm({id}: {id: string}) {
     }
   }, [product, form]);
 
-  console.log(images)
+
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (images.length === 0) {

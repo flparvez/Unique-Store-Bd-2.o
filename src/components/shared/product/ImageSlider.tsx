@@ -30,7 +30,7 @@ const ImageSlider = ({images}:{images:IProductImage[]}) => {
         >
           {images.map((image, index) => (
             <SwiperSlide key={index}>
-              <Image width={1000} height={100} src={image.url} alt={`Product ${index + 1}`} className="w-full h-auto object-cover" />
+              <Image width={1000} height={100} src={image.url} alt={`Product ${index + 1}`} className="w-full sm:h-auto h-[350px] object-cover" />
   
   
             </SwiperSlide>

@@ -31,14 +31,14 @@ if (!mounted) return null;
         return <ProductLoadingSkeleton />
     }
     return (
-        <div className="w-full max-w-7xl mx-auto py-4 ">
+        <div className="w-full max-w-7xl mx-auto py-2 ">
       <Swiper
         autoplay={{ delay: 2500, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         spaceBetween={16}
         breakpoints={{
           0: { slidesPerView: 1 },
-          480: { slidesPerView: 2 },
+          520: { slidesPerView: 2 },
           768: { slidesPerView: 3 },
           1024: { slidesPerView: 4 },
         }}

@@ -102,3 +102,28 @@ export const useOrderById = (id: string | null) => {
     mutate,
   };
 };
+
+export const useProductByid = (id: string | null) => {
+  const shouldFetch = !!id;
+
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<IProduct>(
+    shouldFetch ? `/api/products/id/${id}` : null,
+    fetcher,
+    {
+      refreshInterval: 5000,
+      revalidateOnFocus: true,
+    }
+  );
+
+  return {
+    product: data,
+    error,
+    isLoading,
+    mutate,
+  };
+};

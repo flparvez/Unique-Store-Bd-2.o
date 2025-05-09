@@ -39,6 +39,7 @@ const formSchema = z.object({
   originalPrice: z.coerce.number().optional(),
   stock: z.coerce.number().min(0, 'Stock cannot be negative'),
   lastUpdatedIndex: z.coerce.number().min(0, 'Last Index Number').optional(),
+  popularityScore: z.coerce.number().min(0, 'Last Index Number').optional(),
   advanced: z.coerce.number().min(0, 'advanced').optional(),
   warranty: z.string().default('7 day warranty'),
   video: z.string().optional(),
@@ -88,6 +89,7 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
       isActive: product?.isActive ?? true,
       specifications: product?.specifications || [],
       lastUpdatedIndex: product?.lastUpdatedIndex || 1,
+      popularityScore: product?.popularityScore || 1,
       advanced: product?.advanced || 100
     },
   });
@@ -355,6 +357,20 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
                       <FormLabel>lastUpdatedIndex </FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="lastUpdatedIndex" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+    {/* popularityScore */}
+                <FormField
+                  control={form.control}
+                  name="popularityScore"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>popularityScore </FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="popularityScore" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

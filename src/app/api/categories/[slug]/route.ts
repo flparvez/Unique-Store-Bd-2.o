@@ -20,7 +20,7 @@ export async function GET(
     if (!category) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });
     }
-    return NextResponse.json({ data: category }, { status: 200 });
+    return NextResponse.json(category);
   } catch (error) {
     console.log(error);
     return NextResponse.json(

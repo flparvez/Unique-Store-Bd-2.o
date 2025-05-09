@@ -6,10 +6,12 @@ import {  ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
 import { useProducts } from "@/hooks/UseOrders";
+import { Button } from "@/components/ui/button";
 
 
 const ProductList = () => {
   const { products,isLoading} = useProducts()
+  const sliceProdct = products?.products.slice(0,23)
   const { addToCart } = useCart();
 if (isLoading) {
   return <ProductLoadingSkeleton />
@@ -20,7 +22,7 @@ if (isLoading) {
       <h2 className="text-2xl font-bold mb-8 text-gray-800">Our Products</h2>
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {products?.products?.map((product) => (
+        {sliceProdct?.map((product) => (
            
            <div key={product._id} 
            className="bg-white rounded-lg   hover:shadow-sm transition-shadow duration-200 overflow-hidden "
@@ -83,6 +85,10 @@ if (isLoading) {
       
         ))}
       </div>
+ <div className="flex justify-center ">
+ <Link href={"/products"} >  <Button>Load All Products</Button>
+ </Link>
+ </div>
       </div>
 
 

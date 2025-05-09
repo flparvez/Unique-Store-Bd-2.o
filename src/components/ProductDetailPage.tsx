@@ -1,9 +1,7 @@
 'use client';
 import { YouTubeEmbed } from '@next/third-parties/google';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import {  useState } from 'react';
 
-import { cn } from '@/lib/utils';
 import ProductLoadingSkeleton from './ProductLoadingSkeleton';
 import { IProduct } from '@/types/product';
 import { useCart } from '@/hooks/useCart';
@@ -11,14 +9,15 @@ import toast from 'react-hot-toast';
 import LatestProduct from './shared/product/LatestProduct';
 import LatestProductm from './shared/product/LatestPm';
 import { useRouter } from 'next/navigation';
+import ImageSlider from './shared/product/ImageSlider';
+import { Button } from './ui/button';
+import Link from 'next/link';
+import { Facebook } from 'lucide-react';
 // import { ShoppingCart } from 'lucide-react';
 // import Link from 'next/link';
 
 
-interface ProductImage {
-  url: string;
-  altText?: string;
-}
+
 interface Props {
   product: IProduct;
   
@@ -27,7 +26,7 @@ interface Props {
 const ProductDetailPage = ({ product }:Props) => {
 
 
-  const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
+
   const [selectedVariant, setSelectedVariant] = useState<string>();
   const [quantity, setQuantity] = useState(1);
   const { addToCart, getItem, isInitialized } = useCart();
@@ -35,12 +34,6 @@ const router = useRouter();
   const cartItem = getItem(product._id, selectedVariant);
   const currentQuantity = cartItem?.quantity || 0;
   const availableStock = product.stock - currentQuantity;
-  useEffect(() => {
-    if (product?.images?.length > 0) {
-      setSelectedImage(product.images[0]);
-    }
-  }, [product.images]);
-
 
 
   const handleAddToCart = () => {
@@ -62,50 +55,11 @@ const advanced = product?.advanced || 100
   // const latestproducts = products.slice(3, 13);
 
   return (
-<div className="container mx-auto px-4 py-8 md:py-12">
-  <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+<div className="container mx-auto px-4 py-2 md:py-4">
+  <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
     {/* Left: Image Gallery */}
     <div className="w-full lg:w-1/2 space-y-4">
-      {/* Main Image */}
-      <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-        {selectedImage ? (
-          <Image
-            src={selectedImage.url}
-            alt={selectedImage.altText || product.name}
-            width={600}
-            height={600}
-            className="w-full h-full object-contain"
-            priority
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-200 animate-pulse" />
-        )}
-      </div>
-
-      {/* Thumbnails */}
-      <div className=" flex gap-2 overflow-x-auto">
-        {product?.images?.map((img, idx) => (
-          <button
-            key={idx}
-            onClick={() => setSelectedImage(img)}
-            className={cn(
-              'w-16 h-16 rounded-md overflow-hidden border-2',
-              selectedImage?.url === img.url
-                ? 'border-primary ring-2 ring-primary/30'
-                : 'border-transparent'
-            )}
-          >
-            <Image
-              src={img.url}
-              alt={img.altText || `${product.name} thumb ${idx + 1}`}
-              width={64}
-              height={64}
-              className="w-full h-full object-cover"
-            />
-          </button>
-        ))}
-      </div>
-
+<ImageSlider images={product.images} />
         {/* Latest Products Section */}
 <LatestProduct />
     </div>
@@ -139,7 +93,7 @@ const advanced = product?.advanced || 100
             {product.specifications
               .filter((s) => s.key === 'Color')
               .map((spec) => (
-                <button
+                <Button
                   key={spec.value}
                   onClick={() => setSelectedVariant(spec.value)}
                   className={`w-8 h-8 rounded-full border-2 ${
@@ -174,7 +128,7 @@ const advanced = product?.advanced || 100
         </div>
         <span className="text-sm text-gray-500">{availableStock} available</span>
 
-        <button
+        <Button
           onClick={handleAddToCart}
           disabled={availableStock <= 0}
           className={`w-full sm:w-auto py-3 px-6 rounded-md font-semibold ${
@@ -184,10 +138,10 @@ const advanced = product?.advanced || 100
           }`}
         >
           {availableStock <= 0 ? 'Out of Stock' : 'Order Now'}
-        </button>
+        </Button>
       </div>
  {/* Payment Info */}
- <div className="mb-4">
+ <div className="mb-2">
               <p className="text-red-600 font-bold">
                 {advanced} Taka or full payment in advance is required
               </p>
@@ -199,14 +153,24 @@ const advanced = product?.advanced || 100
           <ul className="space-y-1">
             {product.specifications.slice(0, 4).map((spec, idx) => (
               <li key={idx} className="flex text-sm text-gray-800">
-                <span className="w-24 flex-shrink-0 text-gray-600">{spec.key}</span>
+                <span className="w-24 flex-shrink-0 uppercase text-black font-bold">{spec.key}</span>
                 <span>{spec.value}</span>
               </li>
             ))}
           </ul>
         </div>
       )}
-
+<div className="fixed bottom-16 sm:right-20  right-12 z-50">
+      <Link target='_blank' href="https://www.facebook.com/uniquestorebd23" passHref>
+        <h1
+          
+          rel="noopener noreferrer"
+          className="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition duration-300"
+        >
+          <Facebook size={24} />
+        </h1>
+      </Link>
+    </div>
       {/* Description */}
       <div className="pt-6">
         <h3 className="text-sm font-semibold text-gray-900 mb-2">Product Description</h3>

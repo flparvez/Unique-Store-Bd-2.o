@@ -118,7 +118,7 @@ const CheckoutPage = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-2xl font-bold mb-6">Order Page</h2>
+   
       <h2 className='text-xl sm:text-2xl font-bold text-center'>অর্ডারটি কনফার্ম করতে ফর্মটি সম্পুর্ণ পুরণ করে নিচের Place Order বাটনে ক্লিক করুন।</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>

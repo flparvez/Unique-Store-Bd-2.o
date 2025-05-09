@@ -39,10 +39,7 @@ const {id} = (await params)
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      product: product
-    });
+    return NextResponse.json(product);
   } catch (error: unknown) {
     return NextResponse.json(
       { success: false, error: error instanceof Error ? error.message : 'Failed to fetch product' },

@@ -15,8 +15,8 @@ const ProductByCategory = ({slug}:{slug:string}) => {
 
     return (
       
-  <div className=" mt-16">
-  <h2 className="text-xl font-bold text-gray-900 mb-4">Latest Products</h2>
+  <div className=" mt-8">
+
   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
     {productsByCategory?.map((product:IProduct) => (
          <div key={product._id} 

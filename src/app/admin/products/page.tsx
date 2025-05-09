@@ -11,6 +11,7 @@ const Products =  () => {
   if (!data) return <ProductLoadingSkeleton />
 
   return (
+    
   <ProductList products={data?.products} />
   )
 }

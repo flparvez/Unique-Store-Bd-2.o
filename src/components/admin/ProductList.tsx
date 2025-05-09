@@ -17,6 +17,9 @@ import { IProduct } from '@/types/product'
 const ProductList = ({products}:{products:IProduct[]}) => {
     return (
         <div className="w-full py-4 px-2">
+          <Link href="/admin/products/create-product">
+            <Button className="mb-4">Add Product</Button>
+          </Link>
       <div className="overflow-hidden rounded-lg border border-gray-200 shadow">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">

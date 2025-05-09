@@ -20,7 +20,7 @@ export async function generateMetadata( { params }: Props,
         `https://landig-store.vercel.app/api/categories/${slug}`
       ).then((res) => res.json());
   
-      console.log(category)
+ 
       if (!category) {
         return {
           title: "Category Not Found | Unique Store BD",

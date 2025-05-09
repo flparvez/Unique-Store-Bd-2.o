@@ -27,7 +27,8 @@ import Image from 'next/image';
 
 import RichTextEditor from '@/components/RichTextEditor';
 import { Badge } from '@/components/ui/badge';
-import {  IProduct } from '@/types/product';
+
+import { useCategory, useProductByid } from '@/hooks/UseOrders';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(200),
@@ -52,16 +53,11 @@ const formSchema = z.object({
     })
   ).optional(),
 });
-interface ICategory {
-  _id: string;
-  name: string;
-}
-interface ProductEditFormProps {
-  categories: ICategory[];
-  product?: IProduct;
-}
 
-export function ProductEditForm({ categories, product }: ProductEditFormProps) {
+
+export function ProductEditForm({id}: {id: string}) {
+  const {product} = useProductByid(id!)
+  const {category}= useCategory()
 
   const router = useRouter();
 
@@ -94,13 +90,33 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
     },
   });
 
+  // ✅ Reset form values when product data arrives
   useEffect(() => {
     if (product) {
+      
+      form.reset({
+        name: product.name || '',
+        shortName: product.shortName || '',
+        seo: product.seo || '',
+        description: product.description || '',
+        category: product.category?._id || '',
+        price: product.price || 0,
+        originalPrice: product.originalPrice || undefined,
+        stock: product.stock || 0,
+        video: product.video || '',
+        warranty: product.warranty || '7 day warranty',
+        isFeatured: product.isFeatured || false,
+        isActive: product.isActive ?? true,
+        specifications: product.specifications || [],
+        lastUpdatedIndex: product.lastUpdatedIndex || 1,
+        popularityScore: product.popularityScore || 1,
+        advanced: product.advanced || 100
+      });
+
       setImages(product.images || []);
       setSpecs(product.specifications || []);
     }
-  }, [product]);
-
+  }, [product, form]);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (images.length === 0) {
       toast.error('Please upload at least 1 image');
@@ -253,7 +269,7 @@ export function ProductEditForm({ categories, product }: ProductEditFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {categories?.map(category => (
+                          {category?.map(category => (
                             <SelectItem key={category._id} value={category._id}>
                               {category.name}
                             </SelectItem>

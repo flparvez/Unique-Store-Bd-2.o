@@ -127,3 +127,28 @@ export const useProductByid = (id: string | null) => {
     mutate,
   };
 };
+
+export const useCategoryBySlug = (slug: string | null) => {
+  const shouldFetch = !!slug;
+
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<ICategory>(
+    shouldFetch ? `/api/categories/${slug}` : null,
+    fetcher,
+    {
+      refreshInterval: 5000,
+      revalidateOnFocus: true,
+    }
+  );
+
+  return {
+    category: data,
+    error,
+    isLoading,
+    mutate,
+  };
+};

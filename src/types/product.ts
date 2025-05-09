@@ -32,6 +32,7 @@ export interface IProduct {
     rating?: number;
     isFeatured: boolean;
     isActive: boolean;
+    status: string;
     createdAt?: Date;
     updatedAt?: Date;
     lastUpdatedIndex? : number

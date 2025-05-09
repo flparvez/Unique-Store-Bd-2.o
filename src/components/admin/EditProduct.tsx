@@ -61,39 +61,39 @@ export function ProductEditForm({id}: {id: string}) {
 
   const router = useRouter();
 
-  const [images, setImages] = useState<IProductImage[]>(product?.images || []);
+  const [images, setImages] = useState<IProductImage[]>([]);
+  const [specs, setSpecs] = useState<{ key: string; value: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [specs, setSpecs] = useState<{ key: string; value: string }[]>(product?.specifications || []);
+
   const [currentSpec, setCurrentSpec] = useState({ key: '', value: '' });
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: product?.name || '',
-      shortName: product?.shortName || '',
-      seo: product?.seo || '',
-      description: product?.description || '',
-      category: product?.category?._id || '',
-      price: product?.price || 0,
-      originalPrice: product?.originalPrice || undefined,
-      stock: product?.stock || 0,
-      video: product?.video,
-      warranty: product?.warranty || '7 day warranty',
-      isFeatured: product?.isFeatured || false,
-      isActive: product?.isActive ?? true,
-      specifications: product?.specifications || [],
-      lastUpdatedIndex: product?.lastUpdatedIndex || 1,
-      popularityScore: product?.popularityScore || 1,
-      advanced: product?.advanced || 100
+      name: '',
+      shortName: '',
+      seo: '',
+      description: '',
+      category: '',
+      price: 0,
+      originalPrice: undefined,
+      stock: 0,
+      video: '',
+      warranty: '7 day warranty',
+      isFeatured: false,
+      isActive: true,
+      specifications: [],
+      lastUpdatedIndex: 1,
+      popularityScore: 1,
+      advanced: 100
     },
   });
-
-  // ✅ Reset form values when product data arrives
+  
+  // ✅ product এ ডেটা আসলে সব স্টেট ও ফর্ম রিসেট কর
   useEffect(() => {
     if (product) {
-      
+      // reset form
       form.reset({
         name: product.name || '',
         shortName: product.shortName || '',
@@ -101,7 +101,7 @@ export function ProductEditForm({id}: {id: string}) {
         description: product.description || '',
         category: product.category?._id || '',
         price: product.price || 0,
-        originalPrice: product.originalPrice || undefined,
+        originalPrice: product.originalPrice,
         stock: product.stock || 0,
         video: product.video || '',
         warranty: product.warranty || '7 day warranty',
@@ -110,13 +110,17 @@ export function ProductEditForm({id}: {id: string}) {
         specifications: product.specifications || [],
         lastUpdatedIndex: product.lastUpdatedIndex || 1,
         popularityScore: product.popularityScore || 1,
-        advanced: product.advanced || 100
+        advanced: product.advanced || 100,
       });
-
+  
+      // reset local states
       setImages(product.images || []);
       setSpecs(product.specifications || []);
     }
   }, [product, form]);
+
+  console.log(images)
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (images.length === 0) {
       toast.error('Please upload at least 1 image');
@@ -539,7 +543,7 @@ export function ProductEditForm({id}: {id: string}) {
               <h2 className="text-xl font-bold">{form.getValues().name}</h2>
               <p>{form.getValues().description}</p>
               <div className="flex flex-wrap gap-2">
-                {images.map((img, idx) => (
+                {images?.map((img, idx) => (
                   <Image key={idx} src={img.url} alt="Product Image" width={100} height={100} />
                 ))}
               </div>

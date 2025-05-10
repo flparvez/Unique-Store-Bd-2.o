@@ -3,14 +3,67 @@ import { fetcher } from './fetcher';
 import { IOrder } from '@/models/Order';
 import { ICategory, IProduct } from '@/types/product';
 
+
+
+interface FilterParams {
+  query?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  sort?: string;
+  page?: number;
+  featured?: string; // From URL, it will come as 'true' or 'false'
+}
+
 interface OrderResponse {
   success: boolean;
   orders: IOrder[];
 }
 interface ProductResponse {
+  products: IProduct[]; // You can replace `any` with your Product type
+  total: number;
+  page: number;
   success: boolean;
-  products: IProduct[];
+  totalPages: number;
 }
+
+export const useFilteredProducts = (params: FilterParams) => {
+  const {
+    query = '',
+    minPrice = 0,
+    maxPrice = 1000000,
+    sort = 'newest',
+    page = 1,
+    featured,
+  } = params;
+
+  const queryParams = new URLSearchParams({
+    ...(query && { query }),
+    minPrice: String(minPrice),
+    maxPrice: String(maxPrice),
+    sort,
+    page: String(page),
+    ...(featured === 'true' && { featured: 'true' }),
+  });
+
+  const endpoint = `/api/products?${queryParams.toString()}`;
+
+  const {
+    data: products,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<ProductResponse>(endpoint, fetcher, {
+    refreshInterval: 5000,
+    revalidateOnFocus: true,
+  });
+
+  return {
+    products,
+    error,
+    isLoading,
+    mutate,
+  };
+};
 
 
 export const useOrders = () => {
@@ -55,6 +108,27 @@ export const useProducts = () => {
   };
 };
 
+export const useSearchProducts = (query: string = '') => {
+  const shouldFetch = query.trim().length > 0;
+  const endpoint = shouldFetch ? `/api/products?query=${query}` : null;
+
+  const {
+    data: products,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<ProductResponse>(endpoint, fetcher, {
+    refreshInterval: 5000,
+    revalidateOnFocus: true,
+  });
+
+  return {
+    products,
+    error,
+    isLoading,
+    mutate,
+  };
+};
 export const useCategory = () => {
   const {
     data: category,

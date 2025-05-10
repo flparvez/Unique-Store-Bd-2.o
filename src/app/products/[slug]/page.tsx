@@ -17,7 +17,7 @@ export async function generateMetadata( { params }: Props,
   
     try {
       const category:ICategory= await fetch(
-        `https://landig-store.vercel.app/api/categories/${slug}`
+        `https://unique-store-bd.vercel.app/api/categories/${slug}`
       ).then((res) => res.json());
   
  
@@ -73,7 +73,7 @@ const Category =async ({params}: {params: Promise<{slug:string}>}) => {
    
   try {
     const category = await fetch(
-      `https://landig-store.vercel.app/api/categories/${slug}`
+      `https://unique-store-bd.vercel.app/api/categories/${slug}`
     ).then((res) => res.json());
 
     if (!category) {

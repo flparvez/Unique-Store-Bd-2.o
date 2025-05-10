@@ -6,10 +6,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   
   // Fetch all necessary data in parallel
   const [productsRes, categoriesRes] = await Promise.all([
-    fetch('https://landig-store.vercel.app/api/products', {
+    fetch('https://unique-store-bd.vercel.app/api/products', {
       next: { revalidate: 86400 } // Revalidate daily
     }),
-    fetch('https://landig-store.vercel.app/api/categories', {
+    fetch('https://unique-store-bd.vercel.app/api/categories', {
       next: { revalidate: 86400 } // Revalidate daily
     })
   ]);

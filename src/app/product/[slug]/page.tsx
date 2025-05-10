@@ -23,7 +23,7 @@ type Props = {
 async function getProduct(slug: string): Promise<IProduct | null> {
   try {
     // const res = await fetch(`http://localhost:3000/api/products/${slug}`, {
-    const res = await fetch(`https://landig-store.vercel.app/api/products/${slug}`, {
+    const res = await fetch(`https://unique-store-bd.vercel.app/api/products/${slug}`, {
 
       next: {
         revalidate: 60 * 60 * 12,
@@ -66,12 +66,12 @@ export async function generateMetadata({ params }:Props): Promise<Metadata> {
       'Unique Store BD',
     ].join(', '),
     alternates: {
-      canonical: `https://landig-store.vercel.app/product/${slug}`,
+      canonical: `https://unique-store-bd.vercel.app/product/${slug}`,
     },
     openGraph: {
       title: `${product.shortName} Price In Bangladesh`,
       description: `Buy ${product.shortName}${priceText}. ${shortDescription} Free delivery available.`,
-      url: `https://landig-store.vercel.app/product/${slug}`,
+      url: `https://unique-store-bd.vercel.app/product/${slug}`,
       type: 'website',
       images: product.images?.map(img => ({
         url: img.url,

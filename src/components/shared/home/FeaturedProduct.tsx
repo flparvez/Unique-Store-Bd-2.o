@@ -1,6 +1,5 @@
 "use client"
-import ProductLoadingSkeleton from '@/components/ProductLoadingSkeleton'
-import { useProducts } from '@/hooks/UseOrders'
+
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -8,6 +7,7 @@ import 'swiper/css/pagination';
 import { Autoplay, Pagination } from 'swiper/modules';
 import Image from 'next/image';
 import Link from 'next/link';
+import { IProduct } from '@/types/product';
 
 
 
@@ -18,18 +18,16 @@ import Link from 'next/link';
     React.useEffect(() => setMounted(true), []);
     return mounted;
   };
-const FeaturedProduct = () => {
-    const {products , isLoading} = useProducts()
+const FeaturedProduct = ({products}:{products:IProduct[]}) => {
+ 
 //  filter by featured
 
-const filterProduct = products?.products.filter((product) => product.isFeatured === true)
+const filterProduct =products?.filter((product) => product.isFeatured === true)
 
 const mounted = useMounted();
 if (!mounted) return null;
 
-    if (isLoading) {
-        return <ProductLoadingSkeleton />
-    }
+
     return (
         <div className="w-full max-w-7xl mx-auto py-2 ">
       <Swiper

@@ -4,22 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import {  ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
-import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
-import { useProducts } from "@/hooks/UseOrders";
+
 import { Button } from "@/components/ui/button";
+import { IProduct } from "@/types/product";
 
 
-const ProductList = () => {
-  const { products,isLoading} = useProducts()
-  const sliceProdct = products?.products.slice(0,23)
+const ProductList = ({products}:{products:IProduct[]}) => {
+
+  const sliceProdct = [...products].sort((a, b) => b.lastUpdatedIndex! - a.lastUpdatedIndex!).slice(0,23);
   const { addToCart } = useCart();
-if (isLoading) {
-  return <ProductLoadingSkeleton />
-}
+
 
   return (
     <div className="container mx-auto sm:px-4 sm:py-4">
-      <h2 className="text-2xl font-bold mb-8 text-gray-800">Our Products</h2>
+      <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">Our Products</h2>
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {sliceProdct?.map((product) => (

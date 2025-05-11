@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '*',
       disallow: '/admin/',
     },
-    sitemap: 'https://unique-store-bd.vercel.app/sitemap.xml',
+    sitemap: 'https://uniquestorebd.shop/sitemap.xml',
   }
 }

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import BottomBar from "@/components/shared/header/Bottom";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 
 const geistSans = Geist({
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 
 // Enhanced SEO Metadata
 export const metadata: Metadata = {
-  metadataBase: new URL('https://landig-store.vercel.app'),
+  metadataBase: new URL('https://uniquestorebd.shop/'),
 title: "Unique Store BD - Best Online Shopping in Bangladesh",
   description: "Buy authentic Products - Table Lamps, TWS earbuds, smart watches, home appliances & tech gadgets in Bangladesh. Best prices with warranty, fast delivery & easy returns.",
   keywords: [
@@ -44,7 +45,7 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
   openGraph: {
     title: "Unique Store BD - Best Online Shopping in Bangladesh",
     description: "Shop original TWS earbuds, smart watches, home appliances & tech gadgets at best prices in Bangladesh with warranty & fast delivery.",
-    url: "https://landig-store.vercel.app",
+    url: "https://uniquestorebd.shop/",
     siteName: "Unique Store BD",
     images: [
       {
@@ -67,11 +68,11 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
     ],
   },
   verification: {
-    google: "ZEjE-cLJCoXI1DyyLXq-ErqHg540Nq9mlZO3cq1A2Bs",
+    google: "H1QKSH2SYxJ7TemokhY7BFgKgZN-iJT1B51u-CZ4wpw",
     
   },
   alternates: {
-    canonical: "https://landig-store.vercel.app/",
+    canonical: "https://uniquestorebd.shop/",
   },
   category: "ecommerce",
 };
@@ -83,6 +84,75 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <GoogleTagManager gtmId="GTM-N9P2439Z" />
+
+      <head>
+        {/* Preload critical resources */}
+        <link
+          rel="preload"
+          href="./fonts/GeistVF.woff"
+          as="font"
+          type="font/woff"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="https://res.cloudinary.com/dxmvrhcjx/image/upload/v1736267263/hm8yhv7pehnbxw4klxym.png"
+          as="image"
+        />
+
+        {/* Favicon and App Icons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+
+        {/* Comprehensive Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Unique Store BD",
+              url: "https://uniquestorebd.shop",
+              logo: "https://res.cloudinary.com/dxmvrhcjx/image/upload/v1736267263/hm8yhv7pehnbxw4klxym.png",
+              description: "Authentic gadgets and electronics online store in Bangladesh",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "House 01, Road 01, Sector 01, Uttara, Dhaka",
+                addressLocality: "Dhaka",
+                addressRegion: "Dhaka",
+                postalCode: "1200",
+                addressCountry: "BD"
+              },
+              contactPoint: {
+                "@type": "ContactPoint",
+                telephone: "+8801608257876",
+                contactType: "customer service",
+                email: "uniquestorebd23@gmail.com",
+                areaServed: "BD",
+                availableLanguage: ["en", "bn"]
+              },
+              sameAs: [
+                "https://www.facebook.com/uniquestorebd23",
+                "https://www.instagram.com/uniquestorebd",
+                "https://www.linkedin.com/company/uniquestorebd"
+              ],
+              openingHoursSpecification: {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                opens: "09:00",
+                closes: "21:00"
+              },
+              priceRange: "$$"
+            })
+          }}
+        />
+
+        {/* Search Console Verification */}
+        <meta name="google-site-verification" content="H1QKSH2SYxJ7TemokhY7BFgKgZN-iJT1B51u-CZ4wpw" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

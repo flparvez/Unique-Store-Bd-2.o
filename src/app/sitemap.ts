@@ -2,14 +2,14 @@ import { ICategory, IProduct } from '@/types/product';
 import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://landig-store.vercel.app";
+  const baseUrl = "https://uniquestorebd.shop/";
   
   // Fetch all necessary data in parallel
   const [productsRes, categoriesRes] = await Promise.all([
-    fetch('https://unique-store-bd.vercel.app/api/products', {
+    fetch('https://uniquestorebd.shop/api/products', {
       next: { revalidate: 86400 } // Revalidate daily
     }),
-    fetch('https://unique-store-bd.vercel.app/api/categories', {
+    fetch('https://uniquestorebd.shop/api/categories', {
       next: { revalidate: 86400 } // Revalidate daily
     })
   ]);

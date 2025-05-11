@@ -48,7 +48,7 @@ const OrderInfoPage = ({ id }: { id: string }) => {
   // Handle Submit
   const onSubmit = async (formData: OrderFormData) => {
     try {
-      const response = await fetch(`https://unique-store-bd.vercel.app/api/order/${order?._id}`, {
+      const response = await fetch(`https://uniquestorebd.shop/api/order/${order?._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData }),

@@ -83,7 +83,7 @@ const ProductList = ({products}:{products:IProduct[]}) => {
       
         ))}
       </div>
- <div className="flex justify-center ">
+ <div className="flex justify-center text-center ">
  <Link href={"/products"} >  <Button>Load All Products</Button>
  </Link>
  </div>

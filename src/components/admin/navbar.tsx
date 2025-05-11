@@ -11,7 +11,7 @@ import { Bell, User, Search, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { IProduct } from "@/types/product";
-import { fetchProducts } from "@/lib/action/product-action";
+
 import Image from "next/image";
 import Link from "next/link";
 import ProductLoadingSkeleton from "../ProductLoadingSkeleton";
@@ -39,35 +39,51 @@ export function AdminNavbar() {
   }, []);
 
   // Search functionality
+
   useEffect(() => {
+    const controller = new AbortController();
+  
     const searchProducts = async () => {
-      if (searchQuery.trim().length > 1) {
-        setIsSearching(true);
-        try {
-          const response = await fetchProducts({
-            query: searchQuery,
-            limit: 5, // Limit to 5 results for dropdown
-            sort: 'relevance' // Assuming you have a relevance sort option
-          });
-          setSearchResults(response.products);
-          setIsSearchOpen(true);
-        } catch (error) {
-          console.error("Search failed:", error);
-          setSearchResults([]);
-        } finally {
-          setIsSearching(false);
-        }
-      } else {
+      const trimmedQuery = searchQuery.trim();
+  
+      if (trimmedQuery.length < 2) {
         setSearchResults([]);
         setIsSearchOpen(false);
+        return;
+      }
+  
+      setIsSearching(true);
+  
+      try {
+        const endpoint = `/api/products/filter?query=${encodeURIComponent(trimmedQuery)}`;
+        const res = await fetch(endpoint, { signal: controller.signal });
+        const data = await res.json();
+  
+        if (data.success && Array.isArray(data.products)) {
+          setSearchResults(data.products);
+          setIsSearchOpen(true);
+        } else {
+          setSearchResults([]);
+          setIsSearchOpen(false);
+        }
+      } catch (error) {
+        if (error) {
+          console.error("Search failed:", error);
+          setSearchResults([]);
+          setIsSearchOpen(false);
+        }
+      } finally {
+        setIsSearching(false);
       }
     };
-
-    const delayDebounceFn = setTimeout(searchProducts, 300);
-
-    return () => clearTimeout(delayDebounceFn);
+  
+    const debounceTimer = setTimeout(searchProducts, 300);
+  
+    return () => {
+      clearTimeout(debounceTimer);
+      controller.abort();
+    };
   }, [searchQuery]);
-
   const clearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);

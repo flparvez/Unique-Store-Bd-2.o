@@ -152,7 +152,7 @@ export function ProductEditForm({product}: {product: IProduct}) {
 
   
       toast.success(`Product ${product ? 'updated' : 'created'} successfully`);
-      router.push(`/admin`);
+      router.push(`/admin/products`);
     } catch (error) {
       console.error(error);
       toast.error(`Failed to ${product ? 'update' : 'create'} product`);

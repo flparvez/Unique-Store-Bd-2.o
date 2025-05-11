@@ -2,6 +2,7 @@ import useSWR from 'swr';
 import { fetcher } from './fetcher';
 import { IOrder } from '@/models/Order';
 import { FilterParams, ICategory, IProduct } from '@/types/product';
+import { IUser } from '@/models/User';
 
 
 
@@ -17,6 +18,10 @@ export interface ProductResponse {
     page: number;
     pages: number;
   };
+}
+
+interface User{
+  user: IUser[]
 }
 export const useFilteredProducts = (params: FilterParams) => {
   const {
@@ -102,9 +107,37 @@ export const useProducts = () => {
   };
 };
 
+
+
+
+
+export const useGetUsers = () => {
+  const {
+    data: users,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<User>('/api/auth/register', fetcher, {
+    refreshInterval: 5000, // 🔄 auto re-fetch every 5s
+    revalidateOnFocus: true,
+  });
+
+
+  
+  return {
+    users,
+    error,
+    isLoading,
+    mutate, // useful for refetching after create/update/delete
+  };
+};
+
+
+
+
 export const useSearchProducts = (query: string = '') => {
   const shouldFetch = query.trim().length > 0;
-  const endpoint = shouldFetch ? `/api/products?query=${query}` : null;
+  const endpoint = shouldFetch ? `/api/products/filter?query=${query}` : null;
 
   const {
     data: products,

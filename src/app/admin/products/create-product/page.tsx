@@ -1,7 +1,7 @@
 
 
 import { ProductCreateForm } from "@/components/admin/CreateProduct";
-import { getAllCategory } from "@/lib/action/product-action";
+import { getAllCategory } from "@/lib/action /product-action";
 
 
 

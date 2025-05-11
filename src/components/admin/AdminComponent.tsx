@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import ProductLoadingSkeleton from '../ProductLoadingSkeleton';
-import { getAllProducts } from '@/lib/action/product-action';
+import { getAllProducts } from '@/lib/action /product-action';
 
 
 

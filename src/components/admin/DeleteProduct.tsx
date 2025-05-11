@@ -1,4 +1,4 @@
-import { deleteProduct } from "@/lib/action/product-action";
+import { deleteProduct } from "@/lib/action /product-action";
 import toast from "react-hot-toast";
 
 

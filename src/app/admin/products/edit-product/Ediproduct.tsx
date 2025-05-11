@@ -1,6 +1,6 @@
 
 import { ProductEditForm } from '@/components/admin/EditProduct';
-import { fetchProductById } from '@/lib/action/product-action';
+import { fetchProductById } from '@/lib/action /product-action'
 
 export default async function EditProductPage({id}: {id: string}) {
 

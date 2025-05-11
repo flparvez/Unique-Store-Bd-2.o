@@ -7,16 +7,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Search, ShoppingCart, User } from "lucide-react";
+import { Search,  User } from "lucide-react";
 
 import Link from "next/link";
 
 import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
 import { useState } from "react";
+import { useCart } from "@/hooks/useCart";
 
 
 export function Navbar() {
+  const { cart } = useCart();
 
   const session = useSession();
 const admin = session.data?.user?.role==="admin"
@@ -45,9 +47,31 @@ const [menuOpen, setMenuOpen] = useState(false);
 
       {/* Right: Cart + User */}
       <div className="flex items-center gap-4">
-        <Link href="/cart">
-          <ShoppingCart className="h-5 w-5" />
-        </Link>
+     
+          {/* Cart Icon with Item Count */}
+          <Link href="/cart" className="flex flex-col items-center relative text-gray-800 dark:text-white hover:text-blue-600">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-5 w-6 mb-1"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M3 3h18v18H3V3z"
+              />
+            </svg>
+            Cart
+            {/* {cartItemCount > 0 && ( */}
+              <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full px-1">
+                {cart?.totalItems}
+              </span>
+            {/* )} */}
+          </Link>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">

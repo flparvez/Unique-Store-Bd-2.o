@@ -71,7 +71,7 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
     
   },
   alternates: {
-    canonical: "https://landig-store.vercel.app",
+    canonical: "https://landig-store.vercel.app/",
   },
   category: "ecommerce",
 };

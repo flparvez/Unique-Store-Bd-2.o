@@ -60,17 +60,27 @@ export interface IProduct {
     createdAt: string;
   }
   
-  export interface Pagination {
+  export interface IPagination {
     page: number;
-    limit: number;
+  
     total: number;
     pages: number;
+  }
+
+  export interface FilterParams {
+    query?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    sort?: string;
+    page?: number;
+    limit?: number;
+    featured?: boolean;
   }
   
   export interface ApiResponse {
     success: boolean;
     products: IProduct[];
-    pagination: Pagination;
+    pagination: IPagination;
   }
 
   

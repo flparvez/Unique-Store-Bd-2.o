@@ -10,11 +10,12 @@ import {
 import { Search,  User } from "lucide-react";
 
 import Link from "next/link";
-
+import Logo from "../../../../public/logo.jpg"
 import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
+import Image from "next/image";
 
 
 export function Navbar() {
@@ -35,9 +36,13 @@ const [menuOpen, setMenuOpen] = useState(false);
         >
           <Search className="h-6 w-6" />
         </button>
-        <Link href="/" className="text-lg font-bold text-gray-900">
-          Unique Store BD
-        </Link>
+        <div className="w-auto">
+          <Link href="/">
+            <h2 className="flex items-center">
+              <Image src={Logo} alt="Logo" width={100} height={100} className="h-8 w-auto sm:h-10" />
+            </h2>
+          </Link>
+        </div>
       </div>
 
       {/* Center: Search */}

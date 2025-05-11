@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 const LOCAL_STORAGE_KEY = 'checkoutFormPermanent';
 
@@ -173,6 +174,7 @@ const CheckoutPage = () => {
           />
         </div>
 
+
         <div>
           <label className="block mb-1 font-medium">Payment Type</label>
           <select
@@ -201,6 +203,22 @@ const CheckoutPage = () => {
           />
         </div>
 
+
+
+        <div className="flex flex-col">
+        <h2 className="text-xl font-semibold mt-3 mb-4 text-center">items</h2>
+        {cart?.items?.map((item) => (
+              <div key={item.product._id} className="flex items-center justify-center mb-4">
+                <Image width={100} height={100} src={item.product.images[0].url} alt={item.product.name} className="w-18 h-18 mr-4" />
+                <div>
+                  <h3 className="text-sm sm:text-xl font-medium">{item.product.name}</h3>
+                  <p className="text-black text-sm">
+                    {item.quantity} x ৳{item.product.price}
+                  </p>
+                </div>
+              </div>
+            ))}
+</div>
         <div className="bg-gray-100 p-4 rounded mt-6">
           <h3 className="text-lg font-semibold mb-2">Order Summary</h3>
           <p>Subtotal: ৳{cart.totalPrice}</p>

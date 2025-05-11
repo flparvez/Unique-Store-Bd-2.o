@@ -61,25 +61,25 @@ function generateStaticUrls(baseUrl: string): MetadataRoute.Sitemap {
       changeFrequency: 'daily' as const,
       priority: 0.9,
     },
-    // {
-    //   url: `${baseUrl}/policy/returns`,
-    //   lastModified: new Date(),
-    //   changeFrequency: 'yearly' as const,
-    //   priority: 0.3,
-    // },
-    // {
-    //   url: `${baseUrl}/policy/replacement-warranty`,
-    //   lastModified: new Date(),
-    //   changeFrequency: 'yearly' as const,
-    //   priority: 0.3,
-    // },
-    // // Add other important static pages
-    // {
-    //   url: `${baseUrl}/policy/after-sales-support`,
-    //   lastModified: new Date(),
-    //   changeFrequency: 'monthly' as const,
-    //   priority: 0.5,
-    // },
+    {
+      url: `${baseUrl}/policy/returns`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/policy/replacement-warranty`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    // Add other important static pages
+    {
+      url: `${baseUrl}/policy/after-sales-support`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
 
   ];
 }

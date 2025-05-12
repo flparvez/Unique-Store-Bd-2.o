@@ -73,7 +73,7 @@ if (!mounted) return null;
                
               </div>
               <div className="justify-center px-2 text-center">
-              <h3 className="text-sm absolute bottom-2 left-2 bg-black text-white text-center sm:text-base font-semibold line-clamp-1">
+              <h3 className="text-sm absolute bottom-4 left-2 bg-black text-white text-center sm:text-base font-semibold line-clamp-1">
                  {product.name}
                 </h3>
               </div>

@@ -46,9 +46,9 @@ export default function Register() {
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto p-2">
       <h1 className="text-2xl font-bold mb-4">Register</h1>
-      <div>
+      <div >
           <label htmlFor="email" className="block mb-1">
             Name
           </label>

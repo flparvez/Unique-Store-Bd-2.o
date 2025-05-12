@@ -1,4 +1,5 @@
 
+import { Button } from '@/components/ui/button';
 import { IProduct } from '@/models/Product';
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,7 +11,7 @@ const LatestProductm = () => {
  
 const { data } = useSWR('/api/products', fetcher);
 
-    const products = data?.products
+    const products = data?.products.slice(0,14)
     return (  
 
 
@@ -69,6 +70,10 @@ const { data } = useSWR('/api/products', fetcher);
     </div>
       ))}
     </div>
+        <div className='flex justify-center mt-2'>
+ <Link href={"/products"} >  <Button>Load All Products</Button>
+   </Link>
+       </div>
   </div>
 
     )

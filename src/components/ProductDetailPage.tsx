@@ -177,7 +177,7 @@ const advanced = product?.advanced || 100
         <h3 className="text-sm font-semibold text-gray-900 mb-2">Product Description</h3>
         <h1 className="font-bold sm:text-xl  border-b text-black my-2 "> {product.shortName} in Bangladesh
         </h1> 
- {/* Product Video */}
+
  {product?.video?    <div className="mb-2">
                 <h2 className="text-lg font-semibold mb-2">Product Video</h2>
                 <div className="aspect-w-16 aspect-h-9">
@@ -196,7 +196,57 @@ const advanced = product?.advanced || 100
     </div>
   </div>
 
-  {/* Latest Products Section */}
+            {product.seo && (
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold mb-2">Product Tags</h2>
+                <div className="flex flex-wrap gap-2">
+             
+                    <span 
+                      
+                      className="px-3 py-1 w-full space-x-2 bg-blue-200 text-blue-800 rounded-md break-words"
+                    >
+                      {product.seo.trim()}
+                    </span>
+             
+                </div>
+              </div>
+            )}
+
+           <div className="border border-gray-200 rounded-lg p-4 mb-6">
+              <h2 className="text-xl font-bold mb-3">Frequently Asked Questions</h2>
+              
+              <div className="space-y-4">
+
+
+         
+                <div>
+                <h3 className="font-semibold"> What is the price of {product?.shortName} in Bangladesh?</h3>
+                  <p className="text-gray-700">
+                  The latest price of <b>{product?.shortName}</b> is{' '}
+                <strong>৳{product?.price}</strong> in Bangladesh. You can purchase the{' '}
+                <b>{product?.shortName}</b> in Bangladesh at the best price from our website or any
+                of our stores.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold">Where can I buy <b>{product?.shortName}</b> in Bangladesh?</h3>
+                  <p className="text-gray-700">
+                    You can purchase <b>{product?.shortName}</b> from our store with nationwide delivery across Bangladesh. 
+                    We offer secure online payment options including cash on delivery.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold">What is the warranty for <b>{product?.shortName}</b>?</h3>
+                  <p className="text-gray-700">
+                    {product.warranty || "This product comes with a standard manufacturer's warranty."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+
  <LatestProductm />
 </div>
 

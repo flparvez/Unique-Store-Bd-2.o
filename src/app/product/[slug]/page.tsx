@@ -27,7 +27,7 @@ async function getProduct(slug: string): Promise<IProduct | null> {
     const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`, {
 
       next: {
-        revalidate: 60 * 60 * 12,
+        revalidate: 60 * 60 ,
         tags: [`product_${slug}`]
       }
     });

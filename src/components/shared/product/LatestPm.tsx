@@ -40,7 +40,7 @@ const { data } = useSWR('/api/products', fetcher);
           modules={[Autoplay, Pagination]}
           className="mySwiper"
         >
-          {products.map((product:IProduct) => (
+          {products?.map((product:IProduct) => (
             <SwiperSlide key={product._id}>
         <div key={product._id} 
       className="bg-white rounded-lg  overflow-hidden hover:shadow-xl transition-shadow duration-300"

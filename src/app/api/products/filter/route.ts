@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     const sort: string = searchParams.get('sort') || 'newest';
     const featured: boolean = searchParams.get('featured') === 'true';
     const page: number = parseInt(searchParams.get('page') || '1', 10) || 1;
-    const limit: number = parseInt(searchParams.get('limit') || '12', 10) || 12;
+    const limit: number = parseInt(searchParams.get('limit') || '20', 10) || 20;
 
     // Define filter object
     const filter: {

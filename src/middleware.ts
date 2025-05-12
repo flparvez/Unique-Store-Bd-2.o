@@ -38,7 +38,7 @@ export default withAuth(
 // ✅ Use matcher correctly
 export const config = {
   matcher: [
-    "/admin/:path*",    
+    // "/admin/:path*",    
     "/profile/:path*",  
     "/auth/login",      // exact login path
     "/auth/register",   // exact register path

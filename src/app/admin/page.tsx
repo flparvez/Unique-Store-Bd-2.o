@@ -17,7 +17,7 @@ const {products} = useProducts()
 const {category} = useCategory()
 const {orders} = useOrders()
 const {users} = useGetUsers()
-console.log(users?.user)
+
 
   const stats = [
     { name: "Total Products", value: products?.products?.length, change: "+12%", changeType: "positive" },

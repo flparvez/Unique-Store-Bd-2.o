@@ -17,7 +17,7 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
       {products?.map((product) => (
           
           <div key={product._id} 
-          className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden "
+          className="bg-white rounded-lg  hover:shadow-md transition-shadow duration-200 overflow-hidden "
    
         >
          <Link href={`/product/${product.slug}`} >

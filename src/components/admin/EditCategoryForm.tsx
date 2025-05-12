@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { CloudinaryUploadResult } from '@/lib/cloudinary';
 import { useCategoryBySlug } from '@/hooks/UseOrders';
+import toast from 'react-hot-toast';
 
 export function CategoryForm({ slug }: { slug: string }) {
   const { category, isLoading } = useCategoryBySlug(slug);
@@ -57,7 +58,7 @@ export function CategoryForm({ slug }: { slug: string }) {
       };
 
       const url = category
-        ? `/api/categories/${category._id}`
+        ? `/api/categories/${category.slug}`
         : '/api/categories';
       const method = category ? 'PATCH' : 'POST';
 
@@ -68,7 +69,7 @@ export function CategoryForm({ slug }: { slug: string }) {
       });
 
       if (!res.ok) throw new Error('Failed to save category');
-
+toast.success('Category saved successfully!');
       router.push('/admin/categories');
       router.refresh();
     } catch (err) {

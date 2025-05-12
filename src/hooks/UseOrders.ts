@@ -229,6 +229,34 @@ export const useProductByid = (id: string | null) => {
   };
 };
 
+
+// export const useProductBySlug = (slug: string | null) => {
+//   const shouldFetch = !!slug;
+
+//   const {
+//     data,
+//     error,
+//     isLoading,
+//     mutate,
+//   } = useSWR<IProduct>(
+//     shouldFetch ? `/api/products/${slug}` : null,
+//     fetcher,
+//     {
+//       refreshInterval: 5000,
+//       revalidateOnFocus: true,
+//     }
+//   );
+
+//   return {
+//     product: data,
+//     error,
+//     isLoading,
+//     mutate,
+//   };
+// };
+
+
+
 export const useCategoryBySlug = (slug: string | null) => {
   const shouldFetch = !!slug;
 

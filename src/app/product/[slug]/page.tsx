@@ -20,17 +20,20 @@ type Props = {
 };
 
 
-// Utility: fetch single product by slug
-async function getProduct(slug: string): Promise<IProduct | null> {
+
+
+
+// Used for static pages or performance-optimized views
+export async function getProduct(slug: string): Promise<IProduct | null> {
   try {
-    // const res = await fetch(`http://localhost:3000/api/products/${slug}`, {
-    const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`, {
+        const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`, {
 
       next: {
-        revalidate: 60 * 60 ,
-        tags: [`product_${slug}`]
-      }
+        revalidate: 60, // revalidate every 1 miniute
+        tags: [`product_${slug}`],
+      },
     });
+
     if (!res.ok) return null;
     return await res.json();
   } catch (error) {

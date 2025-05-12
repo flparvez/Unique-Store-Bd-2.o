@@ -4,15 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import ProductLoadingSkeleton from '../ProductLoadingSkeleton';
-import { getAllProducts } from '@/lib/action /product-action';
+import { useProducts } from '@/hooks/UseOrders';
 
 
+const AdminComponent =  () => {
 
-const AdminComponent = async () => {
-
-const products = (await getAllProducts())
+const {products} = useProducts()
   // Check for empty products array
-  if (products.length === 0) {
+  if (products?.products.length === 0) {
   
       return <ProductLoadingSkeleton />;
     
@@ -30,7 +29,7 @@ const products = (await getAllProducts())
       </Link>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {products.map((product) => {
+        {products?.products.map((product) => {
           // Ensure image URL exists
           const imageUrl = product.images?.[0]?.url || "/placeholder-product.jpg";
           const altText = product.name || "Product image";

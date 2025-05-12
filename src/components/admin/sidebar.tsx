@@ -13,7 +13,7 @@ const sidebarItems = [
   { name: "Categories", href: "/admin/categories" },
   { name: "Orders", href: "/admin/orders" },
   { name: "Users", href: "/admin/users" },
-  { name: "Add Category", href: "/admin/category/add" },
+  { name: "Add Category", href: "/admin/categories/add" },
   { name: "Add Product", href: "/admin/products/create-product" },
 ];
 

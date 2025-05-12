@@ -2,7 +2,7 @@
 import { YouTubeEmbed } from '@next/third-parties/google';
 import {  useState } from 'react';
 
-import ProductLoadingSkeleton from './ProductLoadingSkeleton';
+
 import { IProduct } from '@/types/product';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
@@ -13,6 +13,7 @@ import ImageSlider from './shared/product/ImageSlider';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import { Facebook } from 'lucide-react';
+import Loading from './shared/Loading';
 // import { ShoppingCart } from 'lucide-react';
 // import Link from 'next/link';
 
@@ -48,7 +49,7 @@ const advanced = product?.advanced || 100
 
 
   if (!product || !product.specifications ) {
-    return <ProductLoadingSkeleton />;
+    return <Loading />;
   }
 
 

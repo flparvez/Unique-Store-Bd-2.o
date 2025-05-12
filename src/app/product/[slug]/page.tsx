@@ -6,10 +6,11 @@ import { htmlToText } from 'html-to-text';
 
 import { Navbar } from '@/components/shared/header/Navbar';
 import ProductDetailPage from '@/components/ProductDetailPage';
-import ProductLoadingSkeleton from '@/components/ProductLoadingSkeleton';
+
 
 import { IProduct } from '@/types/product';
 import Link from 'next/link';
+import Loading from '@/components/shared/Loading';
 
 
 
@@ -91,7 +92,7 @@ export async function generateMetadata({ params }:Props): Promise<Metadata> {
 const ProductPage = async ({ params }: Props) => {
   const { slug } = await params;
   const product = await getProduct(slug);
-  if (!product) return <ProductLoadingSkeleton />;
+  if (!product) return <Loading />;
  // Enhanced product schema data
  const productSchema = {
   "@context": "https://schema.org",

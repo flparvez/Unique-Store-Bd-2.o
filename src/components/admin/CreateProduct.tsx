@@ -20,8 +20,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import RichTextEditor from '@/components/RichTextEditor';
 import Image from 'next/image';
 
-import type { ICategory } from '@/models/Category';
+
 import type { IProductImage } from '@/models/Product';
+import { useCategory } from '@/hooks/UseOrders';
 
 const productSchema = z.object({
   name: z.string().min(2).max(200),
@@ -39,8 +40,9 @@ const productSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
-export function ProductCreateForm({ categories }: { categories: ICategory[] }) {
+export function ProductCreateForm() {
   const router = useRouter();
+  const {category}= useCategory()
   const [images, setImages] = useState<IProductImage[]>([]);
   const [specs, setSpecs] = useState<{ key: string; value: string }[]>([]);
   const [currentSpec, setCurrentSpec] = useState({ key: '', value: '' });
@@ -152,7 +154,7 @@ export function ProductCreateForm({ categories }: { categories: ICategory[] }) {
                       <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {categories.map(cat => (
+                      {category?.map(cat => (
                         <SelectItem key={cat._id} value={cat._id}>{cat.name}</SelectItem>
                       ))}
                     </SelectContent>

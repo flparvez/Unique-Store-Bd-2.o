@@ -24,7 +24,7 @@ type Props = {
 
 
 // Used for static pages or performance-optimized views
-export async function getProduct(slug: string): Promise<IProduct | null> {
+async function getProduct(slug: string): Promise<IProduct | null> {
   try {
         const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`, {
 

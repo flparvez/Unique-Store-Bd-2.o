@@ -75,10 +75,10 @@ const advanced = product?.advanced || 100
 
       {/* Price & Discount */}
       <div className="flex items-center gap-4">
-      
+      <span className=" text-sm font-stretch-20% text-black">{product.warranty}</span>
           <>
             <span className="text-xl font-extrabold text-red-600">৳{product.price}</span>
-            <span className="line-through text-xl text-gray-500">
+            <span className="line-through text-xl font-stretch-10% text-gray-500">
               ৳{product.originalPrice}
             </span>
         
@@ -223,19 +223,13 @@ const advanced = product?.advanced || 100
                 <h3 className="font-semibold"> What is the price of {product?.shortName} in Bangladesh?</h3>
                   <p className="text-gray-700">
                   The latest price of <b>{product?.shortName}</b> is{' '}
-                <strong>৳{product?.price}</strong> in Bangladesh. You can purchase the{' '}
-                <b>{product?.shortName}</b> in Bangladesh at the best price from our website or any
+                <strong>৳{product?.price}</strong> in Bangladesh. You can purchase
+                 in Bangladesh at the best price from our website or any
                 of our stores.
                   </p>
                 </div>
                 
-                <div>
-                  <h3 className="font-semibold">Where can I buy <b>{product?.shortName}</b> in Bangladesh?</h3>
-                  <p className="text-gray-700">
-                    You can purchase <b>{product?.shortName}</b> from our store with nationwide delivery across Bangladesh. 
-                    We offer secure online payment options including cash on delivery.
-                  </p>
-                </div>
+              
                 
                 <div>
                   <h3 className="font-semibold">What is the warranty for <b>{product?.shortName}</b>?</h3>

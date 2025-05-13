@@ -29,7 +29,7 @@ const { data } = useSWR('/api/products', fetcher);
         <Swiper
           parallax={true}
           autoplay={{
-            delay: 3400,
+            delay: 2400,
             disableOnInteraction: false,
           }}
         

@@ -2,15 +2,15 @@ import { ICategory, IProduct } from '@/types/product';
 import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://uniquestorebd.shop/";
+  const baseUrl = "https://uniquestorebd.shop";
   
   // Fetch all necessary data in parallel
   const [productsRes, categoriesRes] = await Promise.all([
     fetch('https://uniquestorebd.shop/api/products', {
-      next: { revalidate: 86400 } // Revalidate daily
+      next: { revalidate: 60 } // Revalidate daily
     }),
     fetch('https://uniquestorebd.shop/api/categories', {
-      next: { revalidate: 86400 } // Revalidate daily
+      next: { revalidate: 60 } // Revalidate daily
     })
   ]);
 
@@ -25,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = await categoriesRes.json();
 
   // Generate all dynamic URLs
-  const productUrls = products.products?.map((product:IProduct) => ({
+  const productUrls = products?.products?.map((product:IProduct) => ({
     url: `${baseUrl}/product/${product.slug}`,
     lastModified: product.updatedAt ? new Date(product.updatedAt) : new Date(),
     changeFrequency: 'weekly' as const,

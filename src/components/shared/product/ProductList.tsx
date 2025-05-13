@@ -11,7 +11,7 @@ import { IProduct } from "@/types/product";
 
 const ProductList = ({products}:{products:IProduct[]}) => {
 
-  const sliceProdct = [...products].sort((a, b) => b.lastUpdatedIndex! - a.lastUpdatedIndex!).slice(0,23);
+  const sliceProdct = [...products].sort((a, b) => b.lastUpdatedIndex! - a.lastUpdatedIndex!).slice(0,24);
   const { addToCart } = useCart();
 
 

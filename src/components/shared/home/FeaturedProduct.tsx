@@ -23,7 +23,7 @@ const FeaturedProduct = ({products}:{products:IProduct[]}) => {
 //  filter by featured
 
 const filterProduct =products?.filter((product) => product.isFeatured === true)
-
+  const sliceProdct = [...filterProduct].sort((a, b) => b.popularityScore! - a.popularityScore!);
 const mounted = useMounted();
 if (!mounted) return null;
 
@@ -43,7 +43,7 @@ if (!mounted) return null;
         modules={[Autoplay, Pagination]}
         className="rounded-lg"
       >
-        {filterProduct?.map((product) => (
+        {sliceProdct?.map((product) => (
           <SwiperSlide key={product._id}>
             <Link href={`/product/${product.slug}`} className="block group relative">
               <div className="relative w-full h-[300px] sm:h-[350px] overflow-hidden rounded-lg shadow-md transition-transform transform hover:scale-95">

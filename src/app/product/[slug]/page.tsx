@@ -97,55 +97,53 @@ const ProductPage = async ({ params }: Props) => {
   const product = await getProduct(slug);
   if (!product) return <Loading />;
  // Enhanced product schema data
- const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  productID: product._id,
-  name: product.name,
-  sku: product.shortName,
-  description: htmlToText(product.description).slice(0, 250),
-  image: product.images?.map(img => img.url) || [],
-  brand: {
-    "@type": "Brand",
-    name: "Unique Store BD"
-  },
-  offers: {
-    "@type": "Offer",
-    url: `https://uniquestorebd.shop/product/${slug}`,
-    priceCurrency: "BDT",
-    price: product.price,
-    priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    availability: product.stock > 0 
-      ? "https://schema.org/InStock" 
-      : "https://schema.org/OutOfStock",
-    itemCondition: "https://schema.org/NewCondition",
-    shippingDetails: {
-      "@type": "OfferShippingDetails",
-      shippingRate: {
-        "@type": "MonetaryAmount",
-        value: product.advanced === 200 ? 0 : 100,
-        currency: "BDT"
-      }
-    }
-  },
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.8",
-    reviewCount: "13",
-    bestRating: "5",
-    worstRating: "1"
-  }
-};
+
+//  const productSchema = {
+//   "@context": "https://schema.org",
+//   "@type": "Product",
+//   productID: product._id,
+//   name: product.name,
+//   sku: product.shortName,
+//   description: htmlToText(product.description).slice(0, 250),
+//   image: product.images?.map(img => img.url) || [],
+//   brand: {
+//     "@type": "Brand",
+//     name: "Unique Store BD"
+//   },
+//   offers: {
+//     "@type": "Offer",
+//     url: `https://uniquestorebd.shop/product/${slug}`,
+//     priceCurrency: "BDT",
+//     price: product.price,
+//     priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+//     availability: product.stock > 0 
+//       ? "https://schema.org/InStock" 
+//       : "https://schema.org/OutOfStock",
+//     itemCondition: "https://schema.org/NewCondition",
+//     shippingDetails: {
+//       "@type": "OfferShippingDetails",
+//       shippingRate: {
+//         "@type": "MonetaryAmount",
+//         value: product.advanced === 200 ? 0 : 100,
+//         currency: "BDT"
+//       }
+//     }
+//   },
+//   aggregateRating: {
+//     "@type": "AggregateRating",
+//     ratingValue: "4.8",
+//     reviewCount: "13",
+//     bestRating: "5",
+//     worstRating: "1"
+//   }
+// };
 
  
   return (
     <main>
       <Navbar />
     {/* Structured data for search engines */}
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-    />
+ 
      {/* Breadcrumb navigation for SEO */}
      <nav aria-label="Breadcrumb" className="container  mx-auto px-2 pt-2 text-sm">
         <ol className="flex items-center space-x-2">
@@ -182,9 +180,9 @@ const ProductPage = async ({ params }: Props) => {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold">Where can I buy {product.name} in Bangladesh?</h3>
+            <h3 className="font-semibold">Where can I buy {product.shortName} in Bangladesh?</h3>
             <p>
-              You can buy {product.name} from <b>Unique Store BD</b> with home delivery across Bangladesh.
+              You can buy {product.shortName} from <b>Unique Store BD</b> with home delivery across Bangladesh.
             </p>
           </div>
         </div>

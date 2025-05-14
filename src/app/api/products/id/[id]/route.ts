@@ -5,7 +5,7 @@ import { connectToDb } from '@/lib/db';
 import { authOptions } from '@/lib/auth';
 import { Product } from '@/models/Product';
 import { Review } from '@/models/Review';
-
+import slugify from 'slugify';
 
 
 export async function GET(
@@ -73,7 +73,8 @@ const {id} = (await params)
     }
 
     const body = await req.json();
-    const updateData = { ...body };
+    const slug = slugify(body?.slug);
+    const updateData = { ...body, slug };
 
     // Handle price/discount logic
     if (body.price !== undefined || body.originalPrice !== undefined) {

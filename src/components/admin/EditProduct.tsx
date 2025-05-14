@@ -34,6 +34,7 @@ import { IProduct } from '@/types/product';
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(200),
   shortName: z.string().max(150),
+  slug: z.string().max(150),
   seo: z.string().max(800),
   description: z.string().min(50, { message: 'Description must be at least 50 characters.' }).max(20000),
   category: z.string().min(1, 'Category is required'),
@@ -74,6 +75,7 @@ export function ProductEditForm({product}: {product: IProduct}) {
     defaultValues: {
       name: '',
       shortName: '',
+      slug: '',
       seo: '',
       description: '',
       category: product.category._id || '',
@@ -97,6 +99,7 @@ export function ProductEditForm({product}: {product: IProduct}) {
       // reset form
       form.reset({
         name: product.name || '',
+        slug: product.slug || '',
         shortName: product.shortName || '',
         seo: product.seo || '',
         description: product.description || '',
@@ -299,6 +302,10 @@ export function ProductEditForm({product}: {product: IProduct}) {
                     </FormItem>
                   )}
                 />
+
+
+
+                {/* Video */}
        <FormField
                   control={form.control}
                   name="video"
@@ -307,6 +314,21 @@ export function ProductEditForm({product}: {product: IProduct}) {
                       <FormLabel>video</FormLabel>
                       <FormControl>
                         <Input placeholder="video" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* slug */}
+       <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>slug</FormLabel>
+                      <FormControl>
+                        <Input placeholder="slug" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

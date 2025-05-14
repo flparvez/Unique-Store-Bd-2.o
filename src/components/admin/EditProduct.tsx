@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-
+import { handleDelete } from '@/components/admin/DeleteProduct'
 import {
   Form,
   FormControl,
@@ -69,7 +69,7 @@ export function ProductEditForm({product}: {product: IProduct}) {
 
   const [currentSpec, setCurrentSpec] = useState({ key: '', value: '' });
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -164,27 +164,6 @@ export function ProductEditForm({product}: {product: IProduct}) {
     }
   }
 
-  const handleDeleteProduct = async () => {
-    if (!product) return;
-
-    setIsDeleting(true);
-    try {
-      const response = await fetch(`/api/products/${product._id}`, { method: 'DELETE' });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete product');
-      }
-
-      toast.success('Product deleted successfully');
-      router.push('/products');
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to delete product');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   const handleImageUpload = (uploadedImages: IProductImage[]) => {
     setImages(prev => [...prev, ...uploadedImages]);
   };
@@ -219,10 +198,10 @@ export function ProductEditForm({product}: {product: IProduct}) {
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={handleDeleteProduct}
-                disabled={isDeleting}
+               onClick={() => handleDelete(product._id)}
+              
               >
-                {isDeleting ? 'Deleting...' : 'Delete Product'}
+               Delete Product
               </Button>
             </div>
           )}

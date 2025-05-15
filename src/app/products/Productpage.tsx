@@ -4,7 +4,8 @@ import ProductsPageClient from '@/components/shared/ProductsPageClient';
 import ProductFilters from '@/components/shared/ProductFilters';
 import { IProduct } from '@/types/product';
 import { useSearchParams } from 'next/navigation';
-import Loading from '@/components/shared/Loading';
+
+import ProductLoadingSkeleton from '@/components/ProductLoadingSkeleton';
 
 
 
@@ -67,7 +68,7 @@ export default function ProductsPage() {
       </aside>
 
       {loading ? (
-        <div><Loading /></div>
+        <div><ProductLoadingSkeleton /></div>
       ) : error ? (
         <div>{error}</div>
       ) : (

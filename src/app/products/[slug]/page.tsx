@@ -93,21 +93,11 @@ const Category =async ({params}: {params: Promise<{slug:string}>}) => {
       );
     }
 
-        // Structured data for category
-        const categorySchema = {
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: category.name,
-            description: category.description,
-            url: `https://uniquestorebd.shop/products/${category.slug}`,
-            image: category.images?.[0]?.url || '/default-category.jpg'
-          };
+      
+
     return (
         <div>
-            <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(categorySchema) }}
-        />
+       
 
         {/* Breadcrumb navigation */}
         <nav aria-label="Breadcrumb" className="py-2 text-sm">
@@ -117,15 +107,15 @@ const Category =async ({params}: {params: Promise<{slug:string}>}) => {
             </li>
             <li>/</li>
             <li className="text-gray-600" aria-current="page">
-              {category.name}
+              {category.name} 
             </li>
           </ol>
         </nav>
 
         {/* Category header */}
         <header className="text-center ">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            {category.name}
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+            {category.name} - In Unique Store Bd
           </h1>
           {category.description && (
             <p className="mt-2 text-gray-600 max-w-2xl mx-auto">

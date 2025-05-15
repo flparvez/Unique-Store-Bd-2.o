@@ -15,12 +15,12 @@ const ProductByCategory = ({slug}:{slug:string}) => {
 
     return (
       
-  <div className=" mt-8">
+  <div className=" mt-8 mx-auto sm:px-4 sm:py-4">
 
-  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
     {productsByCategory?.map((product:IProduct) => (
          <div key={product._id} 
-         className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden "
+         className="bg-white rounded-lg   hover:shadow-md transition-shadow duration-200 overflow-hidden "
   
        >
        <Link href={`/product/${product.slug}`} prefetch={true}>
@@ -40,7 +40,7 @@ const ProductByCategory = ({slug}:{slug:string}) => {
            </div>
          
            </Link>
-         <div className="p-4">
+         <div className="p-2">
          <Link href={`/product/${product.slug}`} prefetch={true}>
              <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
                {product.shortName}

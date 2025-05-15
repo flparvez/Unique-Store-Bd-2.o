@@ -10,7 +10,7 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
   if (!products?.length) return <p>No products found.</p>;
 
   return (
-    <div className="container mx-auto sm:px-4 sm:py-4">
+    <div className=" mx-auto sm:px-4 sm:py-4">
     <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">All Products</h2>
     
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -43,7 +43,7 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
                 {product.shortName}
               </h3>
         
-    
+     
            
     
             <div className="flex items-center justify-between">

@@ -34,7 +34,7 @@ export default function ProductFilters() {
   }, [query, minPrice, maxPrice, sort, featured, router]);
 
   return (
-    <div>
+    <div className='container'>
         <Navbar />
               <input
           className="w-full border ml-2 mr-2  px-3 py-2 rounded"

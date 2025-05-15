@@ -62,7 +62,7 @@ export default function ProductsPage() {
   }, [searchParams]);
 
   return (
-    <div>
+    <div className='mx-auto'>
       <aside className="mb-4">
         <ProductFilters />
       </aside>

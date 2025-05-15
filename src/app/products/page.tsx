@@ -15,10 +15,12 @@ export default function AllProduct() {
 
 
   return (
+<div className="mx-auto">
 
     <Suspense fallback={<div>Loading...</div>}>
       <Productpage />
   </Suspense>
+</div>
   
   );
 }

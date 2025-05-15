@@ -32,7 +32,7 @@ export default function ProductFilters() {
 
     router.push(`/products?${params.toString()}`);
   }, [query, minPrice, maxPrice, sort, featured, router]);
-
+// test
   return (
     <div className='container'>
         <Navbar />

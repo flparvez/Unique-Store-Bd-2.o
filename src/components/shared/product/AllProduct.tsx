@@ -11,7 +11,7 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
 
   return (
     <div className="container mx-auto sm:px-4 sm:py-4">
-    <h2 className="text-2xl font-bold mb-6 text-gray-800">All Products</h2>
+    <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">All Products</h2>
     
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {products?.map((product) => (
@@ -37,9 +37,9 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
             </div>
           
             </Link>
-          <div className="p-4">
+          <div className="p-2">
         
-              <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
+              <h3 className=" sm:text-lg text-sm font-medium  line-clamp-2 hover:text-blue-600 transition">
                 {product.shortName}
               </h3>
         

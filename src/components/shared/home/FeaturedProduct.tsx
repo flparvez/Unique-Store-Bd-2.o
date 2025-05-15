@@ -29,7 +29,7 @@ if (!mounted) return null;
 
 
     return (
-        <div className="w-full max-w-7xl mx-auto py-2 ">
+        <div className="w-full max-w-7xl mx-auto mt-1 ">
       <Swiper
         autoplay={{ delay: 2500, disableOnInteraction: false }}
         pagination={{ clickable: true }}

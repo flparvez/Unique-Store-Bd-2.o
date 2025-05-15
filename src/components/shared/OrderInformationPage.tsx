@@ -26,12 +26,12 @@ if (order) {
       </div>  
       {
         order.paymentType === "partial" ?   <div className="mb-4">
-        <span className="font-medium">Pay Cash On Delivery:</span> {order.payToRiderAmount} Tk
+        <span className="font-medium">Pay To Rider:</span> {order.payToRiderAmount} Tk
       </div> : ""
       }
       
       <div className="mb-4">
-        <span className="font-medium">Email:</span> test23W@example.com
+        <span className="font-medium">Email:</span> {order.email}
       </div>
       <div className="mb-4">
         <span className="font-medium">Phone:</span> {order.mobile}
@@ -46,7 +46,7 @@ if (order) {
         <span className="font-medium">Transaction ID:</span> {order.bkashTransactionId}
       </div>
       <div className="mb-4">
-        <span className="font-medium">Status:</span> Proecessing
+        <span className="font-medium">Status:</span> {order.status}
       </div>    
 
       <div className="mb-4">

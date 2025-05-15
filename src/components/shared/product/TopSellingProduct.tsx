@@ -43,7 +43,7 @@ const TopSellingProduct = ({products}:{products:IProduct[]}) => {
                </div>
              
                </Link>
-             <div className="p-4">
+             <div className="p-2">
              <Link href={`/product/${product.slug}`} prefetch={true}>
                  <h3 className=" sm:text-lg text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
                    {product.shortName}

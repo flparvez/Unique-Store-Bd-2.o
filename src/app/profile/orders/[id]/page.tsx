@@ -21,7 +21,7 @@ const OrderInfo =async ({
   const order = await res.json()
 
   return (
-    <div>
+    <div className='mb-8'>
       <OrderInformationPage order={order}  />
     </div>
   )

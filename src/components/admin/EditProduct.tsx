@@ -30,12 +30,13 @@ import { Badge } from '@/components/ui/badge';
 
 import { useCategory } from '@/hooks/UseOrders';
 import { IProduct } from '@/types/product';
+import { Textarea } from '../ui/textarea';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Product name must be at least 2 characters.' }).max(200),
   shortName: z.string().max(150),
   slug: z.string().max(150),
-  seo: z.string().max(800),
+  seo: z.string(),
   description: z.string().min(50, { message: 'Description must be at least 50 characters.' }).max(20000),
   category: z.string().min(1, 'Category is required'),
   price: z.coerce.number().min(1, 'Price must be at least 1'),
@@ -275,7 +276,7 @@ export function ProductEditForm({product}: {product: IProduct}) {
                     <FormItem>
                       <FormLabel>SEO Tags</FormLabel>
                       <FormControl>
-                        <Input placeholder="SEO tags (comma separated)" {...field} />
+                        <Textarea placeholder="SEO tags (comma separated)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

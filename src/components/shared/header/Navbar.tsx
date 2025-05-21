@@ -3,8 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-import { Search, User } from "lucide-react";
+
+import {  User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,7 @@ export function Navbar() {
   const { cart } = useCart();
   const session = useSession();
   const admin = session.data?.user?.role === "admin";
-  const [menuOpen, setMenuOpen] = useState(false);
+  // const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="sm:sticky top-0 z-50 w-full border-b bg-white shadow-sm">
@@ -40,12 +40,12 @@ export function Navbar() {
         {/* Right: Cart & User */}
         <div className="flex items-center sm:gap-4 gap-2">
           {/* Mobile Search Button */}
-          <button
+          {/* <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="sm:hidden text-gray-700"
           >
             <Search className="h-5 w-6" />
-          </button>
+          </button> */}
 
           {/* Cart Icon */}
           <Link
@@ -85,11 +85,11 @@ export function Navbar() {
       </div>
 
       {/* Mobile SearchBar */}
-      {menuOpen && (
-        <div className="block sm:hidden px-4 pb-4">
+   
+        <div className="block sm:hidden p-2  ">
           <SearchBar />
         </div>
-      )}
+   
 
       {/* Admin link */}
       {admin && (

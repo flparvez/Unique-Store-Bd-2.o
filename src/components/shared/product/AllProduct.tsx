@@ -38,12 +38,12 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
           
             </Link>
           <div className="p-2">
-        
+         <Link href={`/product/${product.slug}`} >
               <h3 className=" sm:text-lg text-sm font-medium  line-clamp-2 hover:text-blue-600 transition">
                 {product.shortName}
               </h3>
         
-     
+     </Link>
            
     
             <div className="flex items-center justify-between">

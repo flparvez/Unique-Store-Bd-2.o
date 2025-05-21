@@ -58,7 +58,7 @@ const ProductList = ({products}:{products:IProduct[]}) => {
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900 line-clamp-1">
-                          {product.name}
+                         <Link href={`/admin/products/edit-product/${product._id}`}> {product.name}  </Link> 
                         </div>
                      
                       </div>

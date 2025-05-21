@@ -19,6 +19,7 @@ import {
 
 import { IProduct } from "@/types/product";
 import { handleDelete } from "./DeleteProduct";
+import Link from "next/link";
 
 
 
@@ -37,9 +38,9 @@ export function ProductTable({ products }: { products: IProduct[] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map((product) => (
+          {products?.slice(0, 13).map((product) => (
             <TableRow key={product._id}>
-              <TableCell className="font-medium">{product.name}</TableCell>
+              <TableCell className="font-medium"><Link href={`/admin/products/edit-product/${product._id}`}> {product.name}  </Link> </TableCell>
               <TableCell>{product.category.name}</TableCell>
               <TableCell>{product.price}</TableCell>
               <TableCell>{product.stock}</TableCell>
@@ -54,7 +55,7 @@ export function ProductTable({ products }: { products: IProduct[] }) {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>
                       <Pencil className="mr-2 h-4 w-4" />
-                      Edit
+                    <Link href={`/admin/products/edit-product/${product._id}`}> Edit  </Link> 
                     </DropdownMenuItem>
                     <DropdownMenuItem className="text-red-600">
                      

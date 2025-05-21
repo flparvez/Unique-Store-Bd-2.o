@@ -12,7 +12,7 @@ interface CategoryResponse {
 export async function GET(){
   await connectToDb();
   try {
-    const categories = await Category.find().sort({ createdAt: -1 });
+    const categories = await Category.find().sort({ updatedAt: -1 });
 
     return NextResponse.json(categories, { status: 200 });
   } catch (error) {

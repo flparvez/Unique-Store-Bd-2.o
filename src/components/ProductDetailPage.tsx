@@ -148,7 +148,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
         "name": `What is the price of ${product?.shortName} in Bangladesh?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `The latest price of <strong>${product?.shortName}</strong> is <strong>৳${product?.price}</strong> in Bangladesh. You can purchase this product at the best price from Unique Store BD website or any of our physical stores.`
+          "text": `The latest price of ${product?.shortName} is ৳${product?.price} in Bangladesh. You can purchase this product at the best price from Unique Store BD website or any of our physical stores.`
         }
       },
       {

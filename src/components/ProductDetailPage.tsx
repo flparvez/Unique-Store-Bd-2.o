@@ -362,13 +362,13 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
       )}
 
       {/* Frequently Asked Questions */}
-      <section className="border border-gray-200 rounded-lg p-4 mb-6">
+      <section className="border border-gray-200 rounded-lg p-2 mb-6">
         <h2 className="text-xl font-bold mb-3">Frequently Asked Questions about {product.shortName}</h2>
         <div className="space-y-4">
           <div>
             <h3 className="font-semibold">What is the price of <b>{product?.shortName}</b> in Bangladesh?</h3>
-            <p className="text-gray-700">
-              The latest price of **{product?.shortName}** is **৳{product?.price}** in Bangladesh. You can purchase this product at the best price from Unique Store BD website or any of our physical stores.
+            <p className="text-gray-800">
+              The latest price of <b>{product?.shortName}</b> is <b>৳{product?.price}</b> in Bangladesh. You can purchase this product at the best price from Unique Store BD website or any of our physical stores.
             </p>
           </div>
 
@@ -382,7 +382,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
           <div>
             <h3 className="font-semibold">How to buy <b>{product?.shortName}</b> online in Bangladesh?</h3>
             <p className="text-gray-700">
-              You can easily buy **{product?.shortName}** online from Unique Store BD. Simply add the product to your cart, proceed to checkout, and fill in your delivery details. We offer convenient home delivery across Bangladesh.
+              You can easily buy {product?.shortName} online from Unique Store BD. Simply add the product to your cart, proceed to checkout, and fill in your delivery details. We offer convenient home delivery across Bangladesh.
             </p>
           </div>
         </div>

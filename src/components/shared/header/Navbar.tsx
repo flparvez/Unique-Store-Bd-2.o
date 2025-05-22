@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 
-import {  User } from "lucide-react";
+import {  Search, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +16,13 @@ import {
 import SearchBar from "@/components/SearchBar";
 import { useCart } from "@/hooks/useCart";
 import Logo from "../../../../public/logo.jpg";
+import { useState } from "react";
 
 export function Navbar() {
   const { cart } = useCart();
   const session = useSession();
   const admin = session.data?.user?.role === "admin";
-  // const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="sm:sticky top-0 z-50 w-full border-b bg-white shadow-sm">
@@ -38,22 +39,22 @@ export function Navbar() {
         </div>
 
         {/* Right: Cart & User */}
-        <div className="flex items-center sm:gap-4 gap-2">
+        <div className="flex items-center sm:gap-4 ">
           {/* Mobile Search Button */}
-          {/* <button
+          <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="sm:hidden text-gray-700"
+            className="sm:hidden  text-gray-700"
           >
-            <Search className="h-5 w-6" />
-          </button> */}
+            <Search className="h-5 mr-1 w-8" />
+          </button>
 
           {/* Cart Icon */}
           <Link
             href="/cart"
-            className="relative flex flex-col items-center text-gray-800 hover:text-blue-600"
+            className="relative flex flex-col items-center mr-2 text-gray-800 hover:text-blue-600"
           >
             <svg
-              className="sm:h-6 h-4 w-5"
+              className="sm:h-6 h-4 w-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -86,10 +87,10 @@ export function Navbar() {
 
       {/* Mobile SearchBar */}
    
-        <div className="block sm:hidden p-2  ">
+      {menuOpen &&      <div className="block sm:hidden p-2  ">
           <SearchBar />
         </div>
-   
+   }
 
       {/* Admin link */}
       {admin && (

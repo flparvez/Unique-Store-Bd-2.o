@@ -64,7 +64,7 @@ const OrderInfoPage = ({ id }: { id: string }) => {
       }
 
       toast.success("✅ Order updated successfully!");
-      console.log("Updated order:", result);
+      
     } catch (error) {
       console.error("❌ Update failed:", error);
       toast.error("❌ Failed to update order.");

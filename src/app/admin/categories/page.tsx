@@ -9,7 +9,7 @@ import React from 'react'
 
 const CreateCategory = () => {
   const {category} = useCategory()
-  console.log(category)
+ 
   return (
    <div >
       <Link href="/admin/categories/add">

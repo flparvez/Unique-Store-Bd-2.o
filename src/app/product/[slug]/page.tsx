@@ -144,7 +144,7 @@ const ProductPage = async ({ params }: Props) => {
             <>
               <li>
                 <Link
-                  href={`/category/${product.category.slug}`}
+                  href={`/products/${product.category.slug}`}
                   className="text-blue-600 hover:underline"
                 >
                   {product.category.name}

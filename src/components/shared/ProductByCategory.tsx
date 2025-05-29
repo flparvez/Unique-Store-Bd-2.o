@@ -6,13 +6,27 @@ import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import ProductLoadingSkeleton from '../ProductLoadingSkeleton'
 
 const ProductByCategory = ({slug}:{slug:string}) => {
-    const {products} = useProducts()
+    const {products,isLoading} = useProducts()
   const { addToCart } = useCart();
 
-    const productsByCategory = products?.products.filter((product) => product?.category.slug === slug);
 
+// Step 1: Filter products by category slug
+const productsBySlug = products?.products?.filter(
+  (product) => product?.category?.slug === slug
+) ?? [];
+
+
+// Step 2: Sort by popularityScore (descending)
+const productsByCategory = [...productsBySlug].sort(
+  (a, b) => (b?.popularityScore || 0) - (a?.popularityScore || 0)
+);
+
+if (isLoading) {
+  <ProductLoadingSkeleton />
+}
     return (
       
   <div className=" mt-8 mx-auto sm:px-4 sm:py-4">

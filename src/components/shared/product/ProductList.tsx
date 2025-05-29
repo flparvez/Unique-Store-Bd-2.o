@@ -11,7 +11,14 @@ import { IProduct } from "@/types/product";
 
 const ProductList = ({products}:{products:IProduct[]}) => {
 
-  const sliceProdct = [...products].sort((a, b) => b.lastUpdatedIndex! - a.lastUpdatedIndex!).slice(0,24);
+
+      // serial by lastUpdatedIndex number
+    // Step 2: Sort by lastUpdatedIndex (descending)
+const sliceProdct = [...products].sort(
+  (a, b) => (b?.lastUpdatedIndex || 0) - (a?.lastUpdatedIndex || 0)
+).slice(0,24);
+
+
   const { addToCart } = useCart();
 
 

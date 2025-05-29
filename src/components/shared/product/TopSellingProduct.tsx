@@ -12,8 +12,13 @@ import React from 'react'
 const TopSellingProduct = ({products}:{products:IProduct[]}) => {
 
     // serial by popularityScore number
-    
-    const sortedProducts = [...products].sort((a, b) => b.popularityScore - a.popularityScore).slice(0,12);
+    // Step 2: Sort by popularityScore (descending)
+const sortedProducts = [...products].sort(
+  (a, b) => (b?.popularityScore || 0) - (a?.popularityScore || 0)
+).slice(0,12);
+
+
+ 
     const { addToCart } = useCart();
     return (
         <div className="container mx-auto sm:px-4 sm:py-4">

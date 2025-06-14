@@ -35,7 +35,7 @@ export default function Login() {
     <div className="max-w-md   mx-auto">
       
       <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 p-2">
+      <form onSubmit={handleSubmit} className="space-y-4 p-4">
         <div>
           <label htmlFor="email" className="block mb-1">
             Email

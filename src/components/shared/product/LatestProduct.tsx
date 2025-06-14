@@ -17,10 +17,10 @@ const { data } = useSWR('/api/products', fetcher);
 
   <div className="hidden sm:block mt-16">
     <h2 className="text-xl font-bold text-gray-900 mb-4">Latest Products</h2>
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
       {products?.map((product:IProduct) => (
       <div key={product._id} 
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      className="bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
 
     >
       <Link href={`/product/${product.slug}`} className="block">
@@ -40,7 +40,7 @@ const { data } = useSWR('/api/products', fetcher);
         </div>
       </Link>
 
-      <div className="p-4">
+      <div className="">
         <Link href={`/product/${product.slug}`}>
           <h3 className="  text-sm font-bold mb-1 line-clamp-2 hover:text-blue-600 transition">
             {product.shortName}

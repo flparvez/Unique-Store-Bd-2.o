@@ -245,6 +245,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
 
           {/* Quantity + Add to Cart */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+
+
+
             <div className="flex items-center border rounded-md">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -254,7 +257,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
               >
                 -
               </button>
-              <span className="px-4 py-1">{quantity}</span>
+              <span className="px-2 py-1">{quantity}</span>
               <button
                 onClick={() => setQuantity(Math.min(availableStock, quantity + 1))}
                 className="px-3 py-1 text-lg"
@@ -263,6 +266,17 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
               >
                 +
               </button>
+
+{/* stock */}
+<div className='flex-1 text-right'>
+
+        <span className="text-sm text-gray-800">{availableStock} in stock</span>
+
+</div>
+
+
+
+
 
           {/* order now button */}
 <div className="fixed sm:bottom-0 bottom-16  w-[50%] flex bg-white p-2 border-t text-right border-gray-400">
@@ -286,8 +300,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
      
              
             </div>
-            <span className="text-sm text-gray-500">{availableStock} in stock</span>
 
+
+      
            
           </div>
 

@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { YouTubeEmbed } from '@next/third-parties/google';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
+import { ShoppingCart } from "lucide-react";
 import { Facebook } from 'lucide-react';
 import { htmlToText } from 'html-to-text'; // For cleaning description for schema
 
@@ -188,7 +188,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
 
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
         {/* Left: Image Gallery & Latest Products */}
-        <div className="w-full lg:w-1/2 space-y-4">
+        <div className=" sm:w-[50%] space-y-4">
           <ImageSlider images={product.images} />
           {/* LatestProduct and LatestProductm are likely client components too */}
           <LatestProduct />
@@ -198,16 +198,16 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
         <div className="w-full lg:w-1/2 space-y-2">
           {/* Title and Short Name */}
           <div>
-            <h1 className="text-xl sm:text-3xl font-bold text-gray-900">{product.name}</h1>
+            <h1 className="text-sm  sm:text-2xl font-bold text-gray-900">{product.name}</h1>
           </div>
 
           {/* Price & Discount */}
           <div className="flex items-center gap-4">
-            <span className="text-sm font-stretch-20% text-black">{product.warranty}</span>
+            <span className="text-xs font-bold text-black">{product.warranty}</span>
             {product.price !== product.originalPrice ? (
               <>
-                <span className="text-xl font-extrabold text-red-600">৳{product.price}</span>
-                <span className="line-through text-xl font-stretch-10% text-gray-500">
+                <span className="text-sm font-extrabold text-red-600">৳{product.price}</span>
+                <span className="line-through text-sm font-stretch-10% text-gray-500">
                   ৳{product.originalPrice}
                 </span>
               </>
@@ -244,11 +244,11 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
           )}
 
           {/* Quantity + Add to Cart */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
             <div className="flex items-center border rounded-md">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-3 py-1 text-lg"
+                className="px-2  text-lg"
                 disabled={quantity <= 1}
                 aria-label="Decrease quantity"
               >
@@ -263,32 +263,44 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
               >
                 +
               </button>
+
+          {/* order now button */}
+<div className="fixed sm:bottom-0 bottom-16  w-[50%] flex bg-white p-2 border-t text-right border-gray-400">
+     <button
+  className="w-full lg:w-[40%] py-2 sm:py-3 px-1 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold text-lg flex items-center justify-center gap-2 rounded-lg shadow-lg hover:from-yellow-500 hover:to-pink-500 transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+  aria-label={`Order ${product.name} now`}
+  onClick={handleAddToCart}
+  disabled={
+    availableStock <= 0 ||
+    (product.specifications.some((s) => s.key === "Color") && !selectedVariant)
+  }
+>
+  <ShoppingCart className="w-5 h-5 animate-pulse" />
+  {product.stock > 0 ? 'Order Now' : 'Out of Stock'}
+</button>
+            
+            
+            
+                  </div>
+       
+     
+             
             </div>
             <span className="text-sm text-gray-500">{availableStock} in stock</span>
 
-            <Button
-              onClick={handleAddToCart}
-              disabled={availableStock <= 0 || (product.specifications.some((s) => s.key === 'Color') && !selectedVariant)} // Disable if variant is mandatory but not selected
-              className={`w-full sm:w-auto py-3 px-6 rounded-md font-semibold ${
-                availableStock <= 0 || (product.specifications.some((s) => s.key === 'Color') && !selectedVariant)
-                  ? 'bg-gray-300 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 text-white'
-              }`}
-            >
-              {availableStock <= 0 ? 'Out of Stock' : (product.specifications.some((s) => s.key === 'Color') && !selectedVariant ? 'Select Color' : 'Order Now')}
-            </Button>
+           
           </div>
 
           {/* Payment Info */}
-          <div className="mb-2">
-            <p className="text-red-600 font-bold">
+          <div className="">
+            <p className= "text-sm text-red-600 font-bold">
               {advanced} Taka or full payment in advance is required
             </p>
           </div>
 
           {/* Quick Specs */}
           {product.specifications.length > 0 && (
-            <div className="pt-4">
+            <div className="pt-1">
               <h3 className="text-sm font-semibold text-gray-900 mb-2">Key Specifications</h3>
               <ul className="space-y-1 list-disc pl-5">
                 {product.specifications.slice(0, 4).map((spec, idx) => (
@@ -320,9 +332,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
           </div>
 
           {/* Product Description */}
-          <div className="pt-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">Product Details</h2>
-            <h3 className="font-bold sm:text-xl border-b text-black my-2">{product.shortName} in Bangladesh</h3>
+          <div className="pt-1">
+            <h2 className="text-lg font-bold text-gray-900 mb-2">Product Details</h2>
+            <h3 className="font-extrabold text-sm border-b text-black my-2">{product.shortName} in Bangladesh</h3>
 
             {product?.video ? (
               <div className="mb-4">

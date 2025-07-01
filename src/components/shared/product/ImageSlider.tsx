@@ -11,7 +11,7 @@ import { IProductImage } from '@/models/Product';
 
 const ImageSlider = ({images}:{images:IProductImage[]}) => {
     return (
-        <div className="product-image-slider">
+        <div className=" product-image-slider">
         <Swiper
           parallax={true}
           autoplay={{

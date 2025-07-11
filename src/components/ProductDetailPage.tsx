@@ -203,10 +203,10 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
 
           {/* Price & Discount */}
           <div className="flex items-center gap-4">
-            <span className="text-xs font-bold text-black">{product.warranty}</span>
+            <span className="text-sm font-bold text-black">{product.warranty}</span>
             {product.price !== product.originalPrice ? (
               <>
-                <span className="text-sm font-extrabold text-red-600">৳{product.price}</span>
+                <span className="text-lg font-bold text-red-600">৳{product.price}</span>
                 <span className="line-through text-sm font-stretch-10% text-gray-500">
                   ৳{product.originalPrice}
                 </span>
@@ -270,7 +270,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
 {/* stock */}
 <div className='flex-1 text-right'>
 
-        <span className="text-sm text-gray-800">{availableStock} in stock</span>
+        <span className="text-sm font-bold text-gray-800">{availableStock} in stock</span>
 
 </div>
 
@@ -320,8 +320,8 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
               <ul className="space-y-1 list-disc pl-5">
                 {product.specifications.slice(0, 4).map((spec, idx) => (
                   <li key={idx} className="flex text-sm text-gray-800">
-                    <span className="w-24 flex-shrink-0 uppercase text-black font-bold">{spec.key}:</span>
-                    <span>{spec.value}</span>
+                    <span className="w-24 flex-shrink-0 uppercase text-black font-bold">{spec.key} :</span>
+                    <span className='fontsemibold'>{spec.value}</span>
                   </li>
                 ))}
               </ul>

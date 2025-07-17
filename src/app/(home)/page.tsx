@@ -1,6 +1,7 @@
 "use client"
 
 import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
+import RgbProducts from "@/components/RgbProduct";
 import CategorySlider from "@/components/shared/CategorySlider";
 import FeaturedProduct from "@/components/shared/home/FeaturedProduct";
 
@@ -20,8 +21,10 @@ if (isLoading) {
   <CategorySlider />
         
 <ProductList products = {products?.products || []} />
+<RgbProducts  products = {products?.products || []}  />
+         
     <TopSellingProduct products = {products?.products || []}  />
-     
+                
     </div>
   );
 }

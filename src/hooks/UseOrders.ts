@@ -1,3 +1,4 @@
+"use client"
 import useSWR from 'swr';
 import { fetcher } from './fetcher';
 import { IOrder } from '@/models/Order';
@@ -92,10 +93,16 @@ export const useProducts = () => {
     error,
     isLoading,
     mutate,
-  } = useSWR<ProductResponse>('/api/products', fetcher, {
-    refreshInterval: 5000, // 🔄 auto re-fetch every 5s
-    revalidateOnFocus: true,
-  });
+  } = useSWR<ProductResponse>('/api/products', fetcher);
+  // const {
+  //   data: products,
+  //   error,
+  //   isLoading,
+  //   mutate,
+  // } = useSWR<ProductResponse>('/api/products', fetcher, {
+  //   refreshInterval: 5000, // 🔄 auto re-fetch every 5s
+  //   revalidateOnFocus: true,
+  // });
 
 
   
@@ -117,10 +124,7 @@ export const useGetUsers = () => {
     error,
     isLoading,
     mutate,
-  } = useSWR<User>('/api/auth/register', fetcher, {
-    refreshInterval: 5000, // 🔄 auto re-fetch every 5s
-    revalidateOnFocus: true,
-  });
+  } = useSWR<User>('/api/auth/register', fetcher);
 
 
   
@@ -162,10 +166,7 @@ export const useCategory = () => {
     error,
     isLoading,
     mutate,
-  } = useSWR<ICategory[]>('/api/categories', fetcher, {
-    refreshInterval: 5000, // 🔄 auto re-fetch every 5s
-    revalidateOnFocus: true,
-  });
+  } = useSWR<ICategory[]>('/api/categories', fetcher);
 
 
   
@@ -189,11 +190,11 @@ export const useOrderById = (id: string | null) => {
     mutate,
   } = useSWR<IOrder>(
     shouldFetch ? `/api/order/${id}` : null,
-    fetcher,
-    {
-      refreshInterval: 5000,
-      revalidateOnFocus: true,
-    }
+    fetcher
+    // {
+    //   refreshInterval: 5000,
+    //   revalidateOnFocus: true,
+    // }
   );
 
   return {

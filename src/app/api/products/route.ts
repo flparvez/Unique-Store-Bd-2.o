@@ -4,6 +4,7 @@ import { connectToDb } from '@/lib/db';
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 import Category from '@/models/Category';
+import { revalidatePath } from 'next/cache';
 
 
 
@@ -70,6 +71,7 @@ export async function POST(request: NextRequest) {
       sold: 0,
     });
 
+     revalidatePath('/api/products');
     return NextResponse.json({ success: true, data: product }, { status: 201 });
   } catch (error) {
     console.log('❌ API Error:', error);

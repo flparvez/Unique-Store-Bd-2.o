@@ -19,12 +19,7 @@ type Props = {
 // --- Data Fetching Function ---
 async function getProduct(slug: string): Promise<IProduct | null> {
   try {
-    const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`, {
-      next: {
-        revalidate: 60, // Revalidate every 1 minute to keep product data fresh
-        tags: [`product_${slug}`], // Tag for granular revalidation
-      },
-    });
+    const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`);
 
     if (!res.ok) {
       // If the product is not found, return null to trigger notFound()

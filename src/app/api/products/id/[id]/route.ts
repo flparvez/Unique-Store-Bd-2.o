@@ -6,6 +6,7 @@ import { authOptions } from '@/lib/auth';
 import { Product } from '@/models/Product';
 import { Review } from '@/models/Review';
 import slugify from 'slugify';
+import { revalidatePath } from 'next/cache';
 
 
 export async function GET(
@@ -115,6 +116,7 @@ const {id} = (await params)
         : null
     };
 
+     revalidatePath('/api/products/id/${id}');
     return NextResponse.json({
       success: true,
       data: responseData

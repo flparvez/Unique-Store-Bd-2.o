@@ -1,30 +1,26 @@
-"use client"
 
-import ProductLoadingSkeleton from "@/components/ProductLoadingSkeleton";
-import RgbProducts from "@/components/RgbProduct";
-import CategorySlider from "@/components/shared/CategorySlider";
-import FeaturedProduct from "@/components/shared/home/FeaturedProduct";
 
-import ProductList from "@/components/shared/product/ProductList";
-import TopSellingProduct from "@/components/shared/product/TopSellingProduct";
-import { useProducts } from "@/hooks/UseOrders";
+import dynamic from 'next/dynamic';
 
-export default  function Home() {
-  const {products , isLoading} = useProducts()
-if (isLoading) {
-  return <ProductLoadingSkeleton />
+import React from 'react'
+const FeaturedProduct = dynamic(() => import('@/components/shared/home/FeaturedProduct'))
+const CategorySlider = dynamic(() => import('@/components/shared/CategorySlider'))
+const Home = dynamic(() => import('./Home'))
+
+
+const Page =async () => {
+const response = await fetch('https://uniquestorebd.shop/api/products')
+if (!response.ok) {
+  throw new Error('Failed to fetch products')
 }
+const products = await response.json()
   return (
     <div>
-
-      <FeaturedProduct products = {products?.products || []} />
+           <FeaturedProduct products = {products?.products || []} />
   <CategorySlider />
-        
-<ProductList products = {products?.products || []} />
-<RgbProducts  products = {products?.products || []}  />
-         
-    <TopSellingProduct products = {products?.products || []}  />
-                
+     <Home />
     </div>
-  );
+  )
 }
+
+export default Page

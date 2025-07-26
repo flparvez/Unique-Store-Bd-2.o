@@ -1,14 +1,15 @@
-// app/product/[slug]/page.tsx
 
 import React from 'react';
 import { Metadata } from 'next';
 import { htmlToText } from 'html-to-text';
 import { notFound } from 'next/navigation'; // Import notFound for 404 handling
-
+import dynamic from 'next/dynamic';
 import { Navbar } from '@/components/shared/header/Navbar';
-import ProductDetailPage from '@/components/ProductDetailPage'; // Import the client component
+
 import { IProduct } from '@/types/product';
 import Link from 'next/link';
+
+const ProductDetailPage = dynamic(() => import('@/components/ProductDetailPage'));
 
 // Define the Props type for both generateMetadata and the Page Component
 type Props = {
@@ -148,9 +149,9 @@ const ProductPage = async ({ params }: Props) => {
               <li>/</li>
             </>
           )}
-          <li className="text-gray-600 line-clamp-2" aria-current="page">
+          <h2 className="text-gray-600 line-clamp-2" >
             {product.shortName}
-          </li>
+          </h2>
         </ol>
       </nav>
 

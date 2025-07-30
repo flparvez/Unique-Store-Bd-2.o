@@ -189,7 +189,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
         {/* Left: Image Gallery & Latest Products */}
         <div className=" sm:w-[50%] space-y-4">
-          <ImageSlider images={product.images} />
+      
+          <ImageSlider discount = {product?.discount} images={product.images} />
+          
           {/* LatestProduct and LatestProductm are likely client components too */}
           <LatestProduct />
         </div>

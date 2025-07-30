@@ -16,7 +16,7 @@ export interface IProduct {
     };
     price: number;
     originalPrice?: number;
-    discount?: number;
+    discount: number;
     images: IProductImage[];
     stock: number;
     sold: number;

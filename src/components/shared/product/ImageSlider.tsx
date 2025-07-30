@@ -9,7 +9,7 @@ import { IProductImage } from '@/models/Product';
 
 
 
-const ImageSlider = ({images}:{images:IProductImage[]}) => {
+const ImageSlider = ({images, discount}:{images:IProductImage[], discount:number}) => {
     return (
         <div className=" product-image-slider">
         <Swiper
@@ -31,7 +31,11 @@ const ImageSlider = ({images}:{images:IProductImage[]}) => {
           {images.map((image, index) => (
             <SwiperSlide key={index}>
               <Image width={1000} height={100} src={image.url} alt={`Product ${index + 1}`} className="w-full h-auto object-cover" />
-  
+           {
+             discount ?  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+             {discount}% OFF
+           </span> : null
+           }
   
             </SwiperSlide>
           ))}

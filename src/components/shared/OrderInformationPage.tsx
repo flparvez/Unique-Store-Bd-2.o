@@ -5,6 +5,7 @@ import { Table, TableBody,  TableCell,  TableHead, TableHeader, TableRow } from 
 
 import Link from 'next/link';
 import { IOrder } from '@/models/Order';
+import { generateInvoicePdf } from '@/hooks/invoiceGenerator';
 const OrderInformationPage = ({order}:{order: IOrder}) => {
 
 if (order) {
@@ -14,7 +15,12 @@ if (order) {
       <h3 className="text-lg font-semibold">অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h3>
       <p className="mt-2">আপনার অর্ডার আইডি: <span className="font-bold">{order?.orderId}</span></p>
     </div>
-
+<button
+        onClick={() => generateInvoicePdf(order)}
+        className="bg-green-600 text-white px-4 py-2 rounded"
+      >
+        📄 Download Invoice
+      </button>
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-xl  font-semibold mb-4">Order ID: {order?.orderId}</h2>
       <div className="mb-4">

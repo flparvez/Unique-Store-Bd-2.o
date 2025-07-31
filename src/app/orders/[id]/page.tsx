@@ -1,4 +1,5 @@
 
+
 import OrderInformationPage from '@/components/shared/OrderInformationPage'
 
 import { Metadata } from 'next'
@@ -22,6 +23,7 @@ const OrderInfo =async ({
 
   return (
     <div className='mb-8'>
+      
       <OrderInformationPage order={order}  />
     </div>
   )

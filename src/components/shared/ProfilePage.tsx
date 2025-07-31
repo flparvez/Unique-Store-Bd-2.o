@@ -68,7 +68,7 @@ const ProfilePage = () => {
                   <TableRow key={order._id}>
                     <TableCell>
                       <Link
-                        href={`/profile/orders/${order._id}`}
+                        href={`/orders/${order._id}`}
                         className="text-blue-600 hover:underline"
                       >
                         {order.orderId}

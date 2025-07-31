@@ -107,7 +107,7 @@ const router =useRouter()
 setOrderId(result._id)
       if (result.success) {
         toast.success('✅ Order Placed successfully!');
-         router.push(`/profile/orders/${OrderId}`)
+         router.push(`/orders/${OrderId}`)
         clearCart();
         // form clear না করে রাখলে localStorage data থাকবে
       } else {

@@ -5,12 +5,13 @@ import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const LOCAL_STORAGE_KEY = 'checkoutFormPermanent';
 
 const CheckoutPage = () => {
   const { clearCart, cart } = useCart();
-
+const router =useRouter()
   const [form, setForm] = useState({
     name: '',
     mobile: '',
@@ -23,6 +24,7 @@ const CheckoutPage = () => {
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [payNowAmount, setPayNowAmount] = useState(0);
   const [payToRiderAmount, setPayToRiderAmount] = useState(0);
+  const [OrderId, setOrderId] = useState();
   const [copied, setCopied] = useState(false);
   const advanced = cart?.items[0]?.product?.advanced || 100;
 
@@ -102,9 +104,10 @@ const CheckoutPage = () => {
       });
 
       const result = await res.json();
-
+setOrderId(result._id)
       if (result.success) {
-        alert('✅ Order saved successfully!');
+        toast.success('✅ Order Placed successfully!');
+         router.push(`/profile/orders/${OrderId}`)
         clearCart();
         // form clear না করে রাখলে localStorage data থাকবে
       } else {

@@ -98,7 +98,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           : item
       );
     } else {
-      newItems = [...cart.items, { product, quantity, selectedVariant }];
+      newItems = [...cart?.items, { product, quantity, selectedVariant }];
     }
     setCart(recalculate(newItems));
   };

@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { IProduct } from '@/types/product';
+import toast from 'react-hot-toast';
 
 interface CartItem {
   product: IProduct;
@@ -98,23 +99,25 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }));
   }, []);
 
-  const addToCart = useCallback((
-    product: IProduct,
-    quantity: number = 1,
-    selectedVariant?: string
-  ) => {
-    const existingItem = getItem(product._id, selectedVariant);
-    const newItems = existingItem 
-      ? cart.items.map(item => 
-          item.product._id === product._id && item.selectedVariant === selectedVariant
-            ? { ...item, quantity: Math.min(item.quantity + quantity, product.stock) }
-            : item
-        )
-      : [...cart.items, { product, quantity, selectedVariant }];
-    
-    updateCartItems(newItems);
-  }, [cart.items, getItem, updateCartItems]);
+const addToCart = useCallback((
+  product: IProduct,
+  quantity: number = 1,
+  selectedVariant?: string
+) => {
+  const existingItem = getItem(product._id, selectedVariant);
+  const newItems = existingItem 
+    ? cart.items.map(item => 
+        item.product._id === product._id && item.selectedVariant === selectedVariant
+          ? { ...item, quantity: Math.min(item.quantity + quantity, product.stock) }
+          : item
+      )
+    : [...cart.items, { product, quantity, selectedVariant }];
+  
+  updateCartItems(newItems);
 
+  // এখানে alert দেখানো হচ্ছে
+  toast.success(`${product?.name.slice(0, 15)} কার্টে যোগ করা হয়েছে!`);
+}, [cart.items, getItem, updateCartItems]);
   const removeFromCart = useCallback((
     productId: string, 
     selectedVariant?: string

@@ -230,7 +230,9 @@ const OrderSummary = ({
   <div className="bg-gray-100 p-4 rounded mt-6">
     <h3 className="text-lg font-semibold mb-2">Order Summary</h3>
     <p>Subtotal: ৳{totalPrice}</p>
-    <p>Delivery Charge: ৳{deliveryCharge}</p>
+    <p>Delivery Charge: ৳{deliveryCharge}</p> [<span className='font-bold text-gray-500'>
+      ঢাকার ভিতরে - ৬০টাকা, ঢাকার বাইরে-১২০টাকা
+    </span>]
     <hr className="my-2" />
     <p className="font-bold">Total: ৳{(totalPrice + deliveryCharge).toFixed(2)}</p>
 

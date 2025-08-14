@@ -9,27 +9,25 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { IProduct } from '@/types/product';
 
+// ✅ Custom hook to avoid hydration mismatch
+const useMounted = () => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  return mounted;
+};
 
-
-
-  // ✅ Custom hook to avoid hydration mismatch
-  const useMounted = () => {
-    const [mounted, setMounted] = React.useState(false);
-    React.useEffect(() => setMounted(true), []);
-    return mounted;
-  };
-const FeaturedProduct = ({products}:{products:IProduct[]}) => {
- 
-//  filter by featured
-
-const filterProduct =products?.filter((product) => product.isFeatured === true)
+const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
+  const filterProduct = products?.filter((product) => product.isFeatured === true);
   const sliceProdct = [...filterProduct].sort((a, b) => b.popularityScore! - a.popularityScore!);
-const mounted = useMounted();
-if (!mounted) return null;
+  const mounted = useMounted();
 
+  if (!mounted) {
+    // You can return a skeleton loader here for a better user experience
+    return null;
+  }
 
-    return (
-        <div className="w-full max-w-7xl mx-auto mt-1 ">
+  return (
+    <div className="w-full max-w-7xl mx-auto mt-1">
       <Swiper
         autoplay={{ delay: 2500, disableOnInteraction: false }}
         pagination={{ clickable: true }}
@@ -41,48 +39,70 @@ if (!mounted) return null;
           1024: { slidesPerView: 4 },
         }}
         modules={[Autoplay, Pagination]}
-        className="rounded-lg"
+        className="rounded-lg py-8" // Added some padding for pagination dots
       >
         {sliceProdct?.map((product) => (
-          <SwiperSlide key={product._id}>
-            <Link href={`/product/${product.slug}`} className="block group relative">
-              <div className="relative w-full h-[300px] sm:h-[350px] overflow-hidden rounded-lg shadow-md transition-transform transform hover:scale-95">
-                <Image
-                  src={product.images?.[0]?.url}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition-all group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  loading="lazy"
-                />
-                <span className="absolute top-4 left-5 bg-indigo-600 text-white text-xs font-semibold px-2 py-1 rounded">
-                  Featured
-                </span>
-
-          
-                <div className="absolute top-2 right-2 text-right">
-                
-                  <p className="text-sm font-bold mt-4 text-orange-700  line-through px-2 py-0.5  rounded">
-                    ৳{product?.originalPrice}
-                  </p>
-                  <p className="text-sm font-bold bg-green-400 text-black mt-4 px-2 py-1 rounded">
-                    ৳{product.price}
-                  </p>
+          <SwiperSlide key={product._id} className="h-auto">
+            {/* The entire card is treated as one unit inside the slide */}
+            <div className="flex flex-col h-full"> 
+              <Link 
+                href={`/product/${product.slug}`} 
+                className="group block overflow-hidden rounded-lg border border-gray-200/80 shadow-sm transition-all duration-300 ease-in-out hover:shadow-lg h-full"
+              >
+                <div className="relative w-full h-[300px] sm:h-[350px]">
+                  {/* The Image is the background layer */}
+                  <Image
+                    src={product.images?.[0]?.url || '/placeholder-image.jpg'}
+                    alt={product.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    loading="lazy"
+                  />
                   
+                  {/* The overlay layer sits on top of the image */}
+                  <div className="absolute inset-0 z-10 flex flex-col justify-between p-3">
+                    {/* Top part of the overlay (e.g., Sale badge) */}
+                    <div>
+                      {product.originalPrice && (
+                        <span className="bg-red-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                          Sale
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Middle part (hover effect) */}
+                    <div className="absolute inset-0 flex items-center justify-center  bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300">
+                      <button className="text-white bg-indigo-600 hover:bg-indigo-700 font-semibold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+                        View Details
+                      </button>
+                    </div>
+                  </div>
                 </div>
-               
-              </div>
-              <div className="justify-center px-2 text-center">
-              <h3 className="text-sm absolute bottom-4 left-2 bg-black text-white text-center sm:text-base font-semibold line-clamp-1">
-                 {product.name}
-                </h3>
-              </div>
-            </Link>
+
+                {/* Product details are separate from the image container */}
+                <div className="p-4 bg-white">
+                  <h3 className="text-base font-semibold text-gray-800 truncate" title={product.name}>
+                    {product.name}
+                  </h3>
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="text-lg font-bold text-indigo-600">
+                      ৳{product.price}
+                    </p>
+                    {product.originalPrice && (
+                      <p className="text-sm text-gray-500 line-through">
+                        ৳{product.originalPrice}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
     </div>
-    )
+  );
 }
 
-export default FeaturedProduct
+export default FeaturedProduct;

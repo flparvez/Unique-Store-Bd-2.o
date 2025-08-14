@@ -44,7 +44,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
     // }
 
     addToCart(product, quantity, selectedVariant);
-    toast.success('Product added to cart!');
     router.push('/checkout');
   };
 

@@ -75,7 +75,7 @@ const sliceProdct = [...products].sort(
                {/* add to cart */}
                <div className={`flex space-x-2 transition-opacity  hover:opacity-100 opacity-0}`}>
                  <button   onClick={() => addToCart(product)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
-                   <ShoppingCart size={18} />
+                   <ShoppingCart size={23} />
                  </button>
               
               

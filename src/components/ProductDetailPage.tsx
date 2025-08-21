@@ -321,7 +321,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
               <ul className="space-y-1 list-disc pl-5">
                 {product.specifications.slice(0, 4).map((spec, idx) => (
                   <li key={idx} className="flex text-sm text-gray-800">
-                    <span className="w-24 flex-shrink-0 uppercase text-black font-bold">{spec.key} :</span>
+                    <span className="w-32 flex-shrink-0 uppercase text-black font-bold">{spec.key} :</span>
                     <span className='fontsemibold'>{spec.value}</span>
                   </li>
                 ))}

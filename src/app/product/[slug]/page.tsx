@@ -11,11 +11,12 @@ import { IProduct } from '@/types/product';
 
 const ProductDetailPage = dynamic(() => import('@/components/ProductDetailPage'));
 
-// Define the Props type for the page component
-type Props = {
-  params: { slug: string };
-};
 
+// Define the Props type for both generateMetadata and the Page Component
+type Props = {
+  params: Promise<{ slug: string }>;
+  
+};
 // --- Data Fetching Function ---
 async function getProduct(slug: string): Promise<IProduct | null> {
   try {
@@ -37,8 +38,8 @@ async function getProduct(slug: string): Promise<IProduct | null> {
 }
 
 // --- Metadata Generation Function (Server-side) ---
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = params;
+export async function generateMetadata({ params }:Props): Promise<Metadata> {
+  const { slug } = await params;
   const product = await getProduct(slug);
 
   if (!product) {
@@ -115,7 +116,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // --- Page Component (Server Component) ---
 const ProductPage = async ({ params }: Props) => {
-  const { slug } = params;
+  const { slug } =await params;
   const product = await getProduct(slug);
 
   if (!product) {

@@ -22,7 +22,7 @@ async function getProduct(slug: string): Promise<IProduct | null> {
   try {
     // Using cache: 'force-cache' is the default, but being explicit can be helpful.
     // For highly dynamic data, consider 'no-store' or revalidate options.
-    const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`, { cache: 'force-cache' });
+    const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`);
 
     if (!res.ok) {
       if (res.status === 404) return null;

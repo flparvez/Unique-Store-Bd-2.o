@@ -2,6 +2,7 @@ import { connectToDb } from "@/lib/db";
 import Category from "@/models/Category";
 import { Product } from "@/models/Product";
 import {  NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from 'next/cache';
 
 export async function GET(
   request: NextRequest,
@@ -20,7 +21,7 @@ export async function GET(
         { status: 404 }
       );
     }
-
+  revalidatePath(`/api/products/${slug}`);
     return NextResponse.json(product);
   } catch (error: unknown) {
     console.error("Product API error:", error);

@@ -9,7 +9,7 @@ const Home = dynamic(() => import('./Home'))
 
 
 const Page =async () => {
-const response = await fetch('https://uniquestorebd.shop/api/products')
+const response = await fetch('https://uniquestorebd.store/api/products')
 if (!response.ok) {
   throw new Error('Failed to fetch products')
 }

@@ -75,14 +75,14 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
     "sku": product.shortName || product._id, // Fallback to product ID if shortName isn't a true SKU
     "description": htmlToText(product.description || '', { wordwrap: 130 }).slice(0, 500),
     "image": product.images?.map(img => img.url) || [],
-    "url": `https://uniquestorebd.shop/product/${product.slug}`, // Canonical URL
+    "url": `https://uniquestorebd.store/product/${product.slug}`, // Canonical URL
     "brand": {
       "@type": "Brand",
       "name": "Unique Store BD"
     },
     "offers": {
       "@type": "Offer",
-      "url": `https://uniquestorebd.shop/product/${product.slug}`,
+      "url": `https://uniquestorebd.store/product/${product.slug}`,
       "priceCurrency": "BDT",
       "price": product.price,
       "priceValidUntil": new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Valid for 1 year

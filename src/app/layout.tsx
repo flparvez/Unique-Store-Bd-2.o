@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 // Enhanced SEO Metadata
 export const metadata: Metadata = {
-  metadataBase: new URL('https://uniquestorebd.shop/'),
+  metadataBase: new URL('https://uniquestorebd.store/'),
 title: "Unique Store BD - Best Online Shopping in Bangladesh",
   description: "Buy authentic Products - Table Lamps, TWS earbuds, smart watches, home appliances & tech gadgets in Bangladesh. Best prices with warranty, fast delivery & easy returns.",
   keywords: [
@@ -45,7 +45,7 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
   openGraph: {
     title: "Unique Store BD - Best Online Shopping in Bangladesh",
     description: "Shop original TWS earbuds, smart watches, home appliances & tech gadgets at best prices in Bangladesh with warranty & fast delivery.",
-    url: "https://uniquestorebd.shop/",
+    url: "https://uniquestorebd.store/",
     siteName: "Unique Store BD",
     images: [
       {
@@ -72,7 +72,7 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
     
   },
   alternates: {
-    canonical: "https://uniquestorebd.shop/",
+    canonical: "https://uniquestorebd.store/",
   },
   category: "ecommerce",
 };

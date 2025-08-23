@@ -17,7 +17,7 @@ export async function generateMetadata( { params }: Props,
   
     try {
       const category:ICategory= await fetch(
-        `https://uniquestorebd.shop/api/categories/${slug}`
+        `https://uniquestorebd.store/api/categories/${slug}`
       ).then((res) => res.json());
   
  
@@ -41,12 +41,12 @@ export async function generateMetadata( { params }: Props,
           'Unique Store BD'
         ].join(', '),
         alternates: {
-          canonical: `https://uniquestorebd.shop/products/${category.slug}`,
+          canonical: `https://uniquestorebd.store/products/${category.slug}`,
         },
         openGraph: {
           title: `${category.name} | Unique Store BD`,
           description: description.slice(0, 160),
-          url: `https://uniquestorebd.shop/products/${category.slug}`,
+          url: `https://uniquestorebd.store/products/${category.slug}`,
           images: [category.images?.[0]?.url || '/default-category.jpg', ...previousImages],
           type: 'website',
         },
@@ -73,7 +73,7 @@ const Category =async ({params}: {params: Promise<{slug:string}>}) => {
    
   try {
     const category = await fetch(
-      `https://uniquestorebd.shop/api/categories/${slug}`
+      `https://uniquestorebd.store/api/categories/${slug}`
     ).then((res) => res.json());
 
     if (!category) {

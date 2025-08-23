@@ -15,7 +15,7 @@ const OrderInfo =async ({
   params: Promise<{ id: string }>
 }) => {
   const id = (await params).id
-  const res = await fetch(`https://uniquestorebd.shop/api/order/${id}`, {
+  const res = await fetch(`https://uniquestorebd.store/api/order/${id}`, {
 
     cache: 'force-cache',
   })

@@ -22,7 +22,7 @@ async function getProduct(slug: string): Promise<IProduct | null> {
   try {
     // Using cache: 'force-cache' is the default, but being explicit can be helpful.
     // For highly dynamic data, consider 'no-store' or revalidate options.
-    const res = await fetch(`https://uniquestorebd.shop/api/products/${slug}`);
+    const res = await fetch(`https://uniquestorebd.store/api/products/${slug}`);
 
     if (!res.ok) {
       if (res.status === 404) return null;
@@ -84,12 +84,12 @@ export async function generateMetadata({ params }:Props): Promise<Metadata> {
     description: `Order the ${product.name} online from Unique Store BD${priceText}. ${shortDescription} Fast home delivery across Bangladesh.`,
     keywords: seoKeywords,
     alternates: {
-      canonical: `https://uniquestorebd.shop/product/${slug}`,
+      canonical: `https://uniquestorebd.store/product/${slug}`,
     },
     openGraph: {
       title: `${product.name} | Unique Store BD`,
       description: `Check out the ${product.name}${priceText}. ${shortDescription}`,
-      url: `https://uniquestorebd.shop/product/${slug}`,
+      url: `https://uniquestorebd.store/product/${slug}`,
       siteName: 'Unique Store BD',
       images: ogImages,
       type: 'website',
@@ -137,7 +137,7 @@ const ProductPage = async ({ params }: Props) => {
     },
     offers: {
       '@type': 'Offer',
-      url: `https://uniquestorebd.shop/product/${slug}`,
+      url: `https://uniquestorebd.store/product/${slug}`,
       priceCurrency: 'BDT',
       price: product.price,
       availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',

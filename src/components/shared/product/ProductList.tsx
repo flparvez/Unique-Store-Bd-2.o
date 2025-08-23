@@ -24,7 +24,7 @@ const sliceProdct = [...products].sort(
 
   return (
     <div className="container mx-auto sm:px-4 sm:py-4">
-      <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">Our Products</h2>
+      <h2 className="text-xl font-bold text-center mb-4 text-gray-800">Unique Store Bd - Quality Is Here</h2>
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1 m-1">
         {sliceProdct?.map((product) => (

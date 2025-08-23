@@ -6,12 +6,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   
   // Fetch all necessary data in parallel
   const [productsRes, categoriesRes] = await Promise.all([
-    fetch('https://uniquestorebd.shop/api/products', {
-      next: { revalidate: 60 } // Revalidate daily
-    }),
-    fetch('https://uniquestorebd.shop/api/categories', {
-      next: { revalidate: 60 } // Revalidate daily
-    })
+    fetch('https://uniquestorebd.shop/api/products'),
+    fetch('https://uniquestorebd.shop/api/categories')
   ]);
 
   // Handle potential errors

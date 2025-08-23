@@ -84,7 +84,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleTagManager gtmId="GTM-N9P2439Z" />
+      <GoogleTagManager gtmId="GTM-TW37DK9Z" />
 
       <head>
         {/* Preload critical resources */}

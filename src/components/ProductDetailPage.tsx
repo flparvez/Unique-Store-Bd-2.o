@@ -119,13 +119,13 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
     },
     // IMPORTANT: Replace with actual dynamic review data from your backend.
     // If no real reviews exist, it's better to omit this section or set counts to 0.
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8", // Dynamic average rating
-      "reviewCount": "13", // Dynamic total review count
-      "bestRating": "5",
-      "worstRating": "1"
-    },
+    // "aggregateRating": {
+    //   "@type": "AggregateRating",
+    //   "ratingValue": "4.8", // Dynamic average rating
+    //   "reviewCount": "13", // Dynamic total review count
+    //   "bestRating": "5",
+    //   "worstRating": "1"
+    // },
     // "review": [{ // Example if you have individual review data
     //   "@type": "Review",
     //   "reviewRating": { "@type": "Rating", "ratingValue": "5" },

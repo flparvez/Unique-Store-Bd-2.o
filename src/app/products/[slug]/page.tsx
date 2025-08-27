@@ -145,7 +145,7 @@ const Category =async ({params}: {params: Promise<{slug:string}>}) => {
             </div>
           </section>
         )}
-  <section className="max-w-4xl mx-auto py-8 border-t border-gray-200">
+  <section className="max-w-4xl md:mx-auto  mx-4 py-4  mb-[77px] border-t border-gray-200">
   <div className="prose prose-sm md:prose-base mx-auto">
     <h2 className="text-xl font-bold text-gray-900 mb-4">
        {category.name} at Unique Store BD

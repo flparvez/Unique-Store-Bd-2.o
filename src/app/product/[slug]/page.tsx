@@ -80,14 +80,14 @@ export async function generateMetadata({ params }:Props): Promise<Metadata> {
   ].filter(Boolean); // Remove any null/undefined values
 
   return {
-    title: `${product.name} - Price In Bangladesh | Unique Store BD`,
+    title: `${product.shortName} Price In Bangladesh`,
     description: `Order the ${product.name} online from Unique Store BD${priceText}. ${shortDescription} Fast home delivery across Bangladesh.`,
     keywords: seoKeywords,
     alternates: {
       canonical: `https://uniquestorebd.store/product/${slug}`,
     },
     openGraph: {
-      title: `${product.name} | Unique Store BD`,
+      title: `${product.name} Price`,
       description: `Check out the ${product.name}${priceText}. ${shortDescription}`,
       url: `https://uniquestorebd.store/product/${slug}`,
       siteName: 'Unique Store BD',
@@ -172,7 +172,7 @@ const ProductPage = async ({ params }: Props) => {
               <>
                 <li><span>/</span></li>
                 <li>
-                  <Link href={`/category/${product.category.slug}`} className="hover:text-blue-600 hover:underline">
+                  <Link href={`/products/${product.category.slug}`} className="hover:text-blue-600 hover:underline">
                     {product.category.name}
                   </Link>
                 </li>

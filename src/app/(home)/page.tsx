@@ -12,7 +12,7 @@ const CATEGORIES_API_URL = 'https://uniquestorebd.store/api/categories';
 
 // Function to fetch data with error handling
 async function fetchData(url:string) {
-  const response = await fetch(url, { next: { revalidate: 3600 } }); // Revalidate data every hour
+  const response = await fetch(url); // Revalidate data every hour
   if (!response.ok) {
     throw new Error(`Failed to fetch data from ${url}. Status: ${response.status}`);
   }

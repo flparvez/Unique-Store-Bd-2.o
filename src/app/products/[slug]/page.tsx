@@ -71,6 +71,12 @@ export async function generateMetadata( { params }: Props,
 const Category =async ({params}: {params: Promise<{slug:string}>}) => {
     const { slug } = await params;
    
+
+    const res = await fetch('https://uniquestorebd.store/api/categories');
+    if (!res.ok) {
+      throw new Error('Failed to fetch categories');
+    }
+    const categories = await res.json();
   try {
     const category = await fetch(
       `https://uniquestorebd.store/api/categories/${slug}`
@@ -125,7 +131,7 @@ const Category =async ({params}: {params: Promise<{slug:string}>}) => {
         </header>
         <div>
             
-            <CategorySlider />
+            <CategorySlider  category = {categories || []} />
             <ProductByCategory slug={slug} />
         </div>
 

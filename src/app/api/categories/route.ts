@@ -2,6 +2,7 @@ import { connectToDb } from '@/lib/db';
 import slugify from 'slugify';
 import { NextResponse } from 'next/server';
 import Category, { ICategory } from '@/models/Category';
+import { revalidatePath } from 'next/cache';
 export const dynamic = 'force-dynamic';
 
 interface CategoryResponse {
@@ -13,7 +14,7 @@ export async function GET(){
   await connectToDb();
   try {
     const categories = await Category.find().sort({ updatedAt: -1 });
-
+  revalidatePath('/api/categories');
     return NextResponse.json(categories, { status: 200 });
   } catch (error) {
     console.log(error)

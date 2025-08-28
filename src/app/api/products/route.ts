@@ -14,6 +14,7 @@ export async function GET() {
     await connectToDb();
      await Category.find()
    const products = await Product.find().populate('category', 'name slug');    
+     revalidatePath('/api/products');
     return NextResponse.json({ success: true,  products }, { status: 200 });
   } catch (error) {
     console.error('❌ API Error:', error);

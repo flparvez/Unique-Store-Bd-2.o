@@ -1,27 +1,24 @@
 "use client";
 
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { Autoplay, Pagination } from 'swiper/modules';
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Autoplay, Pagination } from "swiper/modules";
 
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
-import ProductLoadingSkeleton from '../ProductLoadingSkeleton';
-import { ICategory } from '@/types/product';
+import ProductLoadingSkeleton from "../ProductLoadingSkeleton";
+import { ICategory } from "@/types/product";
 
+const CategorySlider = ({ category }: { category: ICategory[] }) => {
+  if (!category) {
+    return <ProductLoadingSkeleton />;
+  }
 
-
-const CategorySlider= ({category}:{category:ICategory[]}) => {
- 
-    if (!category) {
-        return <ProductLoadingSkeleton />
-    }
   return (
-    <div className="w-full bg-[#ffe9e7] sm:w-[70%]  mx-auto">
+    <div className="w-full bg-[#ffe9e7] sm:w-[70%] mx-auto">
       <Swiper
         autoplay={{
           delay: 4200,
@@ -42,16 +39,24 @@ const CategorySlider= ({category}:{category:ICategory[]}) => {
       >
         {category?.map((category) => (
           <SwiperSlide key={category._id} className="flex-shrink-0">
-            <Link href={`/products/${category.slug}`} className="block relative group">
-              <Image
-                width={300}
-                height={300}
-                src={category.images[0].url}
-                alt={category.name}
-                className="w-full h-full object-cover rounded transition-transform duration-300 group-hover:scale-105"
-              />
+            <Link
+              href={`/products/${category.slug}`}
+              className="block relative group"
+            >
+              <div className="relative w-full h-40 sm:h-48 lg:h-56">
+                <Image
+                  src={category.images[0].url}
+                  alt={category.name}
+                  fill
+                  priority={false}
+                  className="rounded object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 200px"
+                />
+              </div>
               <div className="absolute bottom-0 left-0 w-full bg-black/50 py-1 rounded-b">
-                <h3 className="text-sm font-semibold text-white text-center">{category.name}</h3>
+                <h3 className="text-sm font-semibold text-white text-center">
+                  {category.name}
+                </h3>
               </div>
             </Link>
           </SwiperSlide>

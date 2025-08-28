@@ -5,21 +5,22 @@ import RgbProducts from "@/components/RgbProduct";
 
 import ProductList from "@/components/shared/product/ProductList";
 import TopSellingProduct from "@/components/shared/product/TopSellingProduct";
-import { useProducts } from "@/hooks/UseOrders";
 
-export default  function Home() {
-  const {products , isLoading} = useProducts()
-if (isLoading) {
+import { IProduct } from "@/types/product";
+
+export default  function Home({products}:{products:IProduct[]}) {
+ 
+if (!products) {
   return <ProductLoadingSkeleton />
 }
   return (
     <div>
 
    
-<ProductList products = {products?.products || []} />
-<RgbProducts  products = {products?.products || []}  />
+<ProductList products = {products || []} />
+<RgbProducts  products = {products || []}  />
          
-    <TopSellingProduct products = {products?.products || []}  />
+    <TopSellingProduct products = {products || []}  />
                 
     </div>
   );

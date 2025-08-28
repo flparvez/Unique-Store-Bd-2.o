@@ -9,15 +9,15 @@ import { Autoplay, Pagination } from 'swiper/modules';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCategory } from '@/hooks/UseOrders';
+
 import ProductLoadingSkeleton from '../ProductLoadingSkeleton';
+import { ICategory } from '@/types/product';
 
 
 
-const CategorySlider: React.FC = () => {
-    const { category,isLoading } = useCategory();
-
-    if (isLoading) {
+const CategorySlider= ({category}:{category:ICategory[]}) => {
+ 
+    if (!category) {
         return <ProductLoadingSkeleton />
     }
   return (

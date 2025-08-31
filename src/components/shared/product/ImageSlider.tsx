@@ -34,7 +34,7 @@ const ImageSlider = ({ images, discount }: ImageSliderProps) => {
     return (
         // Flex container is active on all screen sizes for a consistent 80/20 layout.
         // It has a responsive height to look good on different devices.
-        <div className="flex w-full gap-2 h-[400px] sm:h-[450px] md:h-[500px]">
+        <div className="flex w-full gap-1 h-[400px] sm:h-[450px] md:h-[500px]">
             
             {/* Main Image Viewer (Left Side - 80% width on all screens) */}
             <div className="w-4/5 h-full relative ">

@@ -5,6 +5,7 @@ import Providers from "@/components/Providers";
 import BottomBar from "@/components/shared/header/Bottom";
 import { GoogleTagManager } from "@next/third-parties/google";
 
+import { Suspense } from "react"; // Added from official example
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +20,10 @@ const geistMono = Geist_Mono({
 // Enhanced SEO Metadata
 export const metadata: Metadata = {
   metadataBase: new URL('https://uniquestorebd.store/'),
-title: "Unique Store BD - Best Online Shopping in Bangladesh",
+  title: {
+    default: "Unique Store BD - Best Online Shopping in Bangladesh", // Added title object for flexibility
+    template: "%s | Unique Store BD" // Added from official example
+  },
   description: "Buy authentic Products - Table Lamps, TWS earbuds, smart watches, home appliances & tech gadgets in Bangladesh. Best prices with warranty, fast delivery & easy returns.",
   keywords: [
     "Unique Store BD",
@@ -33,13 +37,18 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
     "Online Store Bangladesh",
     "Rechargeable Fan"
   ],
+  authors: [{ name: "Unique Store BD", url: "https://uniquestorebd.store" }], // Added from official example
+  creator: "Unique Store BD", // Added from official example
+  publisher: "Unique Store BD", // Added from official example
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
- 
+      "max-video-preview": -1, // Added from official example
+      "max-image-preview": "large", // Added from official example
+      "max-snippet": -1, // Added from official example
     }
   },
   openGraph: {
@@ -69,12 +78,18 @@ title: "Unique Store BD - Best Online Shopping in Bangladesh",
   },
   verification: {
     google: "H1QKSH2SYxJ7TemokhY7BFgKgZN-iJT1B51u-CZ4wpw",
-    
+    // yandex: "your-yandex-verification-code", // Optional: Add if you have them
+    // yahoo: "your-yahoo-verification-code",   // Optional: Add if you have them
   },
   alternates: {
     canonical: "https://uniquestorebd.store/",
   },
   category: "ecommerce",
+  formatDetection: { // Added from official example
+    email: false,
+    address: false,
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -157,10 +172,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers >
-  <BottomBar />
-        {children}
+          {/* Wrapped children in Suspense from official example */}
+          <Suspense fallback={null}>
+            <BottomBar />
+            {children}
+          </Suspense>
         </Providers>
-   
+        {/* Added Analytics and SpeedInsights from official example */}
+       
       </body>
     </html>
   );

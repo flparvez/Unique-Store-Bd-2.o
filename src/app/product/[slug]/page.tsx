@@ -81,7 +81,7 @@ export async function generateMetadata({ params }:Props): Promise<Metadata> {
 
   return {
     title: `${product.shortName} Price In Bangladesh`,
-    description: `Order the ${product.name} online from Unique Store BD${priceText}. ${shortDescription} Fast home delivery across Bangladesh.`,
+    description: `Order the ${product.shortName} online from Unique Store BD${priceText}. ${shortDescription} Fast home delivery across Bangladesh.`,
     keywords: seoKeywords,
     alternates: {
       canonical: `https://uniquestorebd.store/product/${slug}`,
@@ -163,7 +163,7 @@ const ProductPage = async ({ params }: Props) => {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       <Navbar />
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-2">
         {/* Breadcrumb navigation for SEO and UX */}
         <nav aria-label="Breadcrumb" className="py-3 text-sm">
           <ol className="flex items-center space-x-2 text-gray-500">

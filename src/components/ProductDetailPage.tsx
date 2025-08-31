@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ShoppingCart } from "lucide-react";
 import { Facebook } from 'lucide-react';
-import { htmlToText } from 'html-to-text'; // For cleaning description for schema
 
 import { IProduct } from '@/types/product';
 import { useCart } from '@/hooks/useCart';
@@ -67,73 +66,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
 
   // --- Product Schema (JSON-LD) for Rich Snippets ---
   // Placed here because it describes the content within this component.
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "productID": product._id,
-    "name": product.name,
-    "sku": product.shortName || product._id, // Fallback to product ID if shortName isn't a true SKU
-    "description": htmlToText(product.description || '', { wordwrap: 130 }).slice(0, 500),
-    "image": product.images?.map(img => img.url) || [],
-    "url": `https://uniquestorebd.store/product/${product.slug}`, // Canonical URL
-    "brand": {
-      "@type": "Brand",
-      "name": "Unique Store BD"
-    },
-    "offers": {
-      "@type": "Offer",
-      "url": `https://uniquestorebd.store/product/${product.slug}`,
-      "priceCurrency": "BDT",
-      "price": product.price,
-      "priceValidUntil": new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Valid for 1 year
-      "availability": product.stock > 0
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      "itemCondition": "https://schema.org/NewCondition",
-      "seller": {
-        "@type": "Organization",
-        "name": "Unique Store BD"
-      },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": product.advanced === 200 ? 0 : 100, // Assuming 200 for free delivery
-          "currency": "BDT"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "BD" // Bangladesh
-        },
-        "transitTimeLabel": "Standard shipping",
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": 2,
-            "maxValue": 7,
-            "unitCode": "DAY"
-          }
-        }
-      }
-    },
-    // IMPORTANT: Replace with actual dynamic review data from your backend.
-    // If no real reviews exist, it's better to omit this section or set counts to 0.
-    // "aggregateRating": {
-    //   "@type": "AggregateRating",
-    //   "ratingValue": "4.8", // Dynamic average rating
-    //   "reviewCount": "13", // Dynamic total review count
-    //   "bestRating": "5",
-    //   "worstRating": "1"
-    // },
-    // "review": [{ // Example if you have individual review data
-    //   "@type": "Review",
-    //   "reviewRating": { "@type": "Rating", "ratingValue": "5" },
-    //   "author": { "@type": "Person", "name": "Customer Name" },
-    //   "reviewBody": "Excellent product, highly recommended!",
-    //   "datePublished": "2024-05-20"
-    // }]
-  };
+
 
   // --- FAQ Page Schema (JSON-LD) ---
   // You can combine this into the Product schema or keep it separate.
@@ -171,13 +104,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-2 md:py-4">
+    <div className="container mx-auto px-2 py-1 md:py-4">
       {/* JSON-LD for Product */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-        key="product-jsonld" // Add a key for React to handle multiple scripts
-      />
+    
       {/* JSON-LD for FAQPage */}
       <script
         type="application/ld+json"

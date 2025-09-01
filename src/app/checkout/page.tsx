@@ -120,9 +120,10 @@ console.log(copied)
 
       if (result.success) {
         const orderId = result?.order?._id;
+        router.push(`/orders/${orderId}`);
         toast.success('✅ Order Placed successfully!');
         clearCart();
-        router.push(`/orders/${orderId}`);
+        
       } else {
         toast.error('❌ Failed to place order!');
       }

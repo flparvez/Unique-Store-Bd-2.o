@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IProduct } from '@/types/product';
-import { FaEye, FaShoppingCart, FaStar, FaHeart } from 'react-icons/fa';
+import { FaEye, FaShoppingCart, FaHeart } from 'react-icons/fa';
 
 // ✅ Custom hook to avoid hydration mismatch
 const useMounted = () => {
@@ -48,7 +48,7 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
 
   return (
     <section className="w-full bg-gradient-to-b from-gray-50 to-white ">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-1">
         {/* Section Header */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -125,14 +125,7 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
                           </div>
                         )}
                         
-                        {/* Rating badge */}
-                        {product.rating && (
-                          <div className="absolute top-4 right-4 z-10 bg-white bg-opacity-95 rounded-full px-2.5 py-1 shadow-md flex items-center">
-                            <FaStar className="text-yellow-400 mr-1 text-sm" />
-                            <span className="text-xs font-semibold text-gray-800">{product.rating}</span>
-                          </div>
-                        )}
-                        
+                     
                         {/* Hover overlay with actions */}
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                           <div className="flex space-x-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -160,14 +153,14 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
                     </Link>
 
                     {/* Product details */}
-                    <div className="p-5 flex-grow flex flex-col">
+                    <div className="p-4 flex-grow flex flex-col">
                       <Link href={`/product/${product.slug}`}>
                         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-indigo-600 transition-colors" title={product.name}>
                           {product.name}
                         </h3>
                       </Link>
                       
-                      <div className="mt-auto pt-3">
+                      <div className="mt-auto pt-1">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <p className="text-xl font-bold text-indigo-600">
@@ -196,7 +189,7 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
           </Swiper>
           
           {/* Custom pagination */}
-          <div className="featured-pagination flex justify-center mt-1 space-x-2" />
+          <div className="featured-pagination flex justify-center " />
         </motion.div>
 
         {/* View all button */}
@@ -205,7 +198,7 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-10"
+          className="text-center mt-2"
         >
           <Link 
             href="/products" 

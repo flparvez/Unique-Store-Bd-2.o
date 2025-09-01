@@ -50,14 +50,14 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
   }
 
   return (
-    <div className=" bg-gray-50 py-2">
+    <div className=" bg-gray-50 py-1">
       <div className=" mx-auto ">
         {/* Header Section */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-6"
+          className="text-center mb-2"
         >
           <h1 className="text-xl md:text-4xl font-bold text-gray-900 mb-2">Unique Store Bd - All Products</h1>
         
@@ -68,13 +68,13 @@ export default function AllProductList({ products }: { products: IProduct[] }) {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6"
+          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1 md:gap-6"
         >
           {products.map((product) => (
             <motion.div
               key={product._id}
               variants={itemVariants}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group"
+              className="bg-white  border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group"
             >
               {/* Product Image */}
               <div className="relative aspect-square overflow-hidden">

@@ -13,7 +13,7 @@ interface Apiresponse {
 export default function ProductsPageClient({ pagination,products }:Apiresponse ) {
 
   return (
-    <div className="container mx-auto px-4">
+    <div className=" mx-auto ">
   
 
       <section>

@@ -41,9 +41,9 @@ const ProductByCategoryClient = ({ products }: { products: IProduct[] }) => {
 };
 
   return (
-    <div className="mt-8 mx-auto px-2 sm:px-4 lg:px-6">
+    <div className="mt-4 mx-auto px-2 sm:px-4 lg:px-6">
       <motion.div
-        className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"
+        className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1 sm:gap-6"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -53,7 +53,7 @@ const ProductByCategoryClient = ({ products }: { products: IProduct[] }) => {
             key={product._id}
             variants={cardVariants}
             whileHover="hover"
-            className="bg-white rounded-2xl border border-gray-100 flex flex-col overflow-hidden transition-all"
+            className="bg-white rounded-xl border border-gray-100 flex flex-col overflow-hidden transition-all"
           >
             {/* 🔹 Product Image */}
             <Link href={`/product/${product.slug}`} prefetch={true}>
@@ -108,7 +108,7 @@ const ProductByCategoryClient = ({ products }: { products: IProduct[] }) => {
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={() => addToCart(product)}
-                  className="flex items-center space-x-1 bg-gradient-to-r from-orange-500 to-pink-800 hover:from-blue-600 hover:to-purple-600 text-white px-3 py-2 rounded-xl text-xs sm:text-sm font-medium shadow transition"
+                  className="flex items-center  bg-gradient-to-r from-orange-500 to-pink-800 hover:from-blue-600 hover:to-purple-600 text-white px-2 py-2 rounded-xl text-xs sm:text-sm font-medium shadow transition"
                 >
                   <ShoppingCart size={16} />
                   <span>Add To Cart</span>

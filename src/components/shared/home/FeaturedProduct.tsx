@@ -47,7 +47,7 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
   }
 
   return (
-    <section className="w-full bg-gradient-to-b from-gray-50 to-white py-1">
+    <section className="w-full bg-gradient-to-b from-gray-50 to-white ">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <motion.div 
@@ -91,7 +91,7 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
               1280: { slidesPerView: 4 },
             }}
             modules={[Autoplay, Pagination]}
-            className="featured-swiper pb-4"
+            className="featured-swiper pb-1"
           >
             {sliceProdct?.map((product) => (
               <SwiperSlide key={product._id}>
@@ -100,7 +100,7 @@ const FeaturedProduct = ({ products }: { products: IProduct[] }) => {
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   className="h-full"
                 >
-                  <div className="flex flex-col h-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300">
+                  <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300">
                     <Link 
                       href={`/product/${product.slug}`} 
                       className="group block relative overflow-hidden"

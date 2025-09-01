@@ -26,12 +26,12 @@ const TopSellingProduct = ({ products }: { products: IProduct[] }) => {
 
   return (
     <div className="container mx-auto sm:px-4 sm:py-10">
-      <h2 className="text-2xl sm:text-3xl text-center font-extrabold mb-8 text-gray-800">
+      <h2 className="text-2xl sm:text-3xl text-center font-extrabold mb-4 text-gray-800">
         🌟 Top Selling Products
       </h2>
 
       {/* Products Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1">
         {sortedProducts?.map((product, index) => (
           <motion.div
             key={product._id}

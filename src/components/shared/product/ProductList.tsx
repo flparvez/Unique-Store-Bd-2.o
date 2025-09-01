@@ -42,9 +42,9 @@ const ProductList = ({ products }: { products: IProduct[] }) => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-6"
+          className="text-center mb-4"
         >
-          <h2 className="text-2xl md:text-4xl font-bold text-gray-900">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900">
            Unique Store Bd - Quality Is Here
           </h2>
         
@@ -56,13 +56,13 @@ const ProductList = ({ products }: { products: IProduct[] }) => {
   initial="hidden"
   whileInView="show"
   viewport={{ once: true, amount: 0.1 }}
-  className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 lg:gap-6"
+  className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1 md:gap-4 lg:gap-6"
 >
   {sliceProdct?.map((product) => (
     <motion.div
       key={product._id}
       variants={itemVariants}
-      className="bg-white rounded-lg md:rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group"
+      className="bg-white  md:rounded-xl  border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group"
     >
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden">

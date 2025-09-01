@@ -41,9 +41,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
       toast.error('Please select a color before adding to cart.');
       return;
     }
-
+router.push('/checkout');
     addToCart(product, quantity, selectedVariant);
-    router.push('/checkout');
+    
   };
 
   const advanced = product?.advanced || 100;
@@ -404,7 +404,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h3 className="font-bold text-lg border-b text-black my-2">{product.shortName} Details</h3>
+                    <h3 className="font-bold text-lg border-b text-black my-2">{product.shortName} Price</h3>
                     {product?.video && (
                       <div className="mb-4">
                         <div className="aspect-w-16 aspect-h-9 w-full rounded-lg overflow-hidden">

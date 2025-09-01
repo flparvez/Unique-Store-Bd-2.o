@@ -75,7 +75,9 @@ const ProfilePage = () => {
                       </Link>
                     </TableCell>
                     <TableCell>
-              {order.createdAt}
+              <span className="font-semibold">Placed on:</span>{" "}
+            {new Date(order.createdAt).toLocaleDateString()}{" "}
+            {new Date(order.createdAt).toLocaleTimeString()}
                     </TableCell>
                     <TableCell>{order.name}</TableCell>
                     <TableCell>

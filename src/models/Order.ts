@@ -23,7 +23,7 @@ export interface IOrder {
   subtotal: number;
   totalAmount: number;
   isInsideDhaka: boolean;
-  createdAt?: string;
+  createdAt : Date
   updatedAt?: Date;
   email?: string; 
   status?: string;

@@ -52,7 +52,9 @@ if (isLoading) {
         {orders?.orders?.map((invoice) => (
           <TableRow key={invoice._id}>
             <TableCell className="font-medium"><Link href={`/admin/orders/${invoice._id}`}>{invoice.orderId}</Link></TableCell>
-            <TableCell>{invoice?.createdAt}</TableCell>
+            <TableCell><span className="font-semibold">Placed on:</span>{" "}
+            {new Date(invoice.createdAt).toLocaleDateString()}{" "}
+            {new Date(invoice.createdAt).toLocaleTimeString()} </TableCell>
             <TableCell>{invoice.name}</TableCell>
             <TableCell>{invoice?.status}</TableCell>
             <TableCell>         <Button onClick={() => handleDeleteOrder(invoice._id!)}  variant="destructive">Delete</Button></TableCell>

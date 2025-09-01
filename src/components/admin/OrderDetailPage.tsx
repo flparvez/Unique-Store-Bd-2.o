@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 
 import { useOrderById } from "@/hooks/UseOrders";
+import { generateInvoicePdf } from "@/hooks/invoiceGenerator";
 
 type OrderFormData = {
   name: string;
@@ -75,6 +76,15 @@ const OrderInfoPage = ({ id }: { id: string }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+              {/* Invoice Button */}
+      <div className="flex justify-end">
+        <button
+          onClick={() => generateInvoicePdf(order)}
+          className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
+        >
+          📄 Download Invoice
+        </button>
+      </div>
       <div className="bg-white shadow-md rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">Order ID: {order._id}</h2>
         <div className="mb-2"><strong>Customer Name:</strong> {order.name}</div>
@@ -165,6 +175,7 @@ const OrderInfoPage = ({ id }: { id: string }) => {
           </form>
         </div>
       </div>
+ 
     </div>
   );
 };

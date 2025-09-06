@@ -1,25 +1,26 @@
-import { Product } from '@/models/Product';
-import { NextRequest, NextResponse } from 'next/server';
-import { connectToDb } from '@/lib/db';
-import mongoose from 'mongoose';
-import slugify from 'slugify';
-import Category from '@/models/Category';
-import { revalidatePath } from 'next/cache';
-
-
+import { Product } from "@/models/Product";
+import { NextRequest, NextResponse } from "next/server";
+import { connectToDb } from "@/lib/db";
+import mongoose from "mongoose";
+import slugify from "slugify";
+import Category from "@/models/Category";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
   try {
     // ⏱ Connect to DB first
     await connectToDb();
-     await Category.find()
-   const products = await Product.find().populate('category', 'name slug');    
-     revalidatePath('/api/products');
-    return NextResponse.json({ success: true,  products }, { status: 200 });
+    await Category.find();
+    const products = await Product.find().populate("category", "name slug");
+    // After creating or updating a product
+    revalidatePath("/"); // Home page
+    revalidatePath("/products");
+
+    return NextResponse.json({ success: true, products }, { status: 200 });
   } catch (error) {
-    console.error('❌ API Error:', error);
+    console.error("❌ API Error:", error);
     return NextResponse.json(
-      { success: false, error: 'Server error while fetching products' },
+      { success: false, error: "Server error while fetching products" },
       { status: 500 }
     );
   }
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     if (!name || !price || !category) {
       return NextResponse.json(
-        { success: false, error: 'Name, price, and category are required' },
+        { success: false, error: "Name, price, and category are required" },
         { status: 401 }
       );
     }
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
     // ✅ Validate MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(category)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid category ID' },
+        { success: false, error: "Invalid category ID" },
         { status: 402 }
       );
     }
@@ -55,32 +56,35 @@ export async function POST(request: NextRequest) {
     const product = await Product.create({
       name: body.name,
       shortName: body.shortName || body.name.slice(0, 80),
-      seo: body.seo || '',
+      seo: body.seo || "",
       slug: slugify(body.shortName, { lower: true, strict: true }),
       price: Number(body.price),
       originalPrice: body.originalPrice || null,
       stock: Number(body.stock) || 0,
       video: body.video,
-      warranty: body.warranty || '7 day warranty',
+      warranty: body.warranty || "7 day warranty",
       category,
       description: body.description,
       isFeatured: Boolean(body.isFeatured),
-      images:body.images || [],
+      images: body.images || [],
       specifications: Array.isArray(body.specifications)
         ? body.specifications.slice(0, 100) // avoid too large specs
         : [],
       sold: 0,
     });
 
-     revalidatePath('/api/products');
+    // ✅ Revalidate home page to reflect new product
+    // After creating or updating a product
+    revalidatePath("/"); // Home page
+    revalidatePath("/products");
+    revalidatePath(`/category/${product.category.slug}`); // Category page
+    revalidatePath(`/product/${product.slug}`); // Product detail page
     return NextResponse.json({ success: true, data: product }, { status: 201 });
   } catch (error) {
-    console.log('❌ API Error:', error);
-
- 
+    console.log("❌ API Error:", error);
 
     return NextResponse.json(
-      { success: false, error: 'Server error while creating product' },
+      { success: false, error: "Server error while creating product" },
       { status: 500 }
     );
   }
